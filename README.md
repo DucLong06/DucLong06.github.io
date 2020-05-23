@@ -2,7 +2,7 @@
  repository web in university
 # About me :
   - Full name : Hoàng Đức Long
-  - Class : D13CNPM%
+  - Class : D13CNPM5_EPUIT
   - Facebook : [Hoàng Đức Long](https://www.facebook.com/duclong2k)
   
 ## The best code I can write :
