@@ -1,9 +1,9 @@
 # DucLong06.github.io
- Repository chứa các tài liệu học tập về web
-# Thông Tin Liên Hệ :
-  - Họ Và Tên : Hoàng Đức Long
-  - Lớp : D13CNPM%
-  - facebook : [Hoàng Đức Long](https://www.facebook.com/duclong2k)
+ repository web in university
+# About me :
+  - Full name : Hoàng Đức Long
+  - Class : D13CNPM%
+  - Facebook : [Hoàng Đức Long](https://www.facebook.com/duclong2k)
   
 ## The best code I can write :
  ```
