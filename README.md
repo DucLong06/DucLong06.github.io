@@ -1,5 +1,5 @@
 # DucLong06.github.io
- repository web in university
+ Repository web in university
 # About me :
   - Full name : Hoàng Đức Long
   - Class : D13CNPM5_EPUIT
