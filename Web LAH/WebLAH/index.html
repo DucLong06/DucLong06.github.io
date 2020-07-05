@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HAL WINE</title>
+    <link rel="stylesheet" href="css/ruou.css">
+
+
+</head>
+
+<body>
+    <script language="javascript">
+        var interval_obj = setInterval(function() {
+            alert("Chào mừng bạn đến với web bán rượu");
+            // document.getElementById('ads').style.display = 'block'
+            clearInterval(interval_obj);
+        });
+    </script>
+
+    <div id="main">
+        <!--Header-->
+        <div id="head">
+            <div class="hd">
+                <div class="logo body-left">
+                    <a href="index.html">
+                        <img src="img/hd_logomark_e.jpg" width="150" /><br/>
+                    </a>
+                </div>
+                <div class="body-left">
+                    <input class="t" type="text" placeholder="Tìm kiếm" />
+                    <input class="t1" type="submit" value="Tìm kiếm" />
+                </div>
+                <div class="body-left">
+                    <a href="#"><img class="t2" title="Giỏ hàng" src="img/Capture4.PNG" /></a>
+                </div>
+                <div class="twitter0 body-left" align="right">
+                    <a href="ruou8.html" target="blank" title="Giỏ hàng">Giỏ hàng(0)</a>
+                </div>
+                <div class="twitter1 body-left">
+                    <a href="ruou2.html" target="blank" title="Đăng nhập">Đăng nhập</a>
+                </div>
+                <div class="twitter12 body-left">
+                    <a href="ruou1.html" target="blank" title="Đăng ký">/Đăng ký</a>
+                </div>
+            </div>
+            <div class="tpt">
+                <div class="pt">
+                    <div id="menu" class="body-left" align="left">
+                        <ul>
+                            <li>
+                                <a class="dmsp" href="#">
+                                    <span>DANH MỤC SẢN PHẨM</span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li><a href="#" title="BUBBLE">BUBBLE</a></li><br/>
+                                    <li><a href="#" title="WINE">WINE</a></li><br/>
+                                    <li><a href="#" title="SPIRITS">SPIRITS</a></li><br/>
+                                    <li><a href="#" title="BEER & CIDER">BEER & CIDER</a></li><br/>
+                                    <li><a href="#" title="SNACKS">SNACKS</a></li><br/>
+                                    <li><a href="#" title="GIFT">GIFT</a></li><br/>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dmpk body-left" align="right"><a href="ruou4.html" target="blank" title="Sản Phẩm">Sản Phẩm</a></div>
+                    <div class="dmpk body-left" align="right"><a href="#" title="Khuyến Mãi">Khuyến Mãi</a></div>
+                    <div class="dmpk body-left" align="right"><a href="ruou7.html" target="blank" title="Tin Tức">Tin Tức</a></div>
+                    <div class="dmpk body-left" align="right"><a href="ruou6.html" target="blank" title="Liên Hệ">Liên Hệ</a></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="head-link">
+            <div class='container'>
+                <div class='slider'>
+                    <div id="imgshow">
+                        <img src="img/1.jpg" width='100%' height='500px'>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <script>
+            var images = ['img/1.jpg', 'img/2.jpg', 'img/3.jpg', 'img/4.jpg', 'img/5.jpg', 'img/6.jpg'];
+
+            var x = 0;
+
+            var imgs = document.getElementById('imgshow');
+
+            setInterval(slider, 2000);
+
+
+            function slider() {
+
+                if (x < images.length) {
+                    x = x + 1;
+                } else {
+                    x = 1;
+                }
+
+
+                imgs.innerHTML = "<img src=" + images[x - 1] + " width='100%' height='500px'> ";
+
+
+            }
+        </script>
+        <!--End Header-->
+
+        <!--Content-->
+        <div id="content">
+            <div class="dhes">
+                <img src="img/tx.PNG" />
+            </div>
+            <div id="menuft2">
+                <ul>
+                    <li class="mft2">
+                        <a title="Château Loumelat white - 750ml" href="#"><img height="200px" width="200" src="img/km1.jpg" /></a>
+                        <ul class="sub-menuft2">
+                            <li><a href="#"><b> Château Loumelat white - 750ml</b></a></li>
+                            <li><a href="#">Giá: 430,000 VNĐ</a></li>
+                        </ul>
+                    </li>
+                    <li class="mft2">
+                        <a title="Pascal Jolivet - Sancerre - 750ml " href="#"><img height="200px" width="200" src="img/km2.jpg" /></a>
+                        <ul class="sub-menuft2">
+                            <li><a href="#"><b> Pascal Jolivet - Sancerre - 750ml</b></a></li>
+                            <li><a href="#">Giá: 865,000 VNĐđ</a></li>
+                        </ul>
+                    </li>
+                    <li class="mft2">
+                        <a title="Armand de Brignac Brut Gold - 750ml" href="#"><img height="200px" width="200" src="img/km3.jpg" /></a>
+                        <ul class="sub-menuft2">
+                            <li><a href="#"><b> Armand de Brignac Brut Gold - 750ml</b></a></li>
+                            <li><a href="#">Giá: 12,900,000 VNĐ </a></li>
+                        </ul>
+                    </li>
+                    <li class="mft2">
+                        <a title="Armand de Brignac Blanc de Blancs - 750ml" href="#"><img height="200px" width="200" src="img/km4.jpg" /></a>
+                        <ul class="sub-menuft2">
+                            <li><a href="#"><b>Armand de Brignac Blanc de Blancs - 750ml</b></a></li>
+                            <li><a href="#">Giá: 15,500,000 VNĐ  </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="dhes">
+                <h1> CHAMPAGNE</h1>
+            </div>
+            <div class="dhest">
+                <div class="dhes1 body-left">
+                    <a title="Dom Pérignon Rose - 750ml" href="#"><img height="200px" width="200" src="img/sd1.jpg" /></a><br>
+                    <a href="#"><span>Dom Pérignon Rose - 750ml<br></span></a><br>
+                    <input type="button" value="10,800,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Dom Pérignon Blanc - 750ml" href="#"><img height="200px" width="200" src="img/sd2.jpg" /></a><br>
+                    <a href="#"><span>Dom Pérignon Blanc - 750ml<br></span></a><br>
+                    <input type="button" value="5,200,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Moët & Chandon Imperial B Box - 750mlbr" href="#"><img height="200px" width="200" src="img/sd3.jpg" /></a><br>
+                    <a href="#"><span>Moët & Chandon Imperial B Box - 750mlbr</span></a><br>
+                    <input type="button" value="1,550,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Moët & Chandon Imperial B Box - 750mlbr" href="#"><img height="185px" width="200" src="img/sd4.jpg" /></a><br>
+                    <a href="#"><span>Moët & Chandon Imperial B Box - 750mlbr<br></span></a><br>
+                    <input type="button" value="1,890,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Chivas 18 Blue Signature - 750ml" href="#"><img height="185px" width="200" src="img/sd5.jpg" /></a><br>
+                    <a href="#"><span>Chivas 18 Blue Signature - 750ml<br></span></a><br>
+                    <input type="button" value="1,480,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="othschild - Mouton Cadet Reserve Sauternes - 750ml" href="#"><img height="185px" width="200" src="img/sd6.jpg" /></a><br>
+                    <a href="#"><span>othschild - Mouton Cadet Reserve Sauternes - 750ml<br></span></a><br>
+                    <input type="button" value="1,749,000 VNĐ">
+                </div>
+            </div>
+            <div class="dhes">
+                <h1> SPARKLING</1>
+            </div>
+            <div class="dhest">
+                <div class="dhes1 body-left">
+                    <a title="Angas Brut - 750ml" href="#"><img height="180px" width="200" src="img/rg1.jpg" /></a><br>
+                    <a href="#"><span>Angas Brut - 750ml<br></span></a><br>
+                    <input type="button" value="450,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="RG OO Raiser ruou" href="#"><img height="180px" width="200" src="img/rg2.jpg" /></a><br>
+                    <a href="#"><span>RG OO Raiser ruou<br></span></a><br>
+                    <input type="button" value="600.000 đ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a href="#"><img height="370" width="410" src="img/x11.png" /></a><br>
+                </div>
+                <div class="dhes1 body-right">
+                    <a title="Bottega Venetian Gold Prosecco - 750ml" href="#"><img height="170px" width="200" src="img/rg4.jpg" /></a><br>
+                    <a href="#"><span>Bottega Venetian Gold Prosecco - 750ml<br></span></a><br>
+                    <input type="button" value=" 1,200,000 VNĐ">
+                </div>
+                <div class="dhes1 body-right">
+                    <a title="Deakin Estate Chardonnay - 750ml" href="#"><img height="170px" width="200" src="img/rg3.jpg" /></a><br>
+                    <a href="#"><span>Deakin Estate Chardonnay - 750ml<br></span></a><br>
+                    <input type="button" value="2,300,000 VNĐ">
+                </div>
+            </div>
+            <div class="dhes">
+                <h1>RED WINE</h1>
+            </div>
+            <div class="dhest">
+                <div class="dhes1 body-left">
+                    <a title="50 Aniversario - 750ml" href="ruou3.html" target="blank"><img height="190" width="200" src="img/hg1.jpg" /></a><br>
+                    <a href="ruou3.html" target="blank"><span>
+                        50 Aniversario - 750ml <br></span></a><br>
+                    <input type="button" value="2,000,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="60 Sessantanni Limited Edition - 1.5L" href="#"><img height="190px" width="200" src="img/hg3.jpg" /></a><br>
+                    <a href="#"><span>60 Sessantanni Limited - 1.5L <br></span></a><br>
+                    <input type="button" value="3,000,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Adobe Cabernet Sauvignon - 750ml" href="#"><img height="190px" width="200" src="img/hg2.jpg" /></a><br>
+                    <a href="#"><span>Adobe Cabernet Sauvignon- <br></span></a><br>
+                    <input type="button" value="350,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Alain Chabanon, Petit Merle Aux Alouettes, IGP d'Oc - 750ml" href="#"><img height="190px" width="190" src="img/hg4.jpg" /></a><br>
+                    <a href="#"><span>Baron Edmond de Rothschild  <br></span></a><br>
+                    <input type="button" value="1,221,000 VNĐ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Baron Phillippe de Rothschild, Bordeaux - 750ml" href="#"><img height="190px" width="200" src="img/hg5.jpg" /></a><br>
+                    <a href="#"><span>Baron Phillippe de Rothschild<br></span></a><br>
+                    <input type="button" value="350.000 đ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Barone Ricasoli, Chianti DOCG - 750ml" href="#"><img height="190px" width="200" src="img/hg6.jpg" /></a><br>
+                    <a href="#"><span>Barone Ricasoli, Chianti <br></span></a><br>
+                    <input type="button" value="380.000 đ">
+                </div>
+            </div>
+            <div class="dhes">
+                <h1>CONGAC </h1>
+            </div>
+            <div class="dhest">
+                <div class="dhes1 body-left">
+                    <a title="Chateau de Laubade XO - 750ml" href="#"><img height="250px" width="200" src="img/mg1.jpg" /></a><br>
+                    <a href="#"><span>MG Sazabi Ver.Ka<br></span></a><br>
+                    <input type="button" value="1.800.000 đ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a title="Delamain Pale & Dry X.O Cognac - 750ml" href="#"><img height="250px" width="200" src="img/MG5.jpg" /></a><br>
+                    <a href="#"><span>Delamain Pale & Dry X.O<br></span></a><br>
+                    <input type="button" value="3.500.000 đ">
+                </div>
+                <div class="dhes1 body-left">
+                    <a href="#"><img height="370" width="410" src="img/nen2.png" /></a><br>
+                </div>
+                <div class="dhes1 body-right">
+                    <a title="MG NT-1 Alex ruou" href="#"><img height="230px" width="200" src="img/mg4.jpg" /></a><br>
+                    <a href="#"><span>MG NT-1 Alex ruou Hennessy Hktd<br></span></a><br>
+                    <input type="button" value="1.120.000 đ">
+                </div>
+                <div class="dhes1 body-right">
+                    <a title="Hennessy VSOP - 3L" href="#"><img height="247px" width="200" src="img/dyna" /></a><br>
+                    <a href="#"><span>Hennessy VSOP - 3L<br></span></a><br>
+                    <input type="button" value="950.000 đ">
+                </div>
+            </div>
+
+
+            <!--End Content-->
+
+            <!--Footer-->
+            <div id="footer">
+                <div class="bottom_shop">
+                    <ul>
+                        <li>
+                            <h3>Hệ thống cửa hàng</h3>
+                            <p>CS1: 28 Phan Đình Phùng, Ba Đình, Hà Nội </p>
+                            <p>CS2: 10 Ngụy Như Kon Tum, Thanh Xuân, Hà Nội</p>
+                            <p>Hotline: 18009157</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="online">
+                    <ul>
+                        <li>
+                            <h3>Liên hệ online</h3>
+                            <a href="https://www.facebook.com" target="_blank"><img src="img/Facebook_UI-03-512.png" width="50px"></a>
+                            <a href="#"><img src="img/new_instagram_logo-1024x1024.jpg" width="50px"></a>
+                            <a href="#"><img src="img/de1c91788be0d791135736995109272a.png" width="50px"></a>
+                            <a href="#"><img src="img/Lazada_Vietnam_Logo_Version_7.png" width="50px"></a>
+                            <a href="#"><img src="img/download.png" width="50px"></a>
+                            <a href="#"><img src="img/Shopee-logo.jpg" width="50px"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="info_bottom">
+                    <ul>
+                        <li>
+                            <h3>Thông tin</h3>
+                            <p>Giờ làm việc: 7h đến 22h</p>
+                            <p>Ngày làm việc: Từ Thứ Hai đến Chủ Nhật hàng tuần</p>
+                            <p>***Không làm việc vào ngày nghỉ lễ!***</p>
+                            <p>Mail: hoangduclongg@gmail.com</p>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="info_bottom2">
+                    <ul>
+                        <li><img src="img/DMCA_logo-grn-btn100w.png" alt="info_bottom2"></li>
+                        <li><img src="img/ico10.png" alt="info_bottom2"></li>
+                        <li><img src="img/ico11.png" alt="info_bottom2"></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div id="footer-link">
+                <div class="ban_quyen">
+                    <p>Copyright © 2019 - 2020 1999 hobbystore. All Rights Reserved.</p>
+                </div>
+            </div>
+            <!--End Footer-->
+        </div>
+</body>
+
+</html>
