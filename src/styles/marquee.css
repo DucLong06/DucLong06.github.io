@@ -1,0 +1,74 @@
+/*
+ * marquee.css — CSS-only infinite horizontal scroll for tech stack strip.
+ * No JS hydration. Uses translateX(-50%) on doubled list for seamless loop.
+ * Respects prefers-reduced-motion: pauses animation.
+ */
+
+.marquee {
+  overflow: hidden;
+  /* Fixed height prevents CLS */
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  /* Fade edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+.marquee__track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  /* Width: 200% because we duplicate the list */
+  width: max-content;
+  animation: marquee-scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  transition: color var(--duration-fast, 150ms) ease;
+  user-select: none;
+}
+
+.marquee__item:hover {
+  color: var(--aurora-1);
+}
+
+/* Separator dot between items */
+.marquee__item::after {
+  content: '·';
+  margin-left: 1.5rem;
+  color: var(--border-strong);
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Pause on reduced-motion — accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+}

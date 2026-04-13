@@ -1,0 +1,159 @@
+---
+/**
+ * About.astro — Two-column about section.
+ * Left: rendered bio markdown (lang-aware: bio.en.md / bio.vi.md).
+ * Right: avatar placeholder + 8 stat cards.
+ * Stats from brainstorm §16.2 (real production numbers).
+ */
+import SectionTitle from './SectionTitle.astro';
+import StatCard from './StatCard.astro';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+// Read both bio files via import.meta.glob — Astro.glob is deprecated in Astro 5
+const bioModules = import.meta.glob<{ default: unknown; Content: unknown }>(
+  '../../content/about/bio.*.md',
+  { eager: true }
+);
+
+// Select bio file by lang — key ends with bio.en.md or bio.vi.md
+const bioKey = Object.keys(bioModules).find((k) => k.endsWith(`bio.${lang}.md`))
+  ?? Object.keys(bioModules).find((k) => k.endsWith('bio.en.md'))!;
+const bio = bioModules[bioKey] as { Content: astroHTML.JSX.Element | ((_props: Record<string, unknown>) => unknown) };
+const Content = bio.Content as any;
+
+const stats = [
+  { value: '6,000+',   label: t('stat_mrs_month', lang) },
+  { value: '5,000+',   label: t('stat_users',     lang) },
+  { value: '90%',      label: t('stat_security',  lang) },
+  { value: '75.5%',    label: t('stat_rag',        lang) },
+  { value: '200+',     label: t('stat_repos',      lang) },
+  { value: '98%',      label: t('stat_ocr',        lang) },
+  { value: '1st',      label: t('stat_alqac',      lang) },
+  { value: 'Sao Khuê', label: t('stat_saokhe',     lang) },
+];
+---
+
+<section class="about section-gap" id="about" aria-labelledby="about-heading">
+  <div class="container">
+    <SectionTitle eyebrow={t('about_eyebrow', lang)} title={t('about_title', lang)} />
+
+    <div class="about-grid">
+      <!-- Bio prose -->
+      <div class="about-bio prose">
+        <Content />
+      </div>
+
+      <!-- Avatar + stats -->
+      <div class="about-sidebar">
+        <!-- Avatar: gradient WebP generated in Phase 09 -->
+        <div class="about-avatar-wrap">
+          <img
+            src="/avatar.webp"
+            alt="Hoàng Đức Long avatar"
+            width="96"
+            height="96"
+            loading="lazy"
+            decoding="async"
+            class="about-avatar-img"
+          />
+        </div>
+
+        <!-- Stats grid: 2×4 -->
+        <div class="about-stats" role="list" aria-label="Key achievements">
+          {stats.map(s => (
+            <div role="listitem">
+              <StatCard value={s.value} label={s.label} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-gap {
+    padding: 6rem 0;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Two-column at md+ */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media (min-width: 768px) {
+    .about-grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+
+  /* Prose styling for bio content */
+  .about-bio {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .about-bio :global(p) {
+    margin-bottom: 1.25rem;
+  }
+
+  .about-bio :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .about-bio :global(strong) {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .about-bio :global(a) {
+    color: var(--aurora-1);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Sidebar layout */
+  .about-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Avatar */
+  .about-avatar-wrap {
+    margin: 0 auto 0 0;
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+  }
+
+  .about-avatar-img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Stats 2-col grid */
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+</style>

@@ -1,0 +1,51 @@
+groups:
+  - category: Languages
+    items:
+      - { name: Python,      level: 5, years: 7 }
+      - { name: C++,         level: 4, years: 5 }
+      - { name: "C#/.NET",   level: 4, years: 4 }
+      - { name: TypeScript,  level: 4, years: 3 }
+      - { name: JavaScript,  level: 4, years: 5 }
+      - { name: Go,          level: 3, years: 1 }
+      - { name: SQL,         level: 4 }
+
+  - category: "AI / ML"
+    items:
+      - { name: PyTorch,     level: 4 }
+      - { name: TensorFlow,  level: 3 }
+      - { name: OpenCV,      level: 4 }
+      - { name: Langchain,   level: 4 }
+      - { name: ChromaDB,    level: 4 }
+      - { name: "Vertex AI", level: 4 }
+      - { name: OpenVINO,    level: 3 }
+      - { name: "LLM / RAG", level: 5 }
+      - { name: YOLOv11,     level: 4 }
+
+  - category: Backend
+    items:
+      - { name: Django,        level: 5 }
+      - { name: FastAPI,       level: 5 }
+      - { name: "REST / gRPC", level: 4 }
+      - { name: PostgreSQL,    level: 4 }
+      - { name: Redis,         level: 3 }
+
+  - category: Frontend
+    items:
+      - { name: "Vue 3",      level: 4 }
+      - { name: React,        level: 4 }
+      - { name: TailwindCSS,  level: 5 }
+      - { name: Figma,        level: 4 }
+
+  - category: "DevOps / Cloud"
+    items:
+      - { name: Docker,      level: 5 }
+      - { name: Kubernetes,  level: 4 }
+      - { name: "GKE / GCP", level: 4 }
+      - { name: "GitLab CI", level: 4 }
+      - { name: Nginx,       level: 4 }
+
+  - category: Security
+    items:
+      - { name: SAST,                              level: 4 }
+      - { name: "Threat Intel",                    level: 3 }
+      - { name: "Web Crawling (Selenium/BS4)",     level: 4 }

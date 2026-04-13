@@ -1,0 +1,95 @@
+---
+/**
+ * Skills.astro — Skills section with 6 groups in 2-col grid.
+ * Data from skills/main.yaml via getEntry('skills', 'main').
+ * Each group renders SkillBar items (level 1–5, aurora gradient fill).
+ */
+import { getEntry } from 'astro:content';
+import SectionTitle from './SectionTitle.astro';
+import SkillBar from './SkillBar.astro';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const skillsData = await getEntry('skills', 'main');
+const groups = skillsData!.data.groups as Array<{
+  category: string;
+  items: Array<{ name: string; level: number; years?: number }>;
+}>;
+---
+
+<section class="skills section-gap" id="skills" aria-labelledby="skills-heading">
+  <div class="container">
+    <SectionTitle eyebrow={t('skills_eyebrow', lang)} title={t('skills_title', lang)} />
+
+    <div class="skills-grid">
+      {groups.map((group) => (
+        <div class="skill-group">
+          <h3 class="skill-group__title">{group.category}</h3>
+          <ul class="skill-group__list" role="list">
+            {group.items.map((item) => (
+              <li role="listitem">
+                <SkillBar name={item.name} level={item.level} years={item.years} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-gap {
+    padding: 6rem 0;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* 2-col grid at md+ */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .skills-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .skill-group {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .skill-group__title {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--aurora-1);
+    margin: 0 0 1.25rem;
+  }
+
+  .skill-group__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+</style>

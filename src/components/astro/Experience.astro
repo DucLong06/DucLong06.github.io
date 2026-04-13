@@ -1,0 +1,106 @@
+---
+/**
+ * Experience.astro — Vertical timeline of work experience.
+ * Reads from 'experience' content collection, sorted by order asc.
+ * Cards revealed via TimelineAnimated framer-motion island (client:visible).
+ * render() called in frontmatter to avoid JSX scope issues with Content component.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import SectionTitle from './SectionTitle.astro';
+import TimelineCard from './TimelineCard.astro';
+import TimelineAnimated from '../react/TimelineAnimated';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const raw = (await getCollection('experience'))
+  .sort((a: CollectionEntry<'experience'>, b: CollectionEntry<'experience'>) => a.data.order - b.data.order);
+
+// Pre-render markdown in frontmatter — required because Content component
+// cannot be destructured inside JSX expressions in Astro templates.
+const items = await Promise.all(
+  raw.map(async (entry: CollectionEntry<'experience'>) => {
+    const { Content } = await entry.render();
+    return { entry, Content };
+  })
+);
+---
+
+<section class="experience section-gap" id="experience" aria-labelledby="experience-heading">
+  <div class="container">
+    <SectionTitle eyebrow={t('experience_eyebrow', lang)} title={t('experience_title', lang)} />
+
+    <div class="timeline">
+      {/* Vertical connector line */}
+      <div class="timeline__line" aria-hidden="true"></div>
+
+      <TimelineAnimated client:visible>
+        {items.map(({ entry, Content }) => (
+          <div class="timeline__entry">
+            <TimelineCard
+              company={entry.data.company}
+              role={(entry.data.role as Record<string, string>)[lang] ?? entry.data.role.en}
+              periodStart={entry.data.period.start}
+              periodEnd={entry.data.period.end}
+              stack={entry.data.stack}
+              lang={lang}
+            >
+              <Content />
+            </TimelineCard>
+          </div>
+        ))}
+      </TimelineAnimated>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-gap {
+    padding: 6rem 0;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Timeline wrapper — provides left border line */
+  .timeline {
+    position: relative;
+  }
+
+  /* Continuous vertical line */
+  .timeline__line {
+    position: absolute;
+    left: 0.25rem;
+    top: 0.4rem;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      var(--aurora-1),
+      var(--aurora-2) 50%,
+      transparent 100%
+    );
+    opacity: 0.3;
+  }
+
+  /* Each entry spaced apart */
+  .timeline__entry {
+    margin-bottom: 2rem;
+  }
+
+  .timeline__entry:last-child {
+    margin-bottom: 0;
+  }
+
+  /* The animated wrapper div layout */
+  :global(.timeline-animated) {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

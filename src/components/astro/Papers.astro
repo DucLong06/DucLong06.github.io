@@ -1,0 +1,72 @@
+---
+/**
+ * Papers.astro — Research papers & awards section.
+ * Reads from 'papers' content collection, sorts by year descending.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import SectionTitle from './SectionTitle.astro';
+import PaperCard from './PaperCard.astro';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const entries = await getCollection('papers');
+const sorted = entries.sort(
+  (a: CollectionEntry<'papers'>, b: CollectionEntry<'papers'>) => b.data.year - a.data.year,
+);
+---
+
+<section class="papers section-gap" id="research" aria-label="Research papers and awards">
+  <div class="container">
+    <SectionTitle eyebrow={t('papers_eyebrow', lang)} title={t('papers_title', lang)} />
+
+    <div class="papers__grid" role="list" aria-label="Paper cards">
+      {sorted.map((entry: CollectionEntry<'papers'>) => (
+        <div role="listitem">
+          <PaperCard
+            title={entry.data.title}
+            authors={entry.data.authors}
+            venue={entry.data.venue}
+            year={entry.data.year}
+            award={entry.data.award}
+            doi={entry.data.doi}
+            pdf={entry.data.pdf}
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-gap {
+    padding: 6rem 0;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .papers__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .papers__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .papers__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

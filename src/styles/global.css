@@ -1,0 +1,128 @@
+/*
+ * global.css — Modern CSS reset + base styles
+ * Import order matters: tokens → typography → reset → base
+ */
+
+@import './tokens.css';
+@import './typography.css';
+
+/* ─── MODERN CSS RESET ──────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Smooth scrolling — overridden by lenis in Phase 07 */
+  scroll-behavior: smooth;
+  /* Prevent layout shift from scrollbar appearing */
+  scrollbar-gutter: stable;
+  /* iOS text size adjust */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  /* Anti-aliasing for sharp text */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Remove list styles on ul/ol with list role */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Form element inheritance */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* Avoid text overflow on long words */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* Focus ring — accessible, aurora-tinted */
+:focus-visible {
+  outline: 2px solid var(--aurora-1);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+/* Remove default button styles */
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Anchor base */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── BASE UTILITY VARS (Tailwind gap-fill) ─────────────────────────────────── */
+
+:root {
+  /* Spacing scale: 4px base (used in Tailwind extend & manual layouts) */
+  --space-1:  0.25rem;   /* 4px  */
+  --space-2:  0.5rem;    /* 8px  */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+  --space-48: 12rem;     /* 192px */
+  --space-64: 16rem;     /* 256px */
+  --space-96: 24rem;     /* 384px */
+}
+
+/* ─── SELECTION ─────────────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: rgba(99, 102, 241, 0.18);
+  color: var(--text-primary);
+}
+
+/* ─── SCROLLBAR (Webkit) ────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-subtle);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ─── THEME TRANSITION ──────────────────────────────────────────────────────── */
+
+/* Smooth color swap when toggling theme (skipped on first paint by init script) */
+html.theme-ready {
+  transition:
+    background-color var(--duration-base) var(--ease-soft),
+    color var(--duration-base) var(--ease-soft);
+}

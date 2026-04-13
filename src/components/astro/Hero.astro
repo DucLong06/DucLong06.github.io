@@ -1,0 +1,224 @@
+---
+/**
+ * Hero.astro — Full-viewport hero section.
+ * Copy from brainstorm §16.9. LiquidShader canvas behind text (client:visible).
+ * Profile data pulled from content collection. Bilingual via lang prop.
+ */
+import { getEntry } from 'astro:content';
+import LiquidShader from '../react/LiquidShader';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const profile = await getEntry('profile', 'main');
+const name    = profile.data.name[lang] ?? profile.data.name.en;
+const tagline = profile.data.tagline[lang] ?? profile.data.tagline.en;
+const email   = profile.data.email;
+const cvFile  = profile.data.cvFile;
+---
+
+<section class="hero" aria-label="Introduction">
+  <!-- Shader canvas — absolutely behind text, aria-hidden -->
+  <div class="hero-canvas-wrap" aria-hidden="true">
+    <LiquidShader client:visible />
+  </div>
+
+  <!-- Hero content -->
+  <div class="hero-content">
+    <h1 class="hero-name">{name}</h1>
+
+    <p class="hero-tagline">
+      {tagline}<br />
+      {t('hero_tech_stack', lang)}
+    </p>
+
+    <p class="hero-meta">
+      {t('hero_meta', lang)}<br />
+      <span aria-label="Trophy">🏆</span> {t('hero_award_alqac', lang)} ·
+      <span aria-label="Medal">🏅</span> {t('hero_award_saokhe', lang)}.
+    </p>
+
+    <!-- CTAs -->
+    <div class="hero-ctas" role="list">
+      <a href="#work" class="hero-cta hero-cta--primary" role="listitem">
+        {t('hero_cta_work', lang)} <span aria-hidden="true">→</span>
+      </a>
+      <a
+        href={cvFile}
+        class="hero-cta hero-cta--secondary"
+        role="listitem"
+        download
+      >
+        {t('hero_cta_cv', lang)}
+      </a>
+      <a
+        href={`mailto:${email}`}
+        class="hero-cta hero-cta--secondary"
+        role="listitem"
+      >
+        {t('hero_cta_email', lang)}
+      </a>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span class="hero-scroll-arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Canvas fill — behind everything */
+  .hero-canvas-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* Content stack above canvas */
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    max-width: 860px;
+    gap: 1.25rem;
+  }
+
+  /* Giant Instrument Serif italic — §16.9 */
+  .hero-name {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(3rem, 10vw, 5.5rem); /* ~88px at wide viewport */
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    /* Soft aurora gradient text on hover / always in dark mode */
+    background: var(--aurora-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  .hero-meta {
+    font-size: 0.9375rem;
+    color: var(--text-tertiary);
+    line-height: 1.7;
+  }
+
+  /* CTA row */
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.625rem 1.375rem;
+    border-radius: var(--r-md);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      transform var(--duration-fast) var(--ease-soft),
+      box-shadow var(--duration-fast) var(--ease-soft),
+      background-color var(--duration-fast) var(--ease-soft);
+  }
+
+  .hero-cta--primary {
+    background: var(--aurora-gradient);
+    color: #fff;
+  }
+
+  .hero-cta--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-aurora);
+  }
+
+  .hero-cta--primary:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-aurora);
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  .hero-cta--secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+  }
+
+  .hero-cta--secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--bg-subtle);
+  }
+
+  .hero-cta--secondary:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--bg-subtle);
+    outline: 2px solid var(--aurora-1);
+    outline-offset: 2px;
+  }
+
+  /* Scroll hint */
+  .hero-scroll-hint {
+    margin-top: 1rem;
+  }
+
+  .hero-scroll-arrow {
+    display: inline-block;
+    color: var(--text-tertiary);
+    font-size: 1.25rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0);    opacity: 0.5; }
+    50%       { transform: translateY(6px); opacity: 1;   }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-scroll-arrow {
+      animation: none;
+    }
+    .hero-cta {
+      transition: none;
+    }
+    .hero-cta--primary:hover,
+    .hero-cta--primary:focus-visible,
+    .hero-cta--secondary:hover,
+    .hero-cta--secondary:focus-visible {
+      transform: none;
+    }
+  }
+</style>

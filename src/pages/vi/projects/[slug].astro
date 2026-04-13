@@ -1,0 +1,403 @@
+---
+/**
+ * vi/projects/[slug].astro — VI project detail page.
+ * Mirrors /projects/[slug].astro — same structure, lang='vi'.
+ * Route: /vi/projects/<slug>/
+ */
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/astro/Nav.astro';
+import { t } from '../../../lib/i18n-helpers';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+export async function getStaticPaths() {
+  const all = await getCollection('projects');
+  return all.map((entry: CollectionEntry<'projects'>) => ({
+    params: { slug: entry.id.replace(/\.(md|mdx)$/, '') },
+    props: { entry },
+  }));
+}
+
+function entrySlug(id: string) {
+  return id.replace(/\.(md|mdx)$/, '');
+}
+
+const lang = 'vi' as const;
+const { entry } = Astro.props as Props;
+const { Content } = await render(entry);
+
+const { title, summary, stack, stars, repo, demo, category, publishedAt } = entry.data;
+
+const GRADIENTS: Record<string, string> = {
+  'face-detection-ml-system': 'linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#06b6d4 100%)',
+  'booking-duongcam-art':     'linear-gradient(135deg,#f472b6 0%,#8b5cf6 60%,#6366f1 100%)',
+  'legal-prompts':            'linear-gradient(135deg,#06b6d4 0%,#6366f1 100%)',
+  'alqac-2023':               'linear-gradient(135deg,#10b981 0%,#06b6d4 70%,#6366f1 100%)',
+  'text2sql-vietnamese':      'linear-gradient(135deg,#f59e0b 0%,#f472b6 60%,#8b5cf6 100%)',
+  'ocr-api':                  'linear-gradient(135deg,#8b5cf6 0%,#10b981 100%)',
+};
+
+const slug = entrySlug(entry.id);
+const coverGradient = GRADIENTS[slug] ?? 'linear-gradient(135deg,#6366f1,#8b5cf6)';
+
+const formattedDate = new Date(publishedAt).toLocaleDateString('vi-VN', {
+  year: 'numeric', month: 'long',
+});
+---
+
+<BaseLayout
+  title={`${title} — Hoàng Đức Long`}
+  description={summary.vi ?? summary.en}
+  lang={lang}
+>
+  <Nav lang={lang} />
+
+  <!-- Sticky back link -->
+  <div class="back-bar">
+    <div class="container">
+      <a href="/vi/#work" class="back-link" aria-label={t('project_back_link', lang)}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        {t('project_back_link', lang)}
+      </a>
+    </div>
+  </div>
+
+  <main id="main-content" class="detail-page" tabindex="-1">
+    <div class="container">
+
+      <!-- Cover banner -->
+      <div class="cover-banner" style={`background:${coverGradient}`} aria-hidden="true">
+        <div class="cover-noise" />
+      </div>
+
+      <!-- Project header -->
+      <header class="project-header">
+        <div class="project-header__meta">
+          <span class="project-header__category">{category}</span>
+          <span class="project-header__date">{formattedDate}</span>
+          {stars && (
+            <span class="project-header__stars" aria-label={`${stars} ${t('project_stars_label', lang)}`}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              {stars} stars
+            </span>
+          )}
+        </div>
+
+        <h1 class="project-header__title">{title}</h1>
+        <p class="project-header__summary">{summary.vi ?? summary.en}</p>
+
+        <!-- Stack pills -->
+        <ul class="stack-pills" role="list" aria-label="Tech stack">
+          {stack.map((tech: string) => (
+            <li class="stack-pill" role="listitem">{tech}</li>
+          ))}
+        </ul>
+
+        <!-- Action links -->
+        <div class="project-header__links">
+          {repo && (
+            <a
+              href={repo}
+              class="btn btn--outline"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View source on GitHub"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              {t('project_source', lang)}
+            </a>
+          )}
+          {demo && (
+            <a
+              href={demo}
+              class="btn btn--primary"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View live demo"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              {t('project_demo', lang)}
+            </a>
+          )}
+        </div>
+      </header>
+
+      <!-- MDX body -->
+      <article class="prose">
+        <Content />
+      </article>
+
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Back bar */
+  .back-bar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--bg-base);
+    border-bottom: 1px solid var(--border);
+    padding: 0.625rem 0;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .back-link:hover,
+  .back-link:focus-visible {
+    color: var(--aurora-1);
+    outline: none;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Cover banner */
+  .cover-banner {
+    position: relative;
+    width: 100%;
+    height: 14rem;
+    border-radius: var(--r-lg, 1rem);
+    overflow: hidden;
+    margin: 2rem 0;
+  }
+
+  .cover-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+    background-size: cover;
+  }
+
+  /* Project header */
+  .project-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .project-header__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.875rem;
+  }
+
+  .project-header__category {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--aurora-1);
+    background: rgba(99,102,241,0.08);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 0.25rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .project-header__date {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+
+  .project-header__stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--aurora-2, #8b5cf6);
+  }
+
+  .project-header__title {
+    font-family: var(--font-display, 'Instrument Serif', serif);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin: 0 0 0.875rem;
+  }
+
+  .project-header__summary {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin: 0 0 1.25rem;
+  }
+
+  .stack-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+  }
+
+  .stack-pill {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .project-header__links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--r-md, 0.5rem);
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .btn--primary {
+    background: var(--aurora-1, #6366f1);
+    color: #fff;
+    border: 1px solid transparent;
+  }
+
+  .btn--primary:hover,
+  .btn--primary:focus-visible {
+    background: var(--accent-hover, #4f46e5);
+    outline: none;
+  }
+
+  .btn--outline {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+  }
+
+  .btn--outline:hover,
+  .btn--outline:focus-visible {
+    border-color: var(--aurora-1);
+    color: var(--aurora-1);
+    outline: none;
+  }
+
+  /* Prose */
+  .prose {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    padding-bottom: 5rem;
+  }
+
+  .prose :global(h2) {
+    font-family: var(--font-display, 'Instrument Serif', serif);
+    font-size: 1.375rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 2rem 0 0.75rem;
+  }
+
+  .prose :global(h3) {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .prose :global(p) { margin: 0 0 1rem; }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.5rem;
+    margin: 0 0 1rem;
+  }
+
+  .prose :global(li) { margin-bottom: 0.35rem; }
+
+  .prose :global(code) {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.8125rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.35rem;
+    color: var(--aurora-1, #6366f1);
+  }
+
+  .prose :global(pre) {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md, 0.5rem);
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+  }
+
+  .prose :global(a) {
+    color: var(--aurora-1);
+    text-decoration: underline;
+    text-decoration-color: rgba(99,102,241,0.4);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s;
+  }
+
+  .prose :global(a:hover) { text-decoration-color: var(--aurora-1); }
+
+  .prose :global(blockquote) {
+    border-left: 3px solid var(--aurora-1);
+    padding-left: 1rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+    margin: 1rem 0;
+  }
+
+  .detail-page {
+    min-height: 100vh;
+    padding-top: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .cover-banner { height: 18rem; }
+  }
+</style>

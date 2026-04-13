@@ -1,0 +1,113 @@
+---
+/**
+ * ProjectsGrid.astro — Bento 3×2 grid of featured projects.
+ * Queries content collection, sorts by FEATURED_ORDER (deterministic).
+ * First card (face-detection-ml-system) spans 2 cols as hero card.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { FEATURED_ORDER } from '../../lib/featured-projects-order';
+import SectionTitle from './SectionTitle.astro';
+import ProjectCard from './ProjectCard.astro';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+/** Strip .md/.mdx extension from Astro 5 entry.id */
+function entrySlug(id: string) {
+  return id.replace(/\.(md|mdx)$/, '');
+}
+
+interface Props {
+  id?: string;
+  lang?: Lang;
+}
+const { id = 'work', lang = 'en' } = Astro.props;
+
+// Fetch only featured projects, then sort by explicit FEATURED_ORDER array
+const allFeatured = await getCollection(
+  'projects',
+  (e: CollectionEntry<'projects'>) => e.data.featured === true,
+);
+
+// FEATURED_ORDER has bare slugs; entry.id has .md suffix — normalise for comparison
+const sorted = FEATURED_ORDER
+  .map((s) => allFeatured.find((e: CollectionEntry<'projects'>) => entrySlug(e.id) === s))
+  .filter((e): e is CollectionEntry<'projects'> => e !== undefined);
+---
+
+<section class="projects section-gap" id={id} aria-label="Featured projects">
+  <div class="container">
+    <SectionTitle eyebrow={t('projects_eyebrow', lang)} title={t('projects_title', lang)} />
+
+    <div class="bento-grid" role="list" aria-label="Project cards">
+      {sorted.map((entry, idx) => {
+        const isHero = idx === 0;
+        return (
+          <div
+            class:list={['bento-cell', { 'bento-cell--hero': isHero }]}
+            role="listitem"
+          >
+            <ProjectCard
+              slug={entrySlug(entry.id)}
+              title={entry.data.title}
+              summary={entry.data.summary}
+              stack={entry.data.stack}
+              stars={entry.data.stars}
+              repo={entry.data.repo}
+              demo={entry.data.demo}
+              hero={isHero}
+              lang={lang}
+            />
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-gap {
+    padding: 6rem 0;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Mobile: single column stack */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    /* Each row auto-sizes to content on mobile */
+  }
+
+  /* md+: 3-col bento with fixed row height */
+  @media (min-width: 768px) {
+    .bento-grid {
+      grid-template-columns: repeat(3, 1fr);
+      auto-rows: 20rem;
+    }
+  }
+
+  /* Hero card spans 2 cols */
+  @media (min-width: 768px) {
+    .bento-cell--hero {
+      grid-column: span 2;
+    }
+  }
+
+  /* Cells fill their grid track */
+  .bento-cell {
+    /* Ensure the ProjectCard stretches to fill the cell */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* On mobile give cards a comfortable min-height */
+  @media (max-width: 767px) {
+    .bento-cell {
+      min-height: 18rem;
+    }
+  }
+</style>

@@ -1,0 +1,99 @@
+/*
+ * typography.css — Font loading + type scale
+ * Uses @fontsource packages (NO Google Fonts CDN).
+ * font-display: swap on all faces for perf.
+ *
+ * Scale:
+ *   h1  88px  Instrument Serif italic  — hero name
+ *   h2  48px  Inter 700                — section title
+ *   h3  32px  Inter 600                — sub-section
+ *   h4  22px  Inter 600
+ *   body-lg  18px  Inter 400
+ *   body     16px  Inter 400
+ *   caption  13px  Inter 400
+ *   mono     14px  JetBrains Mono 400/500
+ */
+
+/* ─── FONT IMPORTS (@fontsource — no CDN) ───────────────────────────────────── */
+
+/* Instrument Serif — upright + italic, latin only */
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+
+/* Inter variable — wght axis, all subsets declared but browser fetches only needed ranges */
+@import '@fontsource-variable/inter/wght.css';
+
+/* JetBrains Mono variable — wght axis */
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
+/* ─── FONT FAMILY TOKENS ────────────────────────────────────────────────────── */
+:root {
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body:    'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ─── TYPE SCALE ────────────────────────────────────────────────────────────── */
+
+/* Apply base body font globally */
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;       /* 16px */
+  line-height: 1.65;
+  font-weight: 400;
+  font-optical-sizing: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* h1 — hero / display: Instrument Serif italic */
+h1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(3rem, 8vw, 5.5rem); /* 48px → 88px fluid */
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+/* h2 — section title: Inter bold */
+h2 {
+  font-family: var(--font-body);
+  font-size: clamp(1.75rem, 4vw, 3rem); /* 28px → 48px */
+  font-weight: 700;
+}
+
+/* h3 — sub-section */
+h3 {
+  font-family: var(--font-body);
+  font-size: clamp(1.25rem, 2.5vw, 2rem); /* 20px → 32px */
+  font-weight: 600;
+}
+
+/* h4 */
+h4 {
+  font-family: var(--font-body);
+  font-size: 1.375rem; /* 22px */
+  font-weight: 600;
+}
+
+/* Utility: body-lg */
+.text-body-lg {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.7;
+}
+
+/* Utility: caption */
+.text-caption {
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.5;
+}
+
+/* Code / mono */
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.875em; /* 14px relative */
+  font-variant-ligatures: none;
+}

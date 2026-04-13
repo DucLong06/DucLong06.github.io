@@ -1,0 +1,13 @@
+{
+  "totalRepos": 72,
+  "totalStars": 56,
+  "topLanguages": [
+    { "name": "C++", "percentage": 29.5 },
+    { "name": "Python", "percentage": 28.9 },
+    { "name": "Smarty", "percentage": 19.1 },
+    { "name": "Jupyter Notebook", "percentage": 17.2 },
+    { "name": "JavaScript", "percentage": 4.3 }
+  ],
+  "contributionsThisYear": 0,
+  "fetchedAt": "2026-04-14T00:00:00.000Z"
+}

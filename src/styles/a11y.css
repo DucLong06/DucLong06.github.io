@@ -1,0 +1,46 @@
+/*
+ * a11y.css — Accessibility helpers
+ * Skip-to-content link + reinforced focus ring tokens.
+ * Imported by BaseLayout.astro before all other styles resolve.
+ */
+
+/* ─── SKIP LINK ─────────────────────────────────────────────────────────────── */
+/* Visually hidden until focused — first element in <body> */
+
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background: var(--aurora-1, #6366f1);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 var(--r-sm, 6px) 0;
+  /* Smooth slide-in on focus */
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+}
+
+/* ─── GLOBAL FOCUS RING ──────────────────────────────────────────────────────── */
+/* Reinforces global.css :focus-visible — kept in sync here as canonical source */
+
+:focus-visible {
+  outline: 2px solid var(--aurora-1, #6366f1);
+  outline-offset: 2px;
+  border-radius: var(--r-sm, 4px);
+}
+
+/* ─── REDUCED-MOTION: disable smooth scroll ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,41 @@
+---
+/**
+ * vi/index.astro — VI home page
+ * Mirrors /index.astro — same component tree, lang='vi'.
+ * Route: /vi/
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/astro/Nav.astro';
+import Hero from '../../components/astro/Hero.astro';
+import About from '../../components/astro/About.astro';
+import Marquee from '../../components/astro/Marquee.astro';
+import Experience from '../../components/astro/Experience.astro';
+import Skills from '../../components/astro/Skills.astro';
+import ProjectsGrid from '../../components/astro/ProjectsGrid.astro';
+import Papers from '../../components/astro/Papers.astro';
+import GitHubStats from '../../components/astro/GitHubStats.astro';
+import Contact from '../../components/astro/Contact.astro';
+import Footer from '../../components/astro/Footer.astro';
+
+const lang = 'vi' as const;
+---
+
+<BaseLayout
+  title="Hoàng Đức Long — Kỹ sư AI Full-stack"
+  description="Kỹ sư AI Full-stack xây dựng hệ thống ML quy mô viễn thông. Python · C++ · .NET · TypeScript."
+  lang={lang}
+>
+  <Nav lang={lang} />
+  <main id="main-content" tabindex="-1">
+    <Hero lang={lang} />
+    <About lang={lang} />
+    <Marquee />
+    <Experience lang={lang} />
+    <Skills lang={lang} />
+    <ProjectsGrid id="work" lang={lang} />
+    <Papers lang={lang} />
+    <GitHubStats lang={lang} />
+    <Contact lang={lang} />
+  </main>
+  <Footer lang={lang} currentPath={Astro.url.pathname} />
+</BaseLayout>

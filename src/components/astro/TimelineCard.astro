@@ -1,0 +1,181 @@
+---
+/**
+ * TimelineCard.astro — Single experience entry in the vertical timeline.
+ * Props: company, role, period (start/end strings), stack pills, rendered body slot.
+ * lang prop controls locale for date formatting and "Present" label.
+ */
+import type { Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  company: string;
+  role: string;
+  periodStart: string;
+  periodEnd: string | null;
+  stack: string[];
+  lang?: Lang;
+}
+const { company, role, periodStart, periodEnd, stack, lang = 'en' } = Astro.props;
+
+const locale = lang === 'vi' ? 'vi-VN' : 'en-US';
+const presentLabel = lang === 'vi' ? 'Hiện tại' : 'Present';
+
+// Format "2023-01" → "Jan 2023" / "Th01 2023"
+function fmtPeriod(iso: string): string {
+  const [year, month] = iso.split('-');
+  const d = new Date(Number(year), Number(month) - 1);
+  return d.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+}
+
+const start = fmtPeriod(periodStart);
+const end   = periodEnd ? fmtPeriod(periodEnd) : presentLabel;
+---
+
+<article class="timeline-card">
+  <!-- Timeline dot -->
+  <div class="timeline-dot" aria-hidden="true"></div>
+
+  <div class="timeline-card__body">
+    <header class="timeline-card__header">
+      <div class="timeline-card__meta">
+        <h3 class="timeline-card__company">{company}</h3>
+        <span class="timeline-card__role">{role}</span>
+      </div>
+      <time class="timeline-card__period" datetime={periodStart}>
+        {start} — {end}
+      </time>
+    </header>
+
+    <!-- Stack pills -->
+    <ul class="timeline-card__stack" aria-label="Tech stack" role="list">
+      {stack.map(s => (
+        <li class="stack-pill" role="listitem">{s}</li>
+      ))}
+    </ul>
+
+    <!-- Rendered markdown body injected by parent via slot -->
+    <div class="timeline-card__content prose">
+      <slot />
+    </div>
+  </div>
+</article>
+
+<style>
+  .timeline-card {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  /* Vertical line drawn by parent Experience component */
+  .timeline-dot {
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    background: var(--aurora-gradient);
+    box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 4px var(--aurora-1);
+    flex-shrink: 0;
+  }
+
+  .timeline-card__body {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .timeline-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-card__company {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 0.2rem;
+  }
+
+  .timeline-card__role {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--aurora-1);
+  }
+
+  .timeline-card__period {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Stack pills */
+  .timeline-card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem;
+  }
+
+  .stack-pill {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    color: var(--text-secondary);
+  }
+
+  /* Prose content */
+  .timeline-card__content {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .timeline-card__content :global(h2) {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 1.25rem 0 0.5rem;
+  }
+
+  .timeline-card__content :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .timeline-card__content :global(ul) {
+    padding-left: 1.25rem;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .timeline-card__content :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
+  .timeline-card__content :global(strong) {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .timeline-card__content :global(a) {
+    color: var(--aurora-1);
+    text-underline-offset: 3px;
+  }
+</style>

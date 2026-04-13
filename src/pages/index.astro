@@ -1,0 +1,41 @@
+---
+/**
+ * index.astro — EN home page (Phase 04+)
+ * Wraps content in BaseLayout; renders Nav + Hero + About + Marquee + Experience + Skills +
+ * ProjectsGrid + Papers + GitHubStats + Footer.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/astro/Nav.astro';
+import Hero from '../components/astro/Hero.astro';
+import About from '../components/astro/About.astro';
+import Marquee from '../components/astro/Marquee.astro';
+import Experience from '../components/astro/Experience.astro';
+import Skills from '../components/astro/Skills.astro';
+import ProjectsGrid from '../components/astro/ProjectsGrid.astro';
+import Papers from '../components/astro/Papers.astro';
+import GitHubStats from '../components/astro/GitHubStats.astro';
+import Contact from '../components/astro/Contact.astro';
+import Footer from '../components/astro/Footer.astro';
+
+const lang = 'en' as const;
+---
+
+<BaseLayout
+  title="Hoàng Đức Long — Full-stack AI Engineer"
+  description="Full-stack AI engineer shipping production ML at telecom scale. Python · C++ · .NET · TypeScript."
+  lang={lang}
+>
+  <Nav lang={lang} />
+  <main id="main-content" tabindex="-1">
+    <Hero lang={lang} />
+    <About lang={lang} />
+    <Marquee />
+    <Experience lang={lang} />
+    <Skills lang={lang} />
+    <ProjectsGrid id="work" lang={lang} />
+    <Papers lang={lang} />
+    <GitHubStats lang={lang} />
+    <Contact lang={lang} />
+  </main>
+  <Footer lang={lang} currentPath={Astro.url.pathname} />
+</BaseLayout>

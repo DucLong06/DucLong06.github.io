@@ -1,0 +1,108 @@
+/*
+ * tokens.css — "Soft Aurora" Design System
+ * Single source of truth for all CSS custom properties.
+ * Tailwind reads from these vars via tailwind.config.js.
+ *
+ * Token groups:
+ *   --bg-*         Surface colors
+ *   --text-*       Foreground colors
+ *   --border, --border-strong  Border alpha values
+ *   --aurora-*     Accent / gradient palette (indigo, violet, cyan, pink)
+ *   --accent-*     Semantic accent shortcuts
+ *   --success, --warning  Status colors
+ *   --r-*          Border radii
+ *   --shadow-*     Box shadows (multi-layer with aurora tint)
+ *   --ease-soft    Motion easing
+ */
+
+/* ─── LIGHT MODE (default) ─────────────────────────────────────────────────── */
+:root {
+  /* Surfaces */
+  --bg-base:        #fafaf9;
+  --bg-elevated:    #ffffff;
+  --bg-subtle:      #f4f4f2;
+
+  /* Text */
+  --text-primary:   #0a0a0b;
+  --text-secondary: #52525b;
+  --text-tertiary:  #a1a1aa;
+
+  /* Borders */
+  --border:         rgba(10, 10, 11, 0.08);
+  --border-strong:  rgba(10, 10, 11, 0.14);
+
+  /* Aurora accents — unchanged across modes */
+  --aurora-1:       #6366f1;  /* indigo */
+  --aurora-2:       #8b5cf6;  /* violet */
+  --aurora-3:       #06b6d4;  /* cyan */
+  --aurora-4:       #f472b6;  /* soft pink */
+  --aurora-gradient: linear-gradient(
+    135deg,
+    var(--aurora-1) 0%,
+    var(--aurora-2) 50%,
+    var(--aurora-3) 100%
+  );
+
+  /* Semantic accents */
+  --accent:         var(--aurora-1);
+  --accent-hover:   #4f46e5;
+
+  /* Status */
+  --success:        #10b981;
+  --warning:        #f59e0b;
+
+  /* Radii */
+  --r-sm:  6px;
+  --r-md:  12px;
+  --r-lg:  20px;
+  --r-xl:  28px;
+
+  /* Shadows (multi-layer, soft, aurora-tinted) */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.04),
+                0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.04),
+                   0 8px 24px rgba(0, 0, 0, 0.06),
+                   0 24px 48px rgba(99, 102, 241, 0.08);
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast:   150ms;
+  --duration-base:   250ms;
+  --duration-slow:   400ms;
+}
+
+/* ─── DARK MODE ─────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Surfaces */
+  --bg-base:        #0b0b0f;
+  --bg-elevated:    #12121a;
+  --bg-subtle:      #18181f;
+
+  /* Text */
+  --text-primary:   #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-tertiary:  #52525b;
+
+  /* Borders */
+  --border:         rgba(255, 255, 255, 0.08);
+  --border-strong:  rgba(255, 255, 255, 0.14);
+
+  /* Aurora: same hues, glow enhanced on dark */
+  --aurora-1:       #6366f1;
+  --aurora-2:       #8b5cf6;
+  --aurora-3:       #06b6d4;
+  --aurora-4:       #f472b6;
+
+  /* Semantic accents */
+  --accent:         var(--aurora-1);
+  --accent-hover:   #818cf8;
+
+  /* Shadows gain more alpha on dark */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.16);
+  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.16),
+                0 8px 24px rgba(0, 0, 0, 0.24);
+  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.16),
+                   0 8px 24px rgba(0, 0, 0, 0.24),
+                   0 24px 48px rgba(99, 102, 241, 0.16);
+}

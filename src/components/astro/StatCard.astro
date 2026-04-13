@@ -1,0 +1,58 @@
+---
+/**
+ * StatCard.astro — Individual stat display card.
+ * Props: value (e.g. "6,000+"), label (e.g. "MRs / month")
+ */
+interface Props {
+  value: string;
+  label: string;
+}
+const { value, label } = Astro.props;
+---
+
+<div class="stat-card">
+  <span class="stat-card__value">{value}</span>
+  <span class="stat-card__label">{label}</span>
+</div>
+
+<style>
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform var(--duration-fast, 150ms) var(--ease-soft, ease),
+      box-shadow var(--duration-fast, 150ms) var(--ease-soft, ease);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-aurora);
+  }
+
+  .stat-card__value {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 1.75rem;
+    font-weight: 400;
+    line-height: 1;
+    background: var(--aurora-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-card__label {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+  }
+</style>
