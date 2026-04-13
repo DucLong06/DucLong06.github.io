@@ -1,0 +1,9 @@
+TODO: Place exported CV PDF here as `cv.pdf`.
+
+No PDF export was available at content-seeding time (Phase 02).
+Action required before Phase 07 (Contact + Download CV button):
+  1. Export CV from Google Docs / source as PDF
+  2. Place the file at: public/cv.pdf
+  3. Remove this marker file
+
+The YAML pointer is already set: profile/main.yaml → cvFile: "/cv.pdf"

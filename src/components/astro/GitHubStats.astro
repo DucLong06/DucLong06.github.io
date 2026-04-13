@@ -1,0 +1,116 @@
+---
+/**
+ * GitHubStats.astro — Build-time GitHub profile stats panel.
+ * Calls getGitHubStats() at build time — zero runtime JS.
+ * Shows: total repos, total stars, top languages bar.
+ */
+import { getGitHubStats } from '../../lib/github-stats';
+import SectionTitle from './SectionTitle.astro';
+import StatCard from './StatCard.astro';
+import LanguageBar from './LanguageBar.astro';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const stats = await getGitHubStats();
+
+const locale = lang === 'vi' ? 'vi-VN' : 'en-GB';
+const fetchDate = new Date(stats.fetchedAt).toLocaleDateString(locale, {
+  month: 'short',
+  year: 'numeric',
+});
+---
+
+<section class="gh-stats section-gap" id="github" aria-label="GitHub statistics">
+  <div class="container">
+    <SectionTitle eyebrow={t('github_eyebrow', lang)} title={t('github_title', lang)} />
+
+    <div class="gh-stats__cards">
+      <StatCard value={String(stats.totalRepos)} label={t('github_stat_repos', lang)} />
+      <StatCard value={String(stats.totalStars)} label={t('github_stat_stars', lang)} />
+      <StatCard value={String(stats.topLanguages.length)} label={t('github_stat_languages', lang)} />
+      <StatCard value="DucLong06" label={t('github_stat_handle', lang)} />
+    </div>
+
+    <div class="gh-stats__languages">
+      <p class="gh-stats__languages-label">{t('github_language_label', lang)}</p>
+      <LanguageBar languages={stats.topLanguages} />
+    </div>
+
+    <p class="gh-stats__footer">
+      {t('github_stats_footer', lang)} ·
+      <a
+        class="gh-stats__profile-link"
+        href="https://github.com/DucLong06"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        github.com/DucLong06
+      </a>
+      · {fetchDate}
+    </p>
+  </div>
+</section>
+
+<style>
+  .section-gap {
+    padding: 6rem 0;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .gh-stats__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .gh-stats__cards {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .gh-stats__languages {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .gh-stats__languages-label {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin: 0 0 1rem 0;
+  }
+
+  .gh-stats__footer {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    margin: 0;
+    text-align: right;
+  }
+
+  .gh-stats__profile-link {
+    color: var(--aurora-1);
+    text-decoration: none;
+  }
+
+  .gh-stats__profile-link:hover {
+    text-decoration: underline;
+  }
+</style>

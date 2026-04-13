@@ -1,0 +1,139 @@
+---
+/**
+ * PaperCard.astro — Displays a single research paper or award entry.
+ * Props mirror the 'papers' collection schema.
+ */
+interface Props {
+  title: string;
+  authors: string[];
+  venue: string;
+  year: number;
+  award?: string;
+  doi?: string;
+  pdf?: string;
+}
+
+const { title, authors, venue, year, award, doi, pdf } = Astro.props;
+const linkHref = doi ? `https://doi.org/${doi}` : pdf;
+---
+
+<article class="paper-card">
+  {award && (
+    <div class="paper-card__award" aria-label="Award">
+      {award}
+    </div>
+  )}
+
+  <h3 class="paper-card__title">{title}</h3>
+
+  <p class="paper-card__authors">
+    {authors.join(' · ')}
+  </p>
+
+  <p class="paper-card__venue">
+    <span class="paper-card__venue-name">{venue}</span>
+    <span class="paper-card__year">{year}</span>
+  </p>
+
+  {linkHref && (
+    <a
+      class="paper-card__link"
+      href={linkHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Read paper: ${title}`}
+    >
+      {doi ? 'View on IEEE →' : 'View Paper →'}
+    </a>
+  )}
+</article>
+
+<style>
+  .paper-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    transition:
+      transform 150ms var(--ease-soft, ease),
+      box-shadow 150ms var(--ease-soft, ease);
+  }
+
+  .paper-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-aurora);
+  }
+
+  .paper-card__award {
+    display: inline-flex;
+    align-self: flex-start;
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--aurora-1);
+    background: color-mix(in srgb, var(--aurora-1) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--aurora-1) 30%, transparent);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+  }
+
+  .paper-card__title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .paper-card__authors {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .paper-card__venue {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin: 0;
+    flex-wrap: wrap;
+  }
+
+  .paper-card__venue-name {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.03em;
+  }
+
+  .paper-card__year {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--aurora-2, var(--aurora-1));
+  }
+
+  .paper-card__link {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--aurora-1);
+    text-decoration: none;
+    transition: opacity 120ms ease;
+  }
+
+  .paper-card__link:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+  }
+</style>

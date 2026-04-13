@@ -1,0 +1,126 @@
+---
+/**
+ * 404.astro — Custom 404 not-found page
+ * GitHub Pages serves this automatically for unmatched routes.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — Page Not Found" description="The page you're looking for doesn't exist.">
+  <main class="not-found">
+    <div class="not-found-inner">
+      <p class="not-found-eyebrow">Error</p>
+      <h1 class="not-found-heading">
+        <span class="glitch" data-text="404">404</span>
+      </h1>
+      <p class="not-found-message">
+        Oops — this page doesn't exist or has been moved.
+      </p>
+      <a href="/" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Back to home
+      </a>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .not-found-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .not-found-eyebrow {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-tertiary);
+    margin: 0;
+  }
+
+  .not-found-heading {
+    margin: 0;
+    font-size: clamp(6rem, 20vw, 12rem);
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  /* Subtle glitch effect */
+  .glitch {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .glitch:hover::before {
+    opacity: 0.6;
+    color: #7c3aed;
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    transform: translateX(-3px);
+    animation: glitch-clip 0.3s steps(2) infinite;
+  }
+
+  .glitch:hover::after {
+    opacity: 0.6;
+    color: #06b6d4;
+    clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+    transform: translateX(3px);
+    animation: glitch-clip 0.3s steps(2) 0.1s infinite;
+  }
+
+  @keyframes glitch-clip {
+    0% { clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); }
+    50% { clip-path: polygon(0 35%, 100% 35%, 100% 55%, 0 55%); }
+    100% { clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); }
+  }
+
+  .not-found-message {
+    font-size: 1.0625rem;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 36ch;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.625rem 1.375rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .back-link:hover {
+    background: var(--surface-raised);
+    color: var(--text-primary);
+    border-color: var(--accent);
+  }
+</style>

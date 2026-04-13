@@ -1,0 +1,137 @@
+---
+/**
+ * Nav.astro — Sticky frosted-blur top navigation
+ * Mounts ThemeToggle + LangToggle as client:idle React islands.
+ * Accepts lang prop to translate nav labels.
+ */
+import ThemeToggle from '../react/ThemeToggle';
+import LangToggle from '../react/LangToggle';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const navLinks = [
+  { label: t('nav_about',   lang), href: '#about'   },
+  { label: t('nav_work',    lang), href: '#work'    },
+  { label: t('nav_papers',  lang), href: '#papers'  },
+  { label: t('nav_contact', lang), href: '#contact' },
+];
+
+// Home href: VI pages link back to /vi/, EN to /
+const homeHref = lang === 'vi' ? '/vi/' : '/';
+---
+
+<header
+  class="nav-header"
+  role="banner"
+>
+  <nav
+    class="nav-inner"
+    aria-label="Main navigation"
+  >
+    <!-- Logo / wordmark -->
+    <a href={homeHref} class="nav-logo" aria-label={t('nav_home_label', lang)}>
+      <span aria-hidden="true">HDL</span>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="nav-links" role="list">
+      {navLinks.map(({ label, href }) => (
+        <li>
+          <a href={href} class="nav-link">{label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Controls -->
+    <div class="nav-controls">
+      <LangToggle client:idle />
+      <ThemeToggle client:idle />
+    </div>
+  </nav>
+</header>
+
+<style>
+  .nav-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    background-color: color-mix(in srgb, var(--bg-base) 60%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-logo {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-primary);
+    text-decoration: none;
+    background: var(--aurora-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    flex-shrink: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0.25rem;
+    margin-left: auto;
+  }
+
+  .nav-link {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--r-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-soft),
+                background-color var(--duration-fast) var(--ease-soft);
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-subtle);
+  }
+
+  .nav-link:focus-visible {
+    color: var(--text-primary);
+    background-color: var(--bg-subtle);
+    outline: 2px solid var(--aurora-1);
+    outline-offset: 2px;
+  }
+
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Mobile: hide text links, keep controls */
+  @media (max-width: 640px) {
+    .nav-links {
+      display: none;
+    }
+  }
+</style>

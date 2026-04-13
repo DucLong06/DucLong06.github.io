@@ -1,0 +1,34 @@
+---
+/**
+ * Marquee.astro — CSS-only infinite tech stack scroll strip.
+ * List duplicated 2× for seamless translateX(-50%) loop.
+ * No JS hydration required.
+ */
+import '../../styles/marquee.css';
+
+const techs = [
+  'Python', 'C++', '.NET', 'TypeScript', 'Django', 'FastAPI',
+  'Vue 3', 'React', 'Docker', 'Kubernetes', 'GCP', 'Vertex AI',
+  'Langchain', 'YOLOv11', 'OpenCV', 'PostgreSQL',
+];
+---
+
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee" role="presentation">
+    <div class="marquee__track">
+      {/* First copy */}
+      {techs.map(t => <span class="marquee__item">{t}</span>)}
+      {/* Duplicate for seamless loop */}
+      {techs.map(t => <span class="marquee__item" aria-hidden="true">{t}</span>)}
+    </div>
+  </div>
+</div>
+
+<style>
+  .marquee-section {
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-subtle);
+  }
+</style>

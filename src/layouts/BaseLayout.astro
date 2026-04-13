@@ -1,0 +1,104 @@
+---
+/**
+ * BaseLayout.astro — Root HTML shell
+ * All pages extend this: full meta/OG/JSON-LD, theme-init, global CSS, slot.
+ * Emits hreflang link pair for EN ↔ VI alternate URLs.
+ * Includes skip-to-content link for keyboard accessibility.
+ */
+import { themeInitScript } from '../lib/theme-init';
+import { mirrorUrl } from '../lib/i18n-helpers';
+import '../styles/global.css';
+import '../styles/a11y.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+  /** Canonical URL override — defaults to current page URL */
+  canonical?: string;
+}
+
+const {
+  title = 'Hoàng Đức Long — Full-stack AI Engineer',
+  description = 'Full-stack AI engineer shipping production ML at telecom scale. Python · C++ · .NET · TypeScript.',
+  lang = 'en',
+  canonical,
+} = Astro.props;
+
+const siteUrl = 'https://duclong06.github.io';
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).href;
+const ogImageUrl = `${siteUrl}/og-image.png`;
+
+// hreflang alternate URLs — EN is canonical (no prefix), VI uses /vi/ prefix
+const currentPath = Astro.url.pathname;
+const enUrl = new URL(mirrorUrl(currentPath, 'en'), siteUrl).href;
+const viUrl = new URL(mirrorUrl(currentPath, 'vi'), siteUrl).href;
+const fullTitle = title.includes('Hoàng Đức Long') ? title : `${title} | Hoàng Đức Long`;
+
+// JSON-LD Person schema
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Hoàng Đức Long',
+  jobTitle: 'Full-stack AI Software Engineer',
+  url: siteUrl,
+  email: 'mailto:hoangduclongg@gmail.com',
+  sameAs: [
+    'https://github.com/DucLong06',
+    'https://linkedin.com/in/hoangduclong',
+  ],
+};
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary meta -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- hreflang alternates — EN (default) + VI -->
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="vi" href={viUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === 'vi' ? 'vi_VN' : 'en_US'} />
+    <meta property="og:site_name" content="Hoàng Đức Long" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
+
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Theme init BEFORE first paint — prevents FOUC -->
+    <script is:inline set:html={themeInitScript} />
+  </head>
+  <body>
+    <!-- Skip-to-content — first focusable element; moves keyboard focus past nav -->
+    <a href="#main-content" class="skip-link">
+      {lang === 'vi' ? 'Bỏ qua để đến nội dung' : 'Skip to content'}
+    </a>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,130 @@
+---
+/**
+ * LanguageBar.astro — Horizontal segmented bar showing top languages by %.
+ * Each segment width = percentage. Color-mapped per known language.
+ * Pure SSR — zero runtime JS.
+ */
+import type { LanguageStat } from '../../lib/github-stats';
+
+interface Props {
+  languages: LanguageStat[];
+}
+
+const { languages } = Astro.props;
+
+/** Color map for known languages — falls back to aurora-1 gradient stop. */
+const COLOR_MAP: Record<string, string> = {
+  'TypeScript':       '#3178c6',
+  'JavaScript':       '#f7df1e',
+  'Python':           '#3572a5',
+  'C++':              '#f34b7d',
+  'C':                '#555555',
+  'Go':               '#00acd7',
+  'Rust':             '#dea584',
+  'Java':             '#b07219',
+  'Kotlin':           '#a97bff',
+  'Swift':            '#f05138',
+  'Dart':             '#00b4ab',
+  'HTML':             '#e34c26',
+  'CSS':              '#563d7c',
+  'Shell':            '#89e051',
+  'Smarty':           '#f0c040',
+  'Jupyter Notebook': '#da5b0b',
+  'Vue':              '#41b883',
+  'Svelte':           '#ff3e00',
+};
+
+function langColor(name: string): string {
+  return COLOR_MAP[name] ?? 'var(--aurora-1)';
+}
+---
+
+<div class="lang-bar-wrapper">
+  <div class="lang-bar" role="img" aria-label="Language distribution bar">
+    {languages.map((lang) => (
+      <span
+        class="lang-bar__segment"
+        style={`width:${lang.percentage}%;background:${langColor(lang.name)};`}
+        title={`${lang.name}: ${lang.percentage}%`}
+      />
+    ))}
+  </div>
+
+  <ul class="lang-legend" aria-label="Language legend">
+    {languages.map((lang) => (
+      <li class="lang-legend__item">
+        <span
+          class="lang-legend__dot"
+          style={`background:${langColor(lang.name)};`}
+          aria-hidden="true"
+        />
+        <span class="lang-legend__name">{lang.name}</span>
+        <span class="lang-legend__pct">{lang.percentage}%</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .lang-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .lang-bar {
+    display: flex;
+    height: 0.5rem;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--bg-elevated);
+    gap: 2px;
+  }
+
+  .lang-bar__segment {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    transition: filter 150ms ease;
+  }
+
+  .lang-bar__segment:hover {
+    filter: brightness(1.25);
+  }
+
+  .lang-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .lang-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .lang-legend__dot {
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .lang-legend__name {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+  }
+
+  .lang-legend__pct {
+    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+  }
+</style>

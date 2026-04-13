@@ -1,0 +1,12 @@
+name:
+  en: "Hoàng Đức Long"
+  vi: "Hoàng Đức Long"
+tagline:
+  en: "Full-stack AI engineer shipping production ML at telecom scale."
+  vi: "Kỹ sư AI full-stack, ship hệ thống ML production ở quy mô viễn thông."
+location: "Hà Nội, Việt Nam"
+email: "hoangduclongg@gmail.com"
+socials:
+  github: "https://github.com/DucLong06"
+  linkedin: "https://linkedin.com/in/hoangduclong"
+cvFile: "/cv.pdf"

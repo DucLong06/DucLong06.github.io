@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(gh api:*)",
+      "Read(//usr/local/bin/**)",
+      "Read(//home/longhd/.nvm/versions/node/**)",
+      "Bash(command -v nvm)",
+      "Bash(nvm list:*)",
+      "Bash(xargs -I{} basename {})"
+    ],
+    "additionalDirectories": [
+      "/mnt/data/Project/DucLong06.github.io/docs"
+    ]
+  }
+}
