@@ -37,10 +37,18 @@ interface GHRepo {
   fork: boolean;
 }
 
-/** Build request headers — attaches token when available for higher rate limit. */
-function buildHeaders(): Record<string, string> {
+/**
+ * Build request headers — attaches a token when available for higher rate limit.
+ * Prefers `PORTFOLIO_READ_PAT` (fine-grained, can read private repos) and falls
+ * back to `GITHUB_TOKEN`. Exported so per-repo meta + README fetchers reuse it (DRY).
+ */
+export function buildHeaders(): Record<string, string> {
+  const env =
+    (typeof import.meta !== 'undefined' ? (import.meta as { env?: Record<string, string> }).env : undefined) ?? {};
   const token =
-    (typeof import.meta !== 'undefined' && (import.meta as { env?: Record<string, string> }).env?.GITHUB_TOKEN) ??
+    env.PORTFOLIO_READ_PAT ??
+    process.env['PORTFOLIO_READ_PAT'] ??
+    env.GITHUB_TOKEN ??
     process.env['GITHUB_TOKEN'];
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',

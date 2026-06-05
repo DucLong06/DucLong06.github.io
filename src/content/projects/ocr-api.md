@@ -5,6 +5,7 @@ summary:
   vi: "Dịch vụ API OCR tiếng Việt cá nhân, đóng gói pipeline OCR từ kinh nghiệm AX-OCR thành REST interface gọn gàng."
 cover: /covers/ocr-api.webp
 repo: "https://github.com/DucLong06/ocr-api"
+repoSlug: "DucLong06/ocr-api"
 stack:
   - Python
   - FastAPI

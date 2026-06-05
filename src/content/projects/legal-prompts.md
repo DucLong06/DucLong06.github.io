@@ -5,6 +5,7 @@ summary:
   vi: "Bộ công cụ prompt engineering cho hỏi đáp pháp luật tiếng Việt — nền tảng bài dự thi đoạt giải nhất ALQAC 2023."
 cover: /covers/legal-prompts.webp
 repo: "https://github.com/DucLong06/Legal-Prompts"
+repoSlug: "DucLong06/Legal-Prompts"
 stack:
   - Python
   - LLM

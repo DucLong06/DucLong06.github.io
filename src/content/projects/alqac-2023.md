@@ -5,6 +5,7 @@ summary:
   vi: "Hệ thống đoạt giải nhất cuộc thi hỏi đáp pháp luật tiếng Việt ALQAC 2023 tại hội nghị IEEE KSE."
 cover: /covers/alqac-2023.webp
 repo: "https://github.com/DucLong06/ALQAC2023"
+repoSlug: "DucLong06/ALQAC2023"
 stack:
   - Python
   - LLM

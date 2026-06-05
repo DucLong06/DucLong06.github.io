@@ -9,6 +9,8 @@ import { FEATURED_ORDER } from '../../lib/featured-projects-order';
 import SectionTitle from './SectionTitle.astro';
 import ProjectCard from './ProjectCard.astro';
 import { t, type Lang } from '../../lib/i18n-helpers';
+import { getAllRepoMeta } from '../../lib/github-repo-meta';
+import { PROJECT_REPOS } from '../../../scripts/project-repos.config.mjs';
 
 /** Strip .md/.mdx extension from Astro 5 entry.id */
 function entrySlug(id: string) {
@@ -31,6 +33,9 @@ const allFeatured = await getCollection(
 const sorted = FEATURED_ORDER
   .map((s) => allFeatured.find((e: CollectionEntry<'projects'>) => entrySlug(e.id) === s))
   .filter((e): e is CollectionEntry<'projects'> => e !== undefined);
+
+// Fetch live repo meta once (cache fallback inside) → map by slug for the cards.
+const repoMeta = await getAllRepoMeta(PROJECT_REPOS);
 ---
 
 <section class="projects section-gap" id={id} aria-label="Featured projects">
@@ -55,6 +60,7 @@ const sorted = FEATURED_ORDER
               demo={entry.data.demo}
               hero={isHero}
               lang={lang}
+              repoMeta={repoMeta[entrySlug(entry.id)] ?? null}
             />
           </div>
         );

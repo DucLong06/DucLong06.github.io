@@ -5,6 +5,7 @@ summary:
   vi: "Chuyển đổi câu hỏi tiếng Việt thành truy vấn SQL, xử lý các thách thức đặc thù về hình thái và cú pháp của tiếng Việt."
 cover: /covers/text2sql-vietnamese.webp
 repo: "https://github.com/DucLong06/Text2SQL-Vietnamese"
+repoSlug: "DucLong06/Text2SQL-Vietnamese"
 stack:
   - Python
   - LLM

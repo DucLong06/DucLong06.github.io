@@ -5,7 +5,7 @@
  */
 import { useCallback, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { AdaptiveDpr } from '@react-three/drei';
+import { AdaptiveDpr, ContactShadows } from '@react-three/drei';
 import { ACESFilmicToneMapping } from 'three';
 import type { SceneData, SectionId } from '../../../lib/scene/scene-data-types';
 import { HOME_POSE, PALETTE, getSection } from './scene-config';
@@ -60,6 +60,19 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
           shadow-camera-right={14}
           shadow-camera-top={14}
           shadow-camera-bottom={-14}
+        />
+
+        {/* Soft contact shadow grounds props on the island top — procedural,
+            baked once (frames={1}), zero network payload. */}
+        <ContactShadows
+          position={[0, 0.02, 0]}
+          scale={26}
+          resolution={512}
+          blur={2.6}
+          opacity={0.38}
+          far={6}
+          color={PALETTE.soilDark}
+          frames={1}
         />
 
         <IslandWorld />

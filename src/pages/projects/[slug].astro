@@ -8,6 +8,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/astro/Nav.astro';
 import { t } from '../../lib/i18n-helpers';
+import { getProjectReadme } from '../../lib/project-readme';
 
 interface Props {
   entry: CollectionEntry<'projects'>;
@@ -42,10 +43,15 @@ const GRADIENTS: Record<string, string> = {
   'alqac-2023':               'linear-gradient(135deg,#10b981 0%,#06b6d4 70%,#6366f1 100%)',
   'text2sql-vietnamese':      'linear-gradient(135deg,#f59e0b 0%,#f472b6 60%,#8b5cf6 100%)',
   'ocr-api':                  'linear-gradient(135deg,#8b5cf6 0%,#10b981 100%)',
+  'techleague':               'linear-gradient(135deg,#6366f1 0%,#0ea5e9 55%,#22d3ee 100%)',
 };
 
 const slug = entrySlug(entry.id);
 const coverGradient = GRADIENTS[slug] ?? 'linear-gradient(135deg,#6366f1,#8b5cf6)';
+
+// Auto-fetched README section (Phase 03/04) — additive; curated body is the fallback.
+const readmeEntry = await getProjectReadme(slug);
+const Readme = readmeEntry ? (await render(readmeEntry)).Content : null;
 
 const formattedDate = new Date(publishedAt).toLocaleDateString('en-US', {
   year: 'numeric', month: 'long',
@@ -141,6 +147,16 @@ const summaryText: string = (summary as Record<string, string>)[lang] ?? summary
       <article class="prose">
         <Content />
       </article>
+
+      <!-- Auto-fetched README section (rendered only when the repo has markers) -->
+      {Readme && (
+        <section class="readme-section" aria-label={t('project_readme_heading', lang)}>
+          <h2 class="readme-section__heading">{t('project_readme_heading', lang)}</h2>
+          <article class="prose readme-body">
+            <Readme />
+          </article>
+        </section>
+      )}
 
     </div>
   </main>
@@ -404,6 +420,30 @@ const summaryText: string = (summary as Record<string, string>)[lang] ?? summary
   .detail-page {
     min-height: 100vh;
     padding-top: 1rem;
+  }
+
+  /* Auto-fetched README section */
+  .readme-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .readme-section__heading {
+    font-family: var(--font-display, 'Instrument Serif', serif);
+    font-size: 1.375rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+  }
+
+  .readme-body :global(img.readme-img),
+  .readme-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--r-md, 0.5rem);
+    border: 1px solid var(--border);
+    margin: 0.75rem 0;
   }
 
   @media (min-width: 768px) {

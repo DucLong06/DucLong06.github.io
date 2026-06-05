@@ -6,6 +6,9 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+  # Weekly rebuild — refreshes GitHub stats + project READMEs without a code push.
+  schedule:
+    - cron: '0 6 * * 1' # Monday 06:00 UTC
 
 permissions:
   contents: read
@@ -36,8 +39,12 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Injected automatically — used by github-stats fetch in build
+          # Injected automatically — reads THIS repo's public stats during build.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Fine-grained PAT (contents:read) scoped to the private portfolio repos
+          # (booking, techleague) — lets prebuild pull their meta + README. Optional:
+          # absent → those repos fall back to cache; build still succeeds.
+          PORTFOLIO_READ_PAT: ${{ secrets.PORTFOLIO_READ_PAT }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

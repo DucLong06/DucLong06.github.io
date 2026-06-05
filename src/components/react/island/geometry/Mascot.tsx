@@ -4,7 +4,7 @@
  */
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import type { Group } from 'three';
+import { Group, Quaternion } from 'three';
 import type { Vec3 } from '../scene-config';
 import { PALETTE } from '../scene-config';
 import { Clay } from './clay-material';
@@ -12,13 +12,22 @@ import { Clay } from './clay-material';
 export function Mascot({ position }: { position: Vec3 }) {
   const root = useRef<Group>(null);
   const head = useRef<Group>(null);
+  // Scratch quats reused each frame (no per-frame allocation).
+  const prevQ = useRef(new Quaternion());
+  const targetQ = useRef(new Quaternion());
 
-  useFrame(({ clock, camera }) => {
+  useFrame(({ clock, camera }, dt) => {
     const t = clock.elapsedTime;
     if (root.current) root.current.position.y = position[1] + Math.sin(t * 1.6) * 0.08;
     if (head.current) {
+      // Compute the snap "look at camera" target, then slerp toward it so the
+      // head turns naturally instead of snapping each frame. Frame-independent (dt).
+      prevQ.current.copy(head.current.quaternion);
       head.current.lookAt(camera.position);
       head.current.rotation.x *= 0.3; // damp vertical tilt
+      targetQ.current.copy(head.current.quaternion);
+      const alpha = 1 - Math.exp(-7 * dt);
+      head.current.quaternion.copy(prevQ.current).slerp(targetQ.current, alpha);
     }
   });
 

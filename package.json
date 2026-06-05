@@ -7,7 +7,7 @@
     "node": ">=18.20.8"
   },
   "scripts": {
-    "prebuild": "node scripts/generate-og.mjs",
+    "prebuild": "node scripts/generate-og.mjs && node scripts/fetch-project-readmes.mjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

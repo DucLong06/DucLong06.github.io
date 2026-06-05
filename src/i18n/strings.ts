@@ -88,6 +88,9 @@ export const STRINGS = {
     project_stars_label: 'GitHub stars',
     project_source:     'Source code',
     project_demo:       'Live demo',
+    project_readme_heading: 'From the README',
+    project_readme_vi_note: 'Technical content in English',
+    project_updated_label: 'Updated',
   },
 
   vi: {
@@ -171,6 +174,9 @@ export const STRINGS = {
     project_stars_label: 'Sao GitHub',
     project_source:     'Mã nguồn',
     project_demo:       'Xem demo',
+    project_readme_heading: 'Từ README',
+    project_readme_vi_note: 'Nội dung kỹ thuật bằng tiếng Anh',
+    project_updated_label: 'Cập nhật',
   },
 } as const satisfies Record<Lang, Record<string, string>>;
 

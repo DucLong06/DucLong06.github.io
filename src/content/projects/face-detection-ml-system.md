@@ -5,6 +5,7 @@ summary:
   vi: "Pipeline MLOps triển khai YOLOv11 phát hiện khuôn mặt trên GKE với CI/CD, tự động scale và monitoring đầy đủ."
 cover: /covers/face-detection-ml-system.webp
 repo: "https://github.com/DucLong06/face-detection-ml-system"
+repoSlug: "DucLong06/face-detection-ml-system"
 stack:
   - Python
   - YOLOv11

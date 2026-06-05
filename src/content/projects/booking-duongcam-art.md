@@ -5,6 +5,7 @@ summary:
   vi: "Nền tảng đặt vé trực tuyến cho đoàn nghệ thuật, tích hợp thanh toán 9Pay, đang hoạt động thực tế với doanh thu thật."
 cover: /covers/booking-duongcam-art.webp
 demo: "https://booking.duongcam.art"
+private: true
 stack:
   - Vue3
   - Django

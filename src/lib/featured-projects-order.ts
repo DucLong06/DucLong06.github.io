@@ -5,6 +5,7 @@
  */
 export const FEATURED_ORDER = [
   'face-detection-ml-system',
+  'techleague',
   'booking-duongcam-art',
   'legal-prompts',
   'alqac-2023',
