@@ -1,0 +1,55 @@
+---
+/**
+ * PortfolioHome.astro — Shared home body for EN (/) and VI (/vi/).
+ *
+ * Renders TWO layers:
+ *   1. The 3D island (React island, client:only) — progressive enhancement.
+ *   2. The full server-rendered 2D site inside #classic-site — the SEO/no-JS/
+ *      a11y baseline. When the 3D layer mounts it adds `html.scene-3d-active`
+ *      and global CSS hides #classic-site.
+ *
+ * The 3D popups read from the SAME content collections (via buildSceneData),
+ * so editing src/content/** updates both layers with no 3D code changes.
+ */
+import Nav from './Nav.astro';
+import Hero from './Hero.astro';
+import About from './About.astro';
+import Marquee from './Marquee.astro';
+import Experience from './Experience.astro';
+import Skills from './Skills.astro';
+import ProjectsGrid from './ProjectsGrid.astro';
+import Papers from './Papers.astro';
+import GitHubStats from './GitHubStats.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
+import IslandExperience from '../react/island/IslandExperience';
+import Scene3DToggle from './Scene3DToggle.astro';
+import { buildSceneData } from '../../lib/scene/build-scene-data';
+import type { Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang: Lang;
+  currentPath: string;
+}
+const { lang, currentPath } = Astro.props;
+const sceneData = await buildSceneData(lang);
+---
+
+<IslandExperience client:only="react" data={sceneData} />
+
+<div id="classic-site">
+  <Nav lang={lang} />
+  <main id="main-content" tabindex="-1">
+    <Hero lang={lang} />
+    <About lang={lang} />
+    <Marquee />
+    <Experience lang={lang} />
+    <Skills lang={lang} />
+    <ProjectsGrid id="work" lang={lang} />
+    <Papers lang={lang} />
+    <GitHubStats lang={lang} />
+    <Contact lang={lang} />
+  </main>
+  <Footer lang={lang} currentPath={currentPath} />
+  <Scene3DToggle lang={lang} />
+</div>

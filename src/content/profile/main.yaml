@@ -1,12 +1,15 @@
-name:
+# Core identity — shown in BOTH the 2D site and the 3D island hero/contact popup.
+# See docs/content-editing-guide.md. Bilingual fields need en + vi.
+
+name:                       # displayed name (hero + chrome)
   en: "Hoàng Đức Long"
   vi: "Hoàng Đức Long"
-tagline:
+tagline:                    # one-line pitch under the name
   en: "Full-stack AI engineer shipping production ML at telecom scale."
   vi: "Kỹ sư AI full-stack, ship hệ thống ML production ở quy mô viễn thông."
 location: "Hà Nội, Việt Nam"
-email: "hoangduclongg@gmail.com"
-socials:
+email: "hoangduclongg@gmail.com"   # must be a valid email (mailto + contact card)
+socials:                    # must be full URLs (https://…)
   github: "https://github.com/DucLong06"
   linkedin: "https://linkedin.com/in/hoangduclong"
-cvFile: "/cv.pdf"
+cvFile: "/cv.pdf"           # path under /public — replace public/cv.pdf to update
