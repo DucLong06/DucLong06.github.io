@@ -35,6 +35,29 @@ const profile = defineCollection({
   }),
 });
 
+// A single quantified metric attached to an experience project. `value` drives
+// the animated count-up + radial ring; `suffix` is appended verbatim (e.g. "+",
+// "%", "/mo") so the EXACT CV figure is preserved (no truncation). `text` carries
+// non-numeric metrics such as awards.
+const experienceMetric = z.object({
+  label: z.object({ en: z.string(), vi: z.string() }),
+  value: z.number().default(0),
+  suffix: z.string().default(''),
+  kind: z.enum(['count', 'percent', 'award']).default('count'),
+  text: z.object({ en: z.string(), vi: z.string() }).optional(),
+});
+
+// Structured project under an experience entry — the source of truth for the
+// graph nodes + detail panels. Prose body is kept for SEO/no-JS fallback.
+const experienceProject = z.object({
+  name: z.string(),
+  summary: z.object({ en: z.string(), vi: z.string() }),
+  metrics: z.array(experienceMetric).default([]),
+  tech: z.array(z.string()).default([]),
+  repo: z.string().url().optional(),
+  demo: z.string().url().optional(),
+});
+
 const experience = defineCollection({
   type: 'content',
   schema: z.object({
@@ -44,6 +67,9 @@ const experience = defineCollection({
     logo: z.string().optional(),
     stack: z.array(z.string()),
     order: z.number(),
+    // Optional structured projects (graph + panels). Existing entries without
+    // this field still render via the markdown body — non-breaking.
+    projects: z.array(experienceProject).default([]),
   }),
 });
 

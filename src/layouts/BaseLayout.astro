@@ -1,15 +1,14 @@
 ---
 /**
  * BaseLayout.astro — Root HTML shell
- * All pages extend this: full meta/OG/JSON-LD, theme-init, global CSS, slot.
+ * All pages extend this: full meta/OG/JSON-LD, global CSS, slot. Dark-only.
  * Emits hreflang link pair for EN ↔ VI alternate URLs.
  * Includes skip-to-content link for keyboard accessibility.
  */
-import { themeInitScript } from '../lib/theme-init';
 import { mirrorUrl } from '../lib/i18n-helpers';
 import '../styles/global.css';
 import '../styles/a11y.css';
-import '../styles/island-scene.css';
+import '../styles/graph.css';
 
 interface Props {
   title?: string;
@@ -52,7 +51,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="light">
+<html lang={lang} data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -91,9 +90,6 @@ const jsonLd = {
 
     <!-- JSON-LD structured data -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-
-    <!-- Theme init BEFORE first paint — prevents FOUC -->
-    <script is:inline set:html={themeInitScript} />
   </head>
   <body>
     <!-- Skip-to-content — first focusable element; moves keyboard focus past nav -->

@@ -1,11 +1,13 @@
 ---
 /**
- * Hero.astro — Full-viewport hero section.
- * Copy from brainstorm §16.9. LiquidShader canvas behind text (client:visible).
- * Profile data pulled from content collection. Bilingual via lang prop.
+ * Hero.astro — Full-viewport hero with the 3D knowledge graph as the backdrop.
+ * The graph (GraphCanvas island, client:visible) is the aesthetic + navigation
+ * hub; the name/headline/CTAs stay as real HTML overlaid on top (content-first
+ * for SEO/no-JS/a11y). Bilingual via lang prop.
  */
 import { getEntry } from 'astro:content';
-import LiquidShader from '../react/LiquidShader';
+import GraphCanvas from '../react/graph/GraphCanvas';
+import { buildGraphData } from '../../lib/graph/build-graph-data';
 import { t, type Lang } from '../../lib/i18n-helpers';
 
 interface Props {
@@ -18,15 +20,15 @@ const name    = profile.data.name[lang] ?? profile.data.name.en;
 const tagline = profile.data.tagline[lang] ?? profile.data.tagline.en;
 const email   = profile.data.email;
 const cvFile  = profile.data.cvFile;
+
+const graphData = await buildGraphData(lang);
 ---
 
 <section class="hero" aria-label="Introduction">
-  <!-- Shader canvas — absolutely behind text, aria-hidden -->
-  <div class="hero-canvas-wrap" aria-hidden="true">
-    <LiquidShader client:visible />
-  </div>
+  <!-- Knowledge graph backdrop — decorative; real nav lives in <nav> + content -->
+  <GraphCanvas data={graphData} hint={t('graph_legend_hint', lang)} client:visible />
 
-  <!-- Hero content -->
+  <!-- Hero content overlay (real HTML) -->
   <div class="hero-content">
     <h1 class="hero-name">{name}</h1>
 
@@ -46,26 +48,12 @@ const cvFile  = profile.data.cvFile;
       <a href="#work" class="hero-cta hero-cta--primary" role="listitem">
         {t('hero_cta_work', lang)} <span aria-hidden="true">→</span>
       </a>
-      <a
-        href={cvFile}
-        class="hero-cta hero-cta--secondary"
-        role="listitem"
-        download
-      >
+      <a href={cvFile} class="hero-cta hero-cta--secondary" role="listitem" download>
         {t('hero_cta_cv', lang)}
       </a>
-      <a
-        href={`mailto:${email}`}
-        class="hero-cta hero-cta--secondary"
-        role="listitem"
-      >
+      <a href={`mailto:${email}`} class="hero-cta hero-cta--secondary" role="listitem">
         {t('hero_cta_email', lang)}
       </a>
-    </div>
-
-    <!-- Scroll hint -->
-    <div class="hero-scroll-hint" aria-hidden="true">
-      <span class="hero-scroll-arrow">↓</span>
     </div>
   </div>
 </section>
@@ -75,41 +63,34 @@ const cvFile  = profile.data.cvFile;
     position: relative;
     min-height: 100dvh;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-end;
     overflow: hidden;
+    isolation: isolate;
   }
 
-  /* Canvas fill — behind everything */
-  .hero-canvas-wrap {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
-  /* Content stack above canvas */
+  /* Content anchored bottom-left so the graph breathes in the upper/right area.
+     Wrapper ignores pointer events so the graph stays draggable; only links do. */
   .hero-content {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 2rem 1.5rem;
-    max-width: 860px;
-    gap: 1.25rem;
+    align-items: flex-start;
+    text-align: left;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    padding-bottom: clamp(3rem, 8vh, 6rem);
+    max-width: 640px;
+    gap: 1rem;
+    pointer-events: none;
   }
 
-  /* Giant Instrument Serif italic — §16.9 */
   .hero-name {
     font-family: 'Instrument Serif', Georgia, serif;
     font-style: italic;
-    font-size: clamp(3rem, 10vw, 5.5rem); /* ~88px at wide viewport */
+    font-size: clamp(2.75rem, 9vw, 5rem);
     font-weight: 400;
-    line-height: 1.05;
+    line-height: 1.04;
     letter-spacing: -0.02em;
-    color: var(--text-primary);
-    /* Soft aurora gradient text on hover / always in dark mode */
     background: var(--aurora-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -118,24 +99,25 @@ const cvFile  = profile.data.cvFile;
 
   .hero-tagline {
     font-size: clamp(1rem, 2.5vw, 1.25rem);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     line-height: 1.6;
-    max-width: 560px;
+    max-width: 36rem;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
   }
 
   .hero-meta {
     font-size: 0.9375rem;
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
     line-height: 1.7;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
   }
 
-  /* CTA row */
   .hero-ctas {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    justify-content: center;
     margin-top: 0.5rem;
+    pointer-events: auto;
   }
 
   .hero-cta {
@@ -155,33 +137,24 @@ const cvFile  = profile.data.cvFile;
 
   .hero-cta--primary {
     background: var(--aurora-gradient);
-    color: #fff;
+    color: #0d1b2a;
+    font-weight: 600;
   }
-
-  .hero-cta--primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-aurora);
-  }
-
+  .hero-cta--primary:hover,
   .hero-cta--primary:focus-visible {
     transform: translateY(-2px);
     box-shadow: var(--shadow-aurora);
-    outline: 2px solid #fff;
+    outline: 2px solid var(--text-primary);
     outline-offset: 3px;
   }
 
   .hero-cta--secondary {
-    background: var(--bg-elevated);
+    background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
     color: var(--text-primary);
     border: 1px solid var(--border-strong);
+    backdrop-filter: blur(8px);
   }
-
-  .hero-cta--secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    background: var(--bg-subtle);
-  }
-
+  .hero-cta--secondary:hover,
   .hero-cta--secondary:focus-visible {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
@@ -190,35 +163,9 @@ const cvFile  = profile.data.cvFile;
     outline-offset: 2px;
   }
 
-  /* Scroll hint */
-  .hero-scroll-hint {
-    margin-top: 1rem;
-  }
-
-  .hero-scroll-arrow {
-    display: inline-block;
-    color: var(--text-tertiary);
-    font-size: 1.25rem;
-    animation: bounce 2s ease-in-out infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0);    opacity: 0.5; }
-    50%       { transform: translateY(6px); opacity: 1;   }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .hero-scroll-arrow {
-      animation: none;
-    }
-    .hero-cta {
-      transition: none;
-    }
-    .hero-cta--primary:hover,
-    .hero-cta--primary:focus-visible,
-    .hero-cta--secondary:hover,
-    .hero-cta--secondary:focus-visible {
-      transform: none;
-    }
+    .hero-cta { transition: none; }
+    .hero-cta:hover,
+    .hero-cta:focus-visible { transform: none; }
   }
 </style>

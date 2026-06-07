@@ -5,38 +5,14 @@
  * Pure SSR — zero runtime JS.
  */
 import type { LanguageStat } from '../../lib/github-stats';
+// Shared with the knowledge graph (DRY): one language→color source of truth.
+import { languageColor as langColor } from '../../lib/graph/graph-palette';
 
 interface Props {
   languages: LanguageStat[];
 }
 
 const { languages } = Astro.props;
-
-/** Color map for known languages — falls back to aurora-1 gradient stop. */
-const COLOR_MAP: Record<string, string> = {
-  'TypeScript':       '#3178c6',
-  'JavaScript':       '#f7df1e',
-  'Python':           '#3572a5',
-  'C++':              '#f34b7d',
-  'C':                '#555555',
-  'Go':               '#00acd7',
-  'Rust':             '#dea584',
-  'Java':             '#b07219',
-  'Kotlin':           '#a97bff',
-  'Swift':            '#f05138',
-  'Dart':             '#00b4ab',
-  'HTML':             '#e34c26',
-  'CSS':              '#563d7c',
-  'Shell':            '#89e051',
-  'Smarty':           '#f0c040',
-  'Jupyter Notebook': '#da5b0b',
-  'Vue':              '#41b883',
-  'Svelte':           '#ff3e00',
-};
-
-function langColor(name: string): string {
-  return COLOR_MAP[name] ?? 'var(--aurora-1)';
-}
 ---
 
 <div class="lang-bar-wrapper">

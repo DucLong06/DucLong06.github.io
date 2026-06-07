@@ -117,12 +117,3 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
 }
-
-/* ─── THEME TRANSITION ──────────────────────────────────────────────────────── */
-
-/* Smooth color swap when toggling theme (skipped on first paint by init script) */
-html.theme-ready {
-  transition:
-    background-color var(--duration-base) var(--ease-soft),
-    color var(--duration-base) var(--ease-soft);
-}

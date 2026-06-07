@@ -13,6 +13,12 @@ stack:
   - TensorFlow
   - OpenVINO
 order: 3
+projects:
+  - name: "Intel OpenVINO Research"
+    summary:
+      en: "Researched Intel OpenVINO for AI model optimization and edge deployment: model conversion, quantization, and CPU-only inference pipelines balancing accuracy vs speed."
+      vi: "Nghiên cứu Intel OpenVINO để tối ưu mô hình AI và triển khai biên: chuyển đổi mô hình, lượng tử hóa và pipeline suy luận chỉ CPU cân bằng độ chính xác và tốc độ."
+    tech: [Python, C++, OpenCV, TensorFlow, OpenVINO]
 ---
 
 ## Intel OpenVINO Research
