@@ -14,10 +14,8 @@
  */
 export const themeInitScript = /* js */ `
 (function () {
-  var stored = localStorage.getItem('theme');
-  var preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  var theme = stored === 'dark' || stored === 'light' ? stored : preferred;
-  document.documentElement.dataset.theme = theme;
+  // Cyber rebrand is DARK-ONLY — always apply dark, ignore stored/system pref.
+  document.documentElement.dataset.theme = 'dark';
   document.addEventListener('DOMContentLoaded', function () {
     document.documentElement.classList.add('theme-ready');
   });

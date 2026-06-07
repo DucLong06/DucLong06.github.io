@@ -15,7 +15,7 @@ interface Props {
   lang?: Lang;
 }
 const { lang = 'en' } = Astro.props;
-const label = lang === 'vi' ? 'Vào đảo 3D' : 'Enter the 3D island';
+const label = lang === 'vi' ? 'Vào không gian 3D' : 'Enter the 3D space';
 ---
 
 <button id="enter-3d" type="button" class="enter-3d" hidden aria-label={label}>
@@ -67,19 +67,19 @@ const label = lang === 'vi' ? 'Vào đảo 3D' : 'Enter the 3D island';
     align-items: center;
     gap: 0.55rem;
     padding: 0.7rem 1.2rem;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid color-mix(in srgb, var(--neon) 60%, transparent);
     border-radius: 9999px;
-    background: linear-gradient(135deg, #7c5cff, #ff5ea8);
-    color: #fff;
+    background: var(--aurora-gradient);
+    color: #04111a;
     font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 12px 30px rgba(124, 92, 255, 0.4);
+    box-shadow: 0 12px 30px rgba(45, 226, 255, 0.32);
     transition: transform 0.15s ease, box-shadow 0.2s ease;
   }
   .enter-3d:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 36px rgba(124, 92, 255, 0.5);
+    box-shadow: 0 16px 40px rgba(45, 226, 255, 0.45);
   }
   .enter-3d:focus-visible {
     outline: 3px solid #fff;

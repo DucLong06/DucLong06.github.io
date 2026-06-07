@@ -7,7 +7,7 @@ export function SceneLoader() {
   return (
     <div className="scene-loader" role="status" aria-live="polite">
       <div className="scene-loader__orb" aria-hidden="true" />
-      <p className="scene-loader__label">Building the island…</p>
+      <p className="scene-loader__label">Initializing data block…</p>
     </div>
   );
 }

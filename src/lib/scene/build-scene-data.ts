@@ -16,7 +16,14 @@ import type {
   SceneExperience,
   ScenePaper,
   SceneSkillGroup,
+  SceneHighlight,
 } from './scene-data-types';
+
+type LocalizedHighlight = {
+  value: { en: string; vi: string };
+  label: { en: string; vi: string };
+  accent: 'neon' | 'amber';
+};
 
 type SkillItem = { name: string; level: number };
 
@@ -58,7 +65,7 @@ async function buildProjects(lang: Lang) {
   ).filter((e): e is CollectionEntry<'projects'> => e !== undefined);
 
   const prefix = lang === 'vi' ? '/vi' : '';
-  const toProject = (e: CollectionEntry<'projects'>): SceneProject => ({
+  const toProject = (e: CollectionEntry<'projects'>, i: number): SceneProject => ({
     slug: entrySlug(e.id),
     title: e.data.title,
     summary: e.data.summary[lang] ?? e.data.summary.en,
@@ -66,6 +73,9 @@ async function buildProjects(lang: Lang) {
     repo: e.data.repo,
     demo: e.data.demo,
     href: `${prefix}/projects/${entrySlug(e.id)}/`,
+    year: e.data.publishedAt.getFullYear(),
+    category: e.data.category,
+    primary: i < 3, // top 3 by FEATURED_ORDER render larger in the orbit
   });
 
   const all = ordered.map(toProject);
@@ -118,6 +128,12 @@ export async function buildSceneData(lang: Lang): Promise<SceneData> {
 
   const gh = await getGitHubStats();
 
+  const highlights: SceneHighlight[] = ((p.highlights ?? []) as LocalizedHighlight[]).map((h) => ({
+    value: h.value[lang] ?? h.value.en,
+    label: h.label[lang] ?? h.label.en,
+    accent: h.accent,
+  }));
+
   return {
     lang,
     profile: {
@@ -135,6 +151,7 @@ export async function buildSceneData(lang: Lang): Promise<SceneData> {
     skills,
     projects: await buildProjects(lang),
     papers,
+    highlights,
     github: {
       totalRepos: gh.totalRepos,
       totalStars: gh.totalStars,

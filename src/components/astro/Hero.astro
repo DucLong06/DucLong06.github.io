@@ -18,6 +18,13 @@ const name    = profile.data.name[lang] ?? profile.data.name.en;
 const tagline = profile.data.tagline[lang] ?? profile.data.tagline.en;
 const email   = profile.data.email;
 const cvFile  = profile.data.cvFile;
+
+// Achievement highlights → mirror the 3D HUD as a 2D stat row.
+const highlights = (profile.data.highlights ?? []).slice(0, 4).map((h) => ({
+  value: h.value[lang] ?? h.value.en,
+  label: h.label[lang] ?? h.label.en,
+  accent: h.accent,
+}));
 ---
 
 <section class="hero" aria-label="Introduction">
@@ -62,6 +69,18 @@ const cvFile  = profile.data.cvFile;
         {t('hero_cta_email', lang)}
       </a>
     </div>
+
+    <!-- Highlight stat row (mirrors 3D HUD) -->
+    {highlights.length > 0 && (
+      <ul class="hero-stats" role="list">
+        {highlights.map((h) => (
+          <li class={`hero-stat hero-stat--${h.accent}`}>
+            <span class="hero-stat__value">{h.value}</span>
+            <span class="hero-stat__label">{h.label}</span>
+          </li>
+        ))}
+      </ul>
+    )}
 
     <!-- Scroll hint -->
     <div class="hero-scroll-hint" aria-hidden="true">
@@ -188,6 +207,51 @@ const cvFile  = profile.data.cvFile;
     background: var(--bg-subtle);
     outline: 2px solid var(--aurora-1);
     outline-offset: 2px;
+  }
+
+  /* Highlight stat row */
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 120px;
+    padding: 0.55rem 0.85rem;
+    background: var(--holo-fill, rgba(10, 14, 26, 0.62));
+    border: 1px solid var(--holo-border, rgba(45, 226, 255, 0.45));
+    border-radius: var(--r-sm);
+    backdrop-filter: blur(6px);
+  }
+  .hero-stat--amber {
+    border-color: var(--holo-border-2, rgba(255, 176, 32, 0.45));
+  }
+
+  .hero-stat__value {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--neon, #2de2ff);
+  }
+  .hero-stat--amber .hero-stat__value {
+    color: var(--gold, #ffd166);
+  }
+
+  .hero-stat__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    color: var(--text-secondary);
   }
 
   /* Scroll hint */

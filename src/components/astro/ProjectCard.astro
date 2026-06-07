@@ -68,7 +68,7 @@ const KNOWN_COVERS = new Set([
 const hasCover = KNOWN_COVERS.has(slug);
 const coverSrc = `/covers/${slug}.webp`;
 // Fallback gradient for slugs without a cover image
-const coverGradient = 'linear-gradient(135deg,#6366f1,#8b5cf6)';
+const coverGradient = 'linear-gradient(135deg,#2de2ff,#3a6cff 55%,#ffb020)';
 
 // Merge live GitHub topics into the tech list (dedup, case-insensitive) so the
 // card surfaces repo tags without manual upkeep. Static stack takes precedence.
@@ -289,9 +289,9 @@ const overflow = mergedTech.length - MAX_PILLS;
     gap: 0.25rem;
     font-size: 0.75rem;
     font-weight: 500;
-    color: var(--aurora-2, #8b5cf6);
-    background: rgba(139,92,246,0.1);
-    border: 1px solid rgba(139,92,246,0.2);
+    color: var(--aurora-4, #ffb020);
+    background: rgba(255,176,32,0.1);
+    border: 1px solid rgba(255,176,32,0.22);
     border-radius: 9999px;
     padding: 0.125rem 0.5rem;
     white-space: nowrap;
@@ -335,9 +335,9 @@ const overflow = mergedTech.length - MAX_PILLS;
   }
 
   .project-card__pill--more {
-    color: var(--aurora-1, #6366f1);
-    border-color: rgba(99,102,241,0.3);
-    background: rgba(99,102,241,0.08);
+    color: var(--aurora-1, #2de2ff);
+    border-color: rgba(45,226,255,0.3);
+    background: rgba(45,226,255,0.08);
   }
 
   /* Bottom links — must float above overlay link */

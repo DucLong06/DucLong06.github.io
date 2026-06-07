@@ -1,5 +1,5 @@
 // aurora.frag.glsl — Simplex noise fbm liquid aurora
-// Colors match "Soft Aurora" design tokens: indigo, violet, cyan, pink
+// Cyber rebrand palette: neon cyan, rim blue, bright cyan, amber.
 precision highp float;
 
 uniform float uTime;
@@ -8,11 +8,11 @@ uniform vec2  uResolution;
 
 varying vec2 vUv;
 
-// ─── Aurora palette (matches CSS tokens) ────────────────────────────────────
-const vec3 COLOR_A = vec3(0.388, 0.400, 0.945); // #6366f1 indigo
-const vec3 COLOR_B = vec3(0.545, 0.361, 0.965); // #8b5cf6 violet
-const vec3 COLOR_C = vec3(0.024, 0.714, 0.831); // #06b6d4 cyan
-const vec3 COLOR_D = vec3(0.957, 0.447, 0.714); // #f472b6 pink
+// ─── Cyber palette (matches CSS tokens) ─────────────────────────────────────
+const vec3 COLOR_A = vec3(0.176, 0.886, 1.000); // #2de2ff neon cyan
+const vec3 COLOR_B = vec3(0.227, 0.424, 1.000); // #3a6cff rim blue
+const vec3 COLOR_C = vec3(0.000, 0.898, 1.000); // #00e5ff bright cyan
+const vec3 COLOR_D = vec3(1.000, 0.690, 0.125); // #ffb020 amber
 
 // ─── Ashima / Ian McEwan simplex noise (2D) ─────────────────────────────────
 // Source: https://github.com/ashima/webgl-noise (MIT licence)

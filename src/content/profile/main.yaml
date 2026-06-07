@@ -13,3 +13,19 @@ socials:                    # must be full URLs (https://…)
   github: "https://github.com/DucLong06"
   linkedin: "https://linkedin.com/in/hoangduclong"
 cvFile: "/cv.pdf"           # path under /public — replace public/cv.pdf to update
+
+# Achievement highlights → HUD corners (3D) + hero stat row (2D).
+# TODO(user): confirm exact numbers/units — values below are placeholders.
+highlights:
+  - value: { en: "6K+", vi: "6K+" }
+    label: { en: "MRs reviewed / month", vi: "MR review / tháng" }
+    accent: "neon"
+  - value: { en: "98%", vi: "98%" }
+    label: { en: "OCR accuracy", vi: "Độ chính xác OCR" }
+    accent: "amber"
+  - value: { en: "Sao Khuê", vi: "Sao Khuê" }
+    label: { en: "National ICT Award", vi: "Giải thưởng CNTT Quốc gia" }
+    accent: "amber"
+  - value: { en: "4+", vi: "4+" }
+    label: { en: "Years shipping ML", vi: "Năm làm ML production" }
+    accent: "neon"

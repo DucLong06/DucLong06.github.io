@@ -1,10 +1,10 @@
 ---
 /**
  * Nav.astro — Sticky frosted-blur top navigation
- * Mounts ThemeToggle + LangToggle as client:idle React islands.
+ * Mounts LangToggle as a client:idle React island (theme toggle removed —
+ * the site is dark-only after the cyber rebrand).
  * Accepts lang prop to translate nav labels.
  */
-import ThemeToggle from '../react/ThemeToggle';
 import LangToggle from '../react/LangToggle';
 import { t, type Lang } from '../../lib/i18n-helpers';
 
@@ -49,7 +49,6 @@ const homeHref = lang === 'vi' ? '/vi/' : '/';
     <!-- Controls -->
     <div class="nav-controls">
       <LangToggle client:idle />
-      <ThemeToggle client:idle />
     </div>
   </nav>
 </header>

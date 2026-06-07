@@ -20,6 +20,18 @@ const profile = defineCollection({
       facebook: z.string().url().optional(),
     }),
     cvFile: z.string(), // path to /public/cv.pdf
+    // Achievement highlights shown in the 3D HUD corners + 2D hero stat row.
+    // Not derivable from GitHub — authored here, bilingual. accent picks the
+    // neon (cyan) vs amber holo treatment.
+    highlights: z
+      .array(
+        z.object({
+          value: z.object({ en: z.string(), vi: z.string() }),
+          label: z.object({ en: z.string(), vi: z.string() }),
+          accent: z.enum(['neon', 'amber']).default('neon'),
+        }),
+      )
+      .default([]),
   }),
 });
 

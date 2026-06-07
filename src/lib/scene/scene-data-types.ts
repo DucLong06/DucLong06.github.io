@@ -48,6 +48,12 @@ export interface SceneProject {
   repo?: string;
   demo?: string;
   href: string;
+  /** Derived from publishedAt.getFullYear() — drives orbit-timeline angle. */
+  year: number;
+  /** Project category — drives node accent color in the orbit. */
+  category: string;
+  /** Top-tier project (first 3 in FEATURED_ORDER) — rendered larger. */
+  primary: boolean;
 }
 
 export interface ScenePaper {
@@ -55,6 +61,12 @@ export interface ScenePaper {
   venue: string;
   year: number;
   award?: string;
+}
+
+export interface SceneHighlight {
+  value: string;
+  label: string;
+  accent: 'neon' | 'amber';
 }
 
 export interface SceneGitHub {
@@ -72,6 +84,7 @@ export interface SceneData {
   skills: SceneSkillGroup[];
   projects: { featured: SceneProject[]; all: SceneProject[]; total: number };
   papers: ScenePaper[];
+  highlights: SceneHighlight[];
   github: SceneGitHub;
   /** Full UI string table for the active language (small, ~50 keys). */
   strings: Record<string, string>;
