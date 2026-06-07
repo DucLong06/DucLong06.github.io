@@ -4,7 +4,7 @@
  * Mirrors /index.astro with lang='vi' via the shared PortfolioHome body.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import JourneyHome from '../../components/astro/JourneyHome.astro';
+import PortfolioHome from '../../components/astro/PortfolioHome.astro';
 
 const lang = 'vi' as const;
 ---
@@ -14,5 +14,5 @@ const lang = 'vi' as const;
   description="Kỹ sư AI Full-stack xây dựng hệ thống ML quy mô viễn thông. Python · C++ · .NET · TypeScript."
   lang={lang}
 >
-  <JourneyHome lang={lang} currentPath={Astro.url.pathname} />
+  <PortfolioHome lang={lang} currentPath={Astro.url.pathname} />
 </BaseLayout>

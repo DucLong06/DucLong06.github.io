@@ -11,7 +11,7 @@ interface Props {
 const { eyebrow, title, align = 'left' } = Astro.props;
 ---
 
-<div class:list={['section-title', `section-title--${align}`]}>
+<div class:list={['section-title', `section-title--${align}`]} data-reveal>
   {eyebrow && <span class="section-title__eyebrow">{eyebrow}</span>}
   <h2 class="section-title__heading">{title}</h2>
 </div>

@@ -2,13 +2,13 @@
 /**
  * PortfolioHome.astro — Shared home body for EN (/) and VI (/vi/).
  *
- * Content-first: the full server-rendered site is the baseline (SEO/no-JS/a11y).
- * The 3D knowledge graph lives INSIDE the Hero as a progressive-enhancement
- * backdrop + navigation hub (see Hero.astro → GraphCanvas island). There is no
- * separate "3D mode" — the graph and the HTML coexist on one scrollable page.
+ * Content-first single page (SEO/no-JS/a11y baseline). The only enhancement is
+ * the decorative OGL aurora liquid shader behind the Hero (see Hero.astro →
+ * LiquidShader island). Everything else is scannable server-rendered HTML.
  */
 import Nav from './Nav.astro';
 import Hero from './Hero.astro';
+import ImpactStrip from './ImpactStrip.astro';
 import About from './About.astro';
 import Marquee from './Marquee.astro';
 import Experience from './Experience.astro';
@@ -30,6 +30,7 @@ const { lang, currentPath } = Astro.props;
 <Nav lang={lang} />
 <main id="main-content" tabindex="-1">
   <Hero lang={lang} />
+  <ImpactStrip lang={lang} />
   <About lang={lang} />
   <Marquee />
   <Experience lang={lang} />

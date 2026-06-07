@@ -5,8 +5,8 @@
  * Pure SSR — zero runtime JS.
  */
 import type { LanguageStat } from '../../lib/github-stats';
-// Shared with the knowledge graph (DRY): one language→color source of truth.
-import { languageColor as langColor } from '../../lib/graph/graph-palette';
+// One language→color source of truth (DRY).
+import { languageColor as langColor } from '../../lib/language-colors';
 
 interface Props {
   languages: LanguageStat[];

@@ -2,8 +2,9 @@
 /**
  * About.astro — Two-column about section.
  * Left: rendered bio markdown (lang-aware: bio.en.md / bio.vi.md).
- * Right: avatar placeholder + 8 stat cards.
- * Stats from brainstorm §16.2 (real production numbers).
+ * Right: avatar + secondary stat cards.
+ * The four headline numbers (MRs/month, OCR, security, Sao Khuê) are promoted to
+ * ImpactStrip.astro under the hero; these are the supporting set (DRY — no dupes).
  */
 import SectionTitle from './SectionTitle.astro';
 import StatCard from './StatCard.astro';
@@ -26,15 +27,13 @@ const bioKey = Object.keys(bioModules).find((k) => k.endsWith(`bio.${lang}.md`))
 const bio = bioModules[bioKey] as { Content: astroHTML.JSX.Element | ((_props: Record<string, unknown>) => unknown) };
 const Content = bio.Content as any;
 
+// Secondary stats — headline figures (MRs/month, OCR, security, Sao Khuê) live
+// in ImpactStrip under the hero, so they are deliberately omitted here.
 const stats = [
-  { value: '6,000+',   label: t('stat_mrs_month', lang) },
-  { value: '5,000+',   label: t('stat_users',     lang) },
-  { value: '90%',      label: t('stat_security',  lang) },
-  { value: '75.5%',    label: t('stat_rag',        lang) },
-  { value: '200+',     label: t('stat_repos',      lang) },
-  { value: '98%',      label: t('stat_ocr',        lang) },
-  { value: '1st',      label: t('stat_alqac',      lang) },
-  { value: 'Sao Khuê', label: t('stat_saokhe',     lang) },
+  { value: '5,000+', label: t('stat_users', lang) },
+  { value: '75.5%',  label: t('stat_rag',   lang) },
+  { value: '200+',   label: t('stat_repos', lang) },
+  { value: '1st',    label: t('stat_alqac', lang) },
 ];
 ---
 
@@ -63,7 +62,7 @@ const stats = [
           />
         </div>
 
-        <!-- Stats grid: 2×4 -->
+        <!-- Stats grid: 2×2 (secondary stats; headlines live in ImpactStrip) -->
         <div class="about-stats" role="list" aria-label="Key achievements">
           {stats.map(s => (
             <div role="listitem">

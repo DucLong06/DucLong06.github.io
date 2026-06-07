@@ -1,15 +1,13 @@
 ---
 /**
  * BaseLayout.astro — Root HTML shell
- * All pages extend this: full meta/OG/JSON-LD, global CSS, slot. Dark-only.
+ * All pages extend this: full meta/OG/JSON-LD, global CSS, slot. Light "Soft Aurora".
  * Emits hreflang link pair for EN ↔ VI alternate URLs.
  * Includes skip-to-content link for keyboard accessibility.
  */
 import { mirrorUrl } from '../lib/i18n-helpers';
 import '../styles/global.css';
 import '../styles/a11y.css';
-import '../styles/graph.css';
-import '../styles/journey.css';
 
 interface Props {
   title?: string;
@@ -52,7 +50,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="dark">
+<html lang={lang} data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -91,6 +89,12 @@ const jsonLd = {
 
     <!-- JSON-LD structured data -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Mark JS available before paint so [data-reveal] hidden state only applies
+         when we can also un-hide it (no-JS users keep content visible). -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
   </head>
   <body>
     <!-- Skip-to-content — first focusable element; moves keyboard focus past nav -->
@@ -98,5 +102,32 @@ const jsonLd = {
       {lang === 'vi' ? 'Bỏ qua để đến nội dung' : 'Skip to content'}
     </a>
     <slot />
+
+    <!-- Reveal-on-scroll: add .is-revealed to [data-reveal] as it enters view.
+         Hidden state is gated on html.js + prefers-reduced-motion in global.css,
+         so this is pure progressive enhancement. -->
+    <script>
+      function initReveal() {
+        const els = document.querySelectorAll('[data-reveal]:not(.is-revealed)');
+        if (!els.length || !('IntersectionObserver' in window)) {
+          els.forEach((el) => el.classList.add('is-revealed'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-revealed');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+        );
+        els.forEach((el) => io.observe(el));
+      }
+      initReveal();
+      document.addEventListener('astro:page-load', initReveal);
+    </script>
   </body>
 </html>

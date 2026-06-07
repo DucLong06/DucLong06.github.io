@@ -1,10 +1,10 @@
 ---
 /**
  * index.astro — EN home page.
- * 3D island (progressive enhancement) + full 2D site fallback via PortfolioHome.
+ * Content-first single page: aurora liquid hero + scannable 2D sections.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import JourneyHome from '../components/astro/JourneyHome.astro';
+import PortfolioHome from '../components/astro/PortfolioHome.astro';
 
 const lang = 'en' as const;
 ---
@@ -14,5 +14,5 @@ const lang = 'en' as const;
   description="Full-stack AI engineer shipping production ML at telecom scale. Python · C++ · .NET · TypeScript."
   lang={lang}
 >
-  <JourneyHome lang={lang} currentPath={Astro.url.pathname} />
+  <PortfolioHome lang={lang} currentPath={Astro.url.pathname} />
 </BaseLayout>

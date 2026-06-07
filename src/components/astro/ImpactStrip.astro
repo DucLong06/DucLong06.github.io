@@ -1,0 +1,163 @@
+---
+/**
+ * ImpactStrip.astro — Recruiter-first proof band directly under the Hero.
+ * Surfaces the headline production numbers so a fast scanner gets the wins in
+ * the first scroll. Numbers are server-rendered (correct with no JS / for SEO);
+ * a tiny scoped script counts them up from 0 when scrolled into view, respecting
+ * prefers-reduced-motion. Bilingual via lang prop.
+ *
+ * DRY: these four are intentionally PROMOTED out of About's stat grid (which
+ * keeps the fuller secondary set) to avoid duplication.
+ */
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const locale = lang === 'vi' ? 'vi-VN' : 'en-US';
+
+// Numeric headline stats — count up on view.
+const numbers = [
+  { target: 6000, suffix: '+', label: t('stat_mrs_month', lang) },
+  { target: 98,   suffix: '%', label: t('stat_ocr',       lang) },
+  { target: 90,   suffix: '%', label: t('stat_security',  lang) },
+];
+
+// Non-numeric headline (award) — static.
+const award = { value: 'Sao Khuê', label: t('stat_saokhe', lang) };
+---
+
+<section class="impact" aria-label="Key results">
+  <div class="container">
+    <div class="impact-grid" role="list">
+      {numbers.map((s) => (
+        <div class="impact-stat" role="listitem">
+          <span class="impact-stat__value">
+            <span
+              class="impact-stat__num"
+              data-target={s.target}
+              data-locale={locale}
+            >{s.target.toLocaleString(locale)}</span><span class="impact-stat__suffix">{s.suffix}</span>
+          </span>
+          <span class="impact-stat__label">{s.label}</span>
+        </div>
+      ))}
+
+      <div class="impact-stat" role="listitem">
+        <span class="impact-stat__value impact-stat__value--text">{award.value}</span>
+        <span class="impact-stat__label">{award.label}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .impact {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-subtle);
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .impact-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .impact-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    text-align: center;
+  }
+
+  .impact-stat__value {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1;
+    background: var(--aurora-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .impact-stat__value--text {
+    font-style: italic;
+  }
+
+  .impact-stat__suffix {
+    /* inherits the gradient text fill from the parent value */
+  }
+
+  .impact-stat__label {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+</style>
+
+<script>
+  // Count-up enhancement. SSR already shows the final number, so no-JS users see
+  // the real figure; this only animates it from 0 when the strip scrolls in.
+  function initImpactCounters() {
+    const nums = document.querySelectorAll<HTMLElement>('.impact-stat__num');
+    if (!nums.length) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return; // leave SSR value as-is
+
+    const animateNum = (el: HTMLElement) => {
+      const target = Number(el.dataset.target || '0');
+      const locale = el.dataset.locale || 'en-US';
+      const duration = 1100;
+      const start = performance.now();
+
+      const tick = (now: number) => {
+        const p = Math.min((now - start) / duration, 1);
+        // easeOut
+        const eased = 1 - Math.pow(1 - p, 3);
+        const current = Math.round(target * eased);
+        el.textContent = current.toLocaleString(locale);
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target.toLocaleString(locale);
+      };
+      // start from 0 then count up
+      el.textContent = (0).toLocaleString(locale);
+      requestAnimationFrame(tick);
+    };
+
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateNum(entry.target as HTMLElement);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    nums.forEach((n) => io.observe(n));
+  }
+
+  initImpactCounters();
+  // Re-run after Astro client-side navigation (if any view transitions are used).
+  document.addEventListener('astro:page-load', initImpactCounters);
+</script>

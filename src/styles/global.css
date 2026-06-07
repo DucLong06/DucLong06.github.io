@@ -117,3 +117,22 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
 }
+
+/* ─── REVEAL ON SCROLL ──────────────────────────────────────────────────────── */
+/* Subtle fade-up for elements marked [data-reveal]. Progressive enhancement:
+   the .is-revealed class is added by a tiny IntersectionObserver in BaseLayout.
+   No JS / reduced-motion → content is fully visible (no hidden state). */
+@media (prefers-reduced-motion: no-preference) {
+  /* Gated on html.js so no-JS users never get stuck on the hidden state. */
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.6s var(--ease-soft, ease),
+      transform 0.6s var(--ease-soft, ease);
+  }
+  html.js [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
