@@ -104,5 +104,7 @@ void main() {
   float vig = 1.0 - length(vUv - 0.5) * 0.8;
   col *= clamp(vig, 0.0, 1.0);
 
-  gl_FragColor = vec4(col, 0.85);
+  // Soft pastel wash: low alpha keeps the aurora as a subtle tint over the light
+  // background so hero text stays legible (WCAG) instead of a loud opaque field.
+  gl_FragColor = vec4(col, 0.38);
 }

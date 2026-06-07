@@ -101,6 +101,22 @@ const cvFile  = profile.data.cvFile;
     gap: 1.25rem;
   }
 
+  /* Soft readability scrim — feathered light glow behind the text so the aurora
+     never drops contrast below WCAG, while staying vibrant around the edges. */
+  .hero-content::before {
+    content: '';
+    position: absolute;
+    inset: -8% -12%;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse at center,
+      color-mix(in srgb, var(--bg-base) 82%, transparent) 0%,
+      color-mix(in srgb, var(--bg-base) 55%, transparent) 45%,
+      transparent 72%
+    );
+    pointer-events: none;
+  }
+
   /* Giant Instrument Serif italic — §16.9 */
   .hero-name {
     font-family: 'Instrument Serif', Georgia, serif;
@@ -126,7 +142,7 @@ const cvFile  = profile.data.cvFile;
 
   .hero-meta {
     font-size: 0.9375rem;
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
     line-height: 1.7;
   }
 
