@@ -112,6 +112,14 @@ export const STRINGS = {
     graph_panel_projects_at:  'Projects',
     graph_panel_used_in:      'Used in',
     graph_nav_label:          'Sections',
+
+    // Data Pipeline Journey (3D)
+    journey_nav_label:        'Pipeline stations',
+    journey_open_project:     'Open project',
+    journey_scroll_cue:       'Scroll to flow through the pipeline',
+    journey_cluster_hint:     'Select a cluster to expand its skills',
+    journey_endpoint_method:  'POST /hire',
+    journey_endpoint_status:  '200 OK · open to opportunities',
   },
 
   vi: {
@@ -219,6 +227,14 @@ export const STRINGS = {
     graph_panel_projects_at:  'Dự án',
     graph_panel_used_in:      'Sử dụng trong',
     graph_nav_label:          'Mục',
+
+    // Data Pipeline Journey (3D)
+    journey_nav_label:        'Các trạm pipeline',
+    journey_open_project:     'Mở dự án',
+    journey_scroll_cue:       'Cuộn để đi qua pipeline',
+    journey_cluster_hint:     'Chọn một nhóm để mở rộng kỹ năng',
+    journey_endpoint_method:  'POST /hire',
+    journey_endpoint_status:  '200 OK · sẵn sàng cơ hội mới',
   },
 } as const satisfies Record<Lang, Record<string, string>>;
 

@@ -4,7 +4,7 @@
  * 3D island (progressive enhancement) + full 2D site fallback via PortfolioHome.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PortfolioHome from '../components/astro/PortfolioHome.astro';
+import JourneyHome from '../components/astro/JourneyHome.astro';
 
 const lang = 'en' as const;
 ---
@@ -14,5 +14,5 @@ const lang = 'en' as const;
   description="Full-stack AI engineer shipping production ML at telecom scale. Python · C++ · .NET · TypeScript."
   lang={lang}
 >
-  <PortfolioHome lang={lang} currentPath={Astro.url.pathname} />
+  <JourneyHome lang={lang} currentPath={Astro.url.pathname} />
 </BaseLayout>
