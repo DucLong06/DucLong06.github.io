@@ -22,7 +22,7 @@ import Papers from './Papers.astro';
 import GitHubStats from './GitHubStats.astro';
 import Contact from './Contact.astro';
 import Footer from './Footer.astro';
-import SceneExperience from '../react/scene/SceneExperience';
+import CoreExperience from '../react/core/CoreExperience';
 import Scene3DToggle from './Scene3DToggle.astro';
 import { buildSceneData } from '../../lib/scene/build-scene-data';
 import type { Lang } from '../../lib/i18n-helpers';
@@ -35,7 +35,7 @@ const { lang, currentPath } = Astro.props;
 const sceneData = await buildSceneData(lang);
 ---
 
-<SceneExperience client:only="react" data={sceneData} />
+<CoreExperience client:only="react" data={sceneData} />
 
 <div id="classic-site">
   <Nav lang={lang} />
