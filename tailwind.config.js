@@ -40,20 +40,6 @@ export default {
         },
         success: 'var(--success)',
         warning: 'var(--warning)',
-
-        // ── Cyber palette (dark/neon rebrand — see cyber-tokens.css) ─────────
-        cyber: {
-          deep:  'var(--bg-deep)',
-          2:     'var(--bg-2)',
-          3:     'var(--bg-3)',
-          neon:  'var(--neon)',
-          neon2: 'var(--neon-2)',
-          amber: 'var(--amber)',
-          gold:  'var(--gold)',
-          rim:   'var(--rim)',
-          fg:    'var(--fg)',
-          fgdim: 'var(--fg-dim)',
-        },
       },
 
       // ── Border radius ────────────────────────────────────────────────────────

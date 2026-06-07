@@ -98,7 +98,7 @@ a {
 /* ─── SELECTION ─────────────────────────────────────────────────────────────── */
 
 ::selection {
-  background-color: rgba(45, 226, 255, 0.22);
+  background-color: rgba(99, 102, 241, 0.18);
   color: var(--text-primary);
 }
 

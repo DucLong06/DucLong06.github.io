@@ -1,1 +1,57 @@
-{}
+{
+  "alqac-2023": {
+    "slug": "alqac-2023",
+    "stars": 0,
+    "pushedAt": "2025-01-24T02:42:26Z",
+    "topics": [],
+    "primaryLanguage": "Python",
+    "fetchedAt": "2026-06-07T10:35:13.386Z"
+  },
+  "legal-prompts": {
+    "slug": "legal-prompts",
+    "stars": 11,
+    "pushedAt": "2023-11-29T09:51:04Z",
+    "topics": [
+      "legal-prompts",
+      "prompt-engineering",
+      "prompts"
+    ],
+    "primaryLanguage": null,
+    "fetchedAt": "2026-06-07T10:35:13.921Z"
+  },
+  "ocr-api": {
+    "slug": "ocr-api",
+    "stars": 0,
+    "pushedAt": "2023-08-14T11:37:01Z",
+    "topics": [
+      "ant-design",
+      "attention-ocr",
+      "docker-compose",
+      "flask",
+      "ocr-recognition",
+      "python",
+      "reactjs",
+      "tailwind-css",
+      "typescript",
+      "yolov5"
+    ],
+    "primaryLanguage": "Python",
+    "fetchedAt": "2026-06-07T10:35:14.287Z"
+  },
+  "text2sql-vietnamese": {
+    "slug": "text2sql-vietnamese",
+    "stars": 0,
+    "pushedAt": "2026-01-27T14:12:15Z",
+    "topics": [],
+    "primaryLanguage": "Python",
+    "fetchedAt": "2026-06-07T10:35:15.068Z"
+  },
+  "face-detection-ml-system": {
+    "slug": "face-detection-ml-system",
+    "stars": 39,
+    "pushedAt": "2026-06-07T09:32:31Z",
+    "topics": [],
+    "primaryLanguage": "Go Template",
+    "fetchedAt": "2026-06-07T10:35:15.754Z"
+  }
+}

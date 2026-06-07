@@ -1,59 +1,55 @@
 /*
- * tokens.css — Cyber "Floating Data Block" Design System (DARK-ONLY).
- * Single source of truth for all CSS custom properties. Tailwind reads these
- * via tailwind.config.js. The site dropped light mode in the cyber rebrand —
- * `:root` is the (only) dark cyber palette; there is no light variant.
- *
- * Neon-primitive tokens (--neon/--amber/--holo-*) live in cyber-tokens.css.
- * The classic --aurora-* names are retained but now point at neon/amber so all
- * existing components inherit the rebrand without per-file edits.
+ * tokens.css — "Soft Aurora" Design System
+ * Single source of truth for all CSS custom properties.
+ * Tailwind reads from these vars via tailwind.config.js.
  *
  * Token groups:
- *   --bg-*         Surface colors (deep → elevated)
+ *   --bg-*         Surface colors
  *   --text-*       Foreground colors
- *   --border*      Border alpha (neon-tinted)
- *   --aurora-*     Accent / gradient palette (now neon→amber)
+ *   --border, --border-strong  Border alpha values
+ *   --aurora-*     Accent / gradient palette (indigo, violet, cyan, pink)
  *   --accent-*     Semantic accent shortcuts
  *   --success, --warning  Status colors
  *   --r-*          Border radii
- *   --shadow-*     Box shadows (neon-tinted glow)
+ *   --shadow-*     Box shadows (multi-layer with aurora tint)
  *   --ease-soft    Motion easing
  */
 
+/* ─── LIGHT MODE (default) ─────────────────────────────────────────────────── */
 :root {
-  /* Surfaces — deep cyber dark */
-  --bg-base:        #05070d;
-  --bg-elevated:    #0c1120;
-  --bg-subtle:      #111726;
+  /* Surfaces */
+  --bg-base:        #fafaf9;
+  --bg-elevated:    #ffffff;
+  --bg-subtle:      #f4f4f2;
 
-  /* Text — cool foreground on dark */
-  --text-primary:   #e7f0ff;
-  --text-secondary: #9fb2d6;
-  --text-tertiary:  #8093b8;  /* ≥4.5:1 on --bg-base for WCAG AA body text */
+  /* Text */
+  --text-primary:   #0a0a0b;
+  --text-secondary: #52525b;
+  --text-tertiary:  #a1a1aa;
 
-  /* Borders — faint neon tint */
-  --border:         rgba(45, 226, 255, 0.10);
-  --border-strong:  rgba(45, 226, 255, 0.22);
+  /* Borders */
+  --border:         rgba(10, 10, 11, 0.08);
+  --border-strong:  rgba(10, 10, 11, 0.14);
 
-  /* Accent palette — neon blue → amber (was the soft-aurora pastels) */
-  --aurora-1:       #2de2ff;  /* neon cyan */
-  --aurora-2:       #3a6cff;  /* rim blue  */
-  --aurora-3:       #00e5ff;  /* bright cyan */
-  --aurora-4:       #ffb020;  /* amber     */
+  /* Aurora accents — unchanged across modes */
+  --aurora-1:       #6366f1;  /* indigo */
+  --aurora-2:       #8b5cf6;  /* violet */
+  --aurora-3:       #06b6d4;  /* cyan */
+  --aurora-4:       #f472b6;  /* soft pink */
   --aurora-gradient: linear-gradient(
     135deg,
     var(--aurora-1) 0%,
-    var(--aurora-2) 55%,
-    var(--aurora-4) 100%
+    var(--aurora-2) 50%,
+    var(--aurora-3) 100%
   );
 
   /* Semantic accents */
   --accent:         var(--aurora-1);
-  --accent-hover:   #6df0ff;
+  --accent-hover:   #4f46e5;
 
   /* Status */
-  --success:        #2de2a0;
-  --warning:        #ffb020;
+  --success:        #10b981;
+  --warning:        #f59e0b;
 
   /* Radii */
   --r-sm:  6px;
@@ -61,17 +57,52 @@
   --r-lg:  20px;
   --r-xl:  28px;
 
-  /* Shadows — deep dark + neon glow on the aurora layer */
-  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.40);
-  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.40),
-                0 8px 24px rgba(0, 0, 0, 0.50);
-  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.40),
-                   0 8px 28px rgba(0, 0, 0, 0.50),
-                   0 18px 48px rgba(45, 226, 255, 0.18);
+  /* Shadows (multi-layer, soft, aurora-tinted) */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.04),
+                0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.04),
+                   0 8px 24px rgba(0, 0, 0, 0.06),
+                   0 24px 48px rgba(99, 102, 241, 0.08);
 
   /* Motion */
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast:   150ms;
   --duration-base:   250ms;
   --duration-slow:   400ms;
+}
+
+/* ─── DARK MODE ─────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Surfaces */
+  --bg-base:        #0b0b0f;
+  --bg-elevated:    #12121a;
+  --bg-subtle:      #18181f;
+
+  /* Text */
+  --text-primary:   #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-tertiary:  #52525b;
+
+  /* Borders */
+  --border:         rgba(255, 255, 255, 0.08);
+  --border-strong:  rgba(255, 255, 255, 0.14);
+
+  /* Aurora: same hues, glow enhanced on dark */
+  --aurora-1:       #6366f1;
+  --aurora-2:       #8b5cf6;
+  --aurora-3:       #06b6d4;
+  --aurora-4:       #f472b6;
+
+  /* Semantic accents */
+  --accent:         var(--aurora-1);
+  --accent-hover:   #818cf8;
+
+  /* Shadows gain more alpha on dark */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.16);
+  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.16),
+                0 8px 24px rgba(0, 0, 0, 0.24);
+  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.16),
+                   0 8px 24px rgba(0, 0, 0, 0.24),
+                   0 24px 48px rgba(99, 102, 241, 0.16);
 }
