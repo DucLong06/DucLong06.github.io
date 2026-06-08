@@ -134,4 +134,28 @@ const skills = defineCollection({
   }),
 });
 
-export const collections = { profile, experience, projects, projectReadmes, papers, skills, about, cv };
+// Off-clock interests (football, badminton) — NEW content for the 3D "Off-clock"
+// wedge + classic Off-clock section. Bilingual; editable as YAML only.
+const offclock = defineCollection({
+  type: 'data',
+  schema: z.object({
+    interests: z.array(
+      z.object({
+        key: z.string(),
+        icon: z.string(), // emoji
+        title: z.object({ en: z.string(), vi: z.string() }),
+        blurb: z.object({ en: z.string(), vi: z.string() }),
+        facts: z
+          .array(
+            z.object({
+              label: z.object({ en: z.string(), vi: z.string() }),
+              value: z.string(),
+            }),
+          )
+          .default([]),
+      }),
+    ),
+  }),
+});
+
+export const collections = { profile, experience, projects, projectReadmes, papers, skills, offclock, about, cv };

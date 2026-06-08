@@ -1,0 +1,32 @@
+# Off-clock interests — shown in the 3D "Off-clock" wedge + the classic Off-clock
+# section. Bilingual (en + vi). Edit freely; values are plain strings.
+# NOTE(user): blurbs/facts below are a draft — confirm or adjust the copy.
+
+interests:
+  - key: football
+    icon: "⚽"
+    title:
+      en: "Football"
+      vi: "Bóng đá"
+    blurb:
+      en: "Weekend five-a-side with friends — the best way to reset after a sprint. Plays anywhere across the midfield."
+      vi: "Đá phủi cuối tuần với bạn bè — cách reset tốt nhất sau mỗi sprint. Chơi đa năng ở khu trung tuyến."
+    facts:
+      - label: { en: "Position", vi: "Vị trí" }
+        value: "Midfield"
+      - label: { en: "Years playing", vi: "Số năm chơi" }
+        value: "10+"
+
+  - key: badminton
+    icon: "🏸"
+    title:
+      en: "Badminton"
+      vi: "Cầu lông"
+    blurb:
+      en: "Fast rallies and footwork drills a couple of evenings a week — sharpens focus and reflexes."
+      vi: "Những pha cầu nhanh và bài tập di chuyển vài buổi tối mỗi tuần — rèn sự tập trung và phản xạ."
+    facts:
+      - label: { en: "Favourite shot", vi: "Cú đánh ưa thích" }
+        value: "Smash"
+      - label: { en: "Plays", vi: "Tần suất" }
+        value: "2x / week"

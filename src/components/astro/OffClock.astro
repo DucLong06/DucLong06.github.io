@@ -1,0 +1,103 @@
+---
+/**
+ * OffClock.astro — Classic "Off-clock" section (canonical/SEO parity with the 3D
+ * wedge). Renders football + badminton from the offclock collection as a card row.
+ */
+import { getEntry } from 'astro:content';
+import SectionTitle from './SectionTitle.astro';
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'en' } = Astro.props;
+
+const entry = await getEntry('offclock', 'main');
+const interests = entry?.data.interests ?? [];
+---
+
+<section class="offclock section-gap" id="offclock" aria-labelledby="offclock-heading">
+  <div class="container">
+    <SectionTitle
+      eyebrow={t('explore_offclock_eyebrow', lang)}
+      title={t('explore_offclock_title', lang)}
+    />
+
+    <div class="offclock-row" role="list">
+      {interests.map((it) => (
+        <article class="oc-card" role="listitem">
+          <span class="oc-card__icon" aria-hidden="true">{it.icon}</span>
+          <h3 class="oc-card__title">{it.title[lang] ?? it.title.en}</h3>
+          <p class="oc-card__blurb">{it.blurb[lang] ?? it.blurb.en}</p>
+          {it.facts.length > 0 && (
+            <ul class="oc-card__facts">
+              {it.facts.map((f) => (
+                <li class="oc-fact">
+                  <span class="oc-fact__value">{f.value}</span>
+                  <span class="oc-fact__label">{f.label[lang] ?? f.label.en}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-gap { padding: 6rem 0; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+
+  .offclock-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .offclock-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  .oc-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .oc-card__icon { font-size: 1.75rem; }
+
+  .oc-card__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0.5rem 0 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .oc-card__blurb {
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0 0 1rem;
+  }
+
+  .oc-card__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .oc-fact { display: flex; flex-direction: column; }
+  .oc-fact__value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--neon-cyan);
+  }
+  .oc-fact__label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+  }
+</style>
