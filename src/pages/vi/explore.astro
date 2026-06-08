@@ -1,0 +1,47 @@
+---
+/**
+ * vi/explore.astro — VI interactive 3D portfolio (/vi/explore).
+ * Mirrors /explore with lang='vi'. Canonical → VI classic home (/vi/).
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExploreRoot from '../../components/react/explore/explore-root';
+import { getExploreData } from '../../lib/explore-data';
+import { getEntry } from 'astro:content';
+import { t } from '../../lib/i18n-helpers';
+import '../../styles/explore.css';
+
+const lang = 'vi' as const;
+const siteUrl = 'https://duclong06.github.io';
+const classicUrl = `${siteUrl}/vi/`;
+const profile = await getEntry('profile', 'main');
+const cvHref = profile.data.cvFile;
+const data = await getExploreData(lang);
+---
+
+<BaseLayout
+  title="Hoàng Đức Long — Khám phá 3D"
+  description="Portfolio 3D tương tác của Hoàng Đức Long — kỹ sư AI full-stack. Khám phá kinh nghiệm, dự án, bài báo, kỹ năng và hơn thế nữa."
+  lang={lang}
+  canonical={classicUrl}
+>
+  <main id="main-content" class="explore-page" tabindex="-1">
+    <ExploreRoot
+      client:only="react"
+      locale={lang}
+      classicUrl="/vi/"
+      cvHref={cvHref}
+      data={data}
+    >
+      <div slot="fallback" class="explore-state">
+        <p class="explore-state__title">{t('explore_loading', lang)}</p>
+        <a class="explore-state__link" href="/vi/">{t('explore_view_classic', lang)} →</a>
+      </div>
+    </ExploreRoot>
+    <noscript>
+      <div class="explore-state explore-state--card">
+        <p class="explore-state__body">{t('explore_fallback_body', lang)}</p>
+        <a class="explore-btn explore-btn--primary" href="/vi/">{t('explore_view_classic', lang)} →</a>
+      </div>
+    </noscript>
+  </main>
+</BaseLayout>
