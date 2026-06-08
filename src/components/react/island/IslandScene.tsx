@@ -36,7 +36,10 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
       setHeroVisible(false);
       setFocusedId(id);
     },
-    onHome: () => setFocusedId(null),
+    onHome: () => {
+      setFocusedId(null);
+      setHeroVisible(true); // returning to the floating home view re-shows the overview
+    },
   });
 
   // User-driven actions cancel any running tour before applying their effect.
@@ -51,6 +54,7 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
   const goHome = useCallback(() => {
     tour.notifyUserInteract();
     setFocusedId(null);
+    setHeroVisible(true); // back-to-island restores the initial overview card
   }, [tour]);
   const exitClassic = useCallback(() => {
     tour.notifyUserInteract();

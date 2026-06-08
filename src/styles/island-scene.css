@@ -267,7 +267,11 @@ html.scene-3d-active body {
 }
 .scene-popup__close:hover { background: rgba(58, 52, 80, 0.16); }
 .scene-popup__close:focus-visible { outline: 3px solid #7c5cff; outline-offset: 2px; }
-.scene-popup__body { padding: 1.2rem; overflow-y: auto; }
+.scene-popup__body { padding: 1.2rem; overflow-y: auto; color: #4a4466; }
+/* Popup forces a light surface, so pin text color explicitly — otherwise bare
+   tags (e.g. Papers titles) inherit the page's --text-primary, which is light in
+   dark mode and becomes invisible on the light card. */
+.scene-popup__body strong, .scene-popup__body b { color: #2a2440; }
 
 /* Popup content primitives */
 .pc-stack { display: flex; flex-direction: column; gap: 1rem; }
