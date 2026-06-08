@@ -1,6 +1,6 @@
 # Hoàng Đức Long — Portfolio
 
-Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Science student at EPU). Built with **Astro 5 + React islands** following a "Soft Aurora" aesthetic — warm neutrals, aurora gradient accents, and a signature WebGL liquid-shader hero. Fully static, ships near-zero client JS by default, supports EN/VI i18n, and auto-deploys to GitHub Pages on every push to `master`.
+Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Science student at EPU). Built with **Astro 5 + React islands** with a **dark-techy** aesthetic — deep indigo-black surfaces, neon cyan/magenta accents, Space Grotesk display + JetBrains Mono. The classic content-first home is canonical at `/` (and `/vi/`); an optional interactive **3D hub-navigator** lives at `/explore` (and `/vi/explore`) as progressive enhancement. Fully static, ships near-zero client JS on the canonical routes, supports EN/VI i18n, and auto-deploys to GitHub Pages on every push to `master`.
 
 ## Stack
 
@@ -8,13 +8,18 @@ Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Scien
 |---|---|
 | Framework | Astro 5 (static output) |
 | UI islands | React 18 |
-| Styling | Tailwind CSS v3 |
-| 3D shader | OGL (WebGL liquid gradient mesh) |
-| Animation | framer-motion |
-| Fonts | @fontsource (self-hosted, no Google CDN) |
+| Styling | Tailwind CSS v3 (dark-techy tokens) |
+| 3D (explore only) | three + @react-three/fiber + @react-three/drei (CameraControls), lazy-loaded |
+| Animation | framer-motion (classic) · drei CameraControls (explore) |
+| Fonts | @fontsource (self-hosted, no Google CDN) — Space Grotesk + JetBrains Mono + Inter |
 | OG images | satori (edge-rendered at build time) |
 | i18n | Astro native i18n (EN default, `/vi/` prefix) |
 | Deployment | GitHub Actions → GitHub Pages native |
+
+## Routes
+
+- **Classic (canonical):** `/`, `/vi/` — content-first, zero three.js, Lighthouse target ≥95.
+- **Explore (3D):** `/explore`, `/vi/explore` — R3F donut hub-navigator (6 wedges: About · Experience · Work · Stats · Skills · Off-clock). `client:only`, lazy three.js, `<link rel="canonical">` → classic. No-WebGL / very low-end → classic fallback card; reduced-motion → static donut + snap camera.
 
 ## Dev Commands
 
@@ -89,10 +94,14 @@ DucLong06.github.io/
 
 - [ ] Smoke test: `/`, `/vi/`, `/projects/*`, `/cv.pdf`, `/sitemap-index.xml`, `/robots.txt`
 - [ ] 404 page renders for unknown routes
-- [ ] Theme toggle persists across reload
 - [ ] Lang toggle preserves current path
-- [ ] OG preview valid (LinkedIn Post Inspector)
-- [ ] Lighthouse ≥ 95 on live URL
+- [ ] OG preview valid (LinkedIn Post Inspector) — classic + `/explore`
+- [ ] Lighthouse ≥ 95 on live `/` and `/vi/` (no three.js in classic chunk)
+- [ ] `/explore` + `/vi/explore` render; canonical → classic; no-JS shows "view classic" link
+- [ ] Explore: hover/click a wedge → camera dolly + DOM panel; Esc/Hub returns; jump wedge→wedge direct
+- [ ] Explore a11y: keyboard-only traversal (wedges → panels → chart toggles → nav); reduced-motion = static + snap
+- [ ] Explore mobile: usable FPS or auto lite/classic; tab-hidden / offscreen pauses render loop
+- [ ] VI parity on all `/explore` UI
 - [ ] `git tag v1.0.0 && git push --tags`
 
 ## References
