@@ -5,7 +5,7 @@
  *  - Run device capability detection (use-webgl-capability).
  *  - tier === 'classic' (no WebGL / very low-end) → render a DOM card linking to
  *    the classic portfolio (the a11y / fallback safety net).
- *  - otherwise → lazy-load the donut-hub scene (keeps three.js out of the / chunk)
+ *  - otherwise → lazy-load the pie-hub scene (keeps three.js out of the / chunk)
  *    inside Suspense with a lightweight skeleton.
  *
  * All content arrives pre-resolved as the `data` prop (assembled server-side).
@@ -15,7 +15,7 @@ import { useWebGLCapability } from './use-webgl-capability';
 import { makeT } from './explore-i18n';
 import type { ExploreData, Lang } from './explore-types';
 
-const DonutHubScene = lazy(() => import('./donut-hub-scene'));
+const PieHubScene = lazy(() => import('./pie-hub-scene'));
 
 interface Props {
   locale: Lang;
@@ -104,7 +104,7 @@ export default function ExploreRoot({ locale, classicUrl, cvHref, data }: Props)
         />
       }
     >
-      <DonutHubScene
+      <PieHubScene
         locale={locale}
         tier={cap.tier}
         reducedMotion={cap.reducedMotion}

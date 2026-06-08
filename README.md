@@ -19,7 +19,7 @@ Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Scien
 ## Routes
 
 - **Classic (canonical):** `/`, `/vi/` — content-first, zero three.js, Lighthouse target ≥95.
-- **Explore (3D):** `/explore`, `/vi/explore` — R3F donut hub-navigator (6 wedges: About · Experience · Work · Stats · Skills · Off-clock). `client:only`, lazy three.js, `<link rel="canonical">` → classic. No-WebGL / very low-end → classic fallback card; reduced-motion → static donut + snap camera.
+- **Explore (3D):** `/explore`, `/vi/explore` — R3F **solid-pie hub** (6 slices: About · Experience · Work · Stats · Skills · Off-clock). Idle-spinning thick acrylic pie → hover soft-brakes + explodes a slice → click flies a Prezi-style camera **arc** to a face-on "stage" → quantitative slices (Skills/Stats) sprout 3D bars + floating glass cards; all slices open an accessible DOM panel. `client:only`, lazy three.js, `<link rel="canonical">` → classic. Frosted-matte material everywhere; acrylic transmission on the focused slice (full tier only). No-WebGL / very low-end → classic fallback card; reduced-motion → static pie + snap camera; lite tier → frosted-only + DOM/SVG payload.
 
 ## Dev Commands
 
@@ -98,8 +98,8 @@ DucLong06.github.io/
 - [ ] OG preview valid (LinkedIn Post Inspector) — classic + `/explore`
 - [ ] Lighthouse ≥ 95 on live `/` and `/vi/` (no three.js in classic chunk)
 - [ ] `/explore` + `/vi/explore` render; canonical → classic; no-JS shows "view classic" link
-- [ ] Explore: hover/click a wedge → camera dolly + DOM panel; Esc/Hub returns; jump wedge→wedge direct
-- [ ] Explore a11y: keyboard-only traversal (wedges → panels → chart toggles → nav); reduced-motion = static + snap
+- [ ] Explore: hover/click a slice → camera arc dive → stage (bars sprout for Skills/Stats) + DOM panel; Esc/Hub returns; jump slice→slice direct
+- [ ] Explore a11y: keyboard-only traversal (slice labels → panels → chart toggles → nav); reduced-motion = static pie + snap
 - [ ] Explore mobile: usable FPS or auto lite/classic; tab-hidden / offscreen pauses render loop
 - [ ] VI parity on all `/explore` UI
 - [ ] `git tag v1.0.0 && git push --tags`

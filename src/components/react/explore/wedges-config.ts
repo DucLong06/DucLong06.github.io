@@ -28,6 +28,23 @@ export const THETA_LENGTH = (Math.PI * 2) / WEDGE_COUNT;
 /** Ring radius (donut center → tube center). Shared by geometry + camera math. */
 export const HUB_RADIUS = 2.2;
 
+/**
+ * Solid-pie geometry constants (the thick "cake" hub). The disc stays in the XY
+ * plane (normal +Z) — the tilted-cake look comes from an OBLIQUE camera, not a
+ * group tilt, so slice-angle math (wedgeAngle) stays pure and the camera dive is a
+ * simple oblique → face-on move. Slices are annular sectors (inner hole clears the
+ * center core). Depth extrudes along +Z. Shared by geometry + camera + payload.
+ */
+export const PIE_INNER = 1.05;
+export const PIE_OUTER = 2.95;
+export const PIE_DEPTH = 0.55;
+/** Mid radius — slice centroid distance, used by camera + payload placement. */
+export const PIE_MID = (PIE_INNER + PIE_OUTER) / 2;
+/** Angular gap (radians) trimmed from each side of a slice → visible seams. */
+export const PIE_GAP = 0.045;
+/** Top face Z (after centering the extrude on z=0) — where bars sprout from. */
+export const PIE_FACE_Z = PIE_DEPTH / 2;
+
 export const WEDGES: readonly WedgeConfig[] = [
   { id: 'about',      labelKey: 'graph_section_about',      color: '#34e2ff', angleIndex: 0, icon: '👤' },
   { id: 'experience', labelKey: 'graph_section_experience', color: '#49b6ff', angleIndex: 1, icon: '💼' },

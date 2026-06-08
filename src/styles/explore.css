@@ -187,6 +187,35 @@
   outline-offset: 2px;
 }
 
+/* ─── Stage cards (sprout-bar labels, drei <Html>) ───────────────────────── */
+.stage-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-elevated) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bar-color, #34e2ff) 50%, transparent);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--bar-color, #34e2ff) 28%, transparent);
+  backdrop-filter: blur(7px);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  pointer-events: none;
+  text-align: center;
+}
+.stage-card__label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+.stage-card__val {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--bar-color, #34e2ff);
+}
+
 /* ─── Hub center ─────────────────────────────────────────────────────────── */
 .hub-center {
   display: flex;
