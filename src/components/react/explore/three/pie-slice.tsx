@@ -11,7 +11,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { MeshTransmissionMaterial } from '@react-three/drei';
-import type { Mesh, MeshPhysicalMaterial } from 'three';
+import type { Mesh, MeshStandardMaterial } from 'three';
 import {
   THETA_LENGTH,
   wedgeAngle,
@@ -50,7 +50,7 @@ export default function PieSlice({
   onSelect,
 }: Props) {
   const meshRef = useRef<Mesh>(null);
-  const matRef = useRef<MeshPhysicalMaterial>(null);
+  const matRef = useRef<MeshStandardMaterial>(null);
 
   const active = hovered || focused;
   const dir = wedgeAngle(angleIndex); // centroid direction in group plane
@@ -64,8 +64,10 @@ export default function PieSlice({
     const ty = Math.sin(dir) * outward;
     const tz = active ? LIFT : 0;
 
-    const targetEmissive = focused ? 1.5 : hovered ? 1.05 : dimmed ? 0.12 : 0.4;
-    const targetOpacity = dimmed ? 0.35 : 1;
+    // Softer dim floor (0.34, not 0.12) so backgrounded slices never read dead-black;
+    // the scene Environment also fills every face so nothing goes pure black on spin.
+    const targetEmissive = focused ? 1.4 : hovered ? 1.0 : dimmed ? 0.34 : 0.5;
+    const targetOpacity = dimmed ? 0.6 : 1;
 
     if (reducedMotion) {
       mesh.position.set(tx, ty, tz);
@@ -126,15 +128,16 @@ export default function PieSlice({
           color={color}
         />
       ) : (
-        <meshPhysicalMaterial
+        // Standard (not physical+clearcoat) → far cheaper to render every frame; the
+        // scene Environment supplies reflections for the frosted/acrylic sheen.
+        <meshStandardMaterial
           ref={matRef}
           color={color}
           emissive={color}
-          emissiveIntensity={0.4}
-          metalness={0.2}
-          roughness={0.55}
-          clearcoat={0.6}
-          clearcoatRoughness={0.4}
+          emissiveIntensity={0.5}
+          metalness={0.45}
+          roughness={0.32}
+          envMapIntensity={1.1}
           transparent
           opacity={1}
         />

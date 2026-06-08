@@ -228,11 +228,19 @@
   pointer-events: none;
 }
 .hub-center__avatar {
-  width: 56px; height: 56px;
+  width: 84px; height: 84px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid color-mix(in srgb, var(--neon-cyan) 60%, transparent);
-  box-shadow: 0 0 24px rgba(52, 226, 255, 0.45);
+  border: 2px solid color-mix(in srgb, var(--neon-cyan) 70%, transparent);
+  box-shadow: 0 0 28px rgba(52, 226, 255, 0.5);
+}
+/* Text sits in its own pill below the avatar so it never overlaps the core glow. */
+.hub-center__sublabel,
+.hub-center__hint {
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-base) 70%, transparent);
+  white-space: nowrap;
 }
 .hub-center__sublabel {
   font-family: var(--font-mono);
@@ -240,12 +248,10 @@
   font-weight: 600;
   color: var(--neon-cyan);
   text-shadow: 0 0 8px rgba(52, 226, 255, 0.4);
-  white-space: nowrap;
 }
 .hub-center__hint {
   font-size: 0.62rem;
   color: var(--text-tertiary);
-  white-space: nowrap;
 }
 
 /* ─── HUD overlay ────────────────────────────────────────────────────────── */
@@ -377,7 +383,7 @@
 }
 .detail-overlay__card {
   position: relative;
-  width: min(640px, 92vw);
+  width: min(460px, 90vw);
   height: 100%;
   overflow-y: auto;
   padding: 4rem 2rem 2rem;

@@ -30,7 +30,7 @@ interface Props {
   onSelect: (id: WedgeId) => void;
 }
 
-const SPIN_SPEED = 0.16; // rad/s idle
+const SPIN_SPEED = 0.05; // rad/s idle — very slow (cuts the always-render GPU load)
 const LABEL_R = PIE_OUTER + 0.5;
 
 export default function PieHub({

@@ -37,7 +37,8 @@ export const HUB_RADIUS = 2.2;
  */
 export const PIE_INNER = 1.05;
 export const PIE_OUTER = 2.95;
-export const PIE_DEPTH = 0.55;
+/** Thicker slab → the "cake" depth actually reads at an oblique angle. */
+export const PIE_DEPTH = 0.9;
 /** Mid radius — slice centroid distance, used by camera + payload placement. */
 export const PIE_MID = (PIE_INNER + PIE_OUTER) / 2;
 /** Angular gap (radians) trimmed from each side of a slice → visible seams. */

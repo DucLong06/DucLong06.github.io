@@ -11,7 +11,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { PerformanceMonitor } from '@react-three/drei';
+import { PerformanceMonitor, Environment, Lightformer } from '@react-three/drei';
 import PieHub from './three/pie-hub';
 import HubCenter from './three/hub-center';
 import CameraRig from './three/camera-rig';
@@ -43,7 +43,7 @@ export default function PieHubScene({ locale, tier, classicUrl, cvHref, data }: 
   const full = tier === 'full';
   const { state: zoom, focus, arriveStage, toHub, arriveHub } = useZoomState();
   const [hoveredId, setHoveredId] = useState<WedgeId | null>(null);
-  const [dpr, setDpr] = useState<number>(lite ? 1 : 1.5);
+  const [dpr, setDpr] = useState<number>(lite ? 1 : 1.25);
   const [paused, setPaused] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const spinRef = useRef(0);
@@ -90,17 +90,26 @@ export default function PieHubScene({ locale, tier, classicUrl, cvHref, data }: 
       <Canvas
         frameloop={frameloop}
         dpr={[1, dpr]}
-        camera={{ position: [0, -5.6, 5.4], fov: 45 }}
+        camera={{ position: [0, -5.0, 3.7], fov: 45 }}
         gl={{ antialias: !lite, alpha: true, powerPreference: 'high-performance' }}
         aria-label={t('explore_canvas_aria')}
       >
         <PerformanceMonitor
-          onDecline={() => setDpr((d) => Math.max(1, d - 0.5))}
-          onIncline={() => setDpr((d) => Math.min(lite ? 1.5 : 2, d + 0.5))}
+          onDecline={() => setDpr((d) => Math.max(1, d - 0.25))}
+          onIncline={() => setDpr((d) => Math.min(lite ? 1.25 : 1.5, d + 0.25))}
         />
-        <ambientLight intensity={0.7} />
-        <pointLight position={[5, 5, 6]} intensity={1.6} color="#34e2ff" />
-        <pointLight position={[-5, -4, 4]} intensity={1.2} color="#ff4d9d" />
+
+        {/* Baked-once env (no CDN fetch) — fills every face so slices never go black
+            on spin, and gives the standard material its frosted/acrylic reflections. */}
+        <Environment frames={1} resolution={64}>
+          <Lightformer intensity={2.2} position={[0, 4, 4]} scale={[12, 12, 1]} color="#cdefff" />
+          <Lightformer intensity={1.5} position={[-6, 1, 2]} scale={[5, 9, 1]} color="#34e2ff" />
+          <Lightformer intensity={1.5} position={[6, -1, 2]} scale={[5, 9, 1]} color="#ff4d9d" />
+        </Environment>
+
+        <ambientLight intensity={0.35} />
+        <pointLight position={[5, 5, 6]} intensity={0.9} color="#34e2ff" />
+        <pointLight position={[-5, -4, 4]} intensity={0.7} color="#ff4d9d" />
 
         <CameraRig
           zoom={zoom}
