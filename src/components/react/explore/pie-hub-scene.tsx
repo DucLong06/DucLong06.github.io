@@ -98,10 +98,9 @@ export default function PieHubScene({ locale, tier, classicUrl, cvHref, data }: 
           onDecline={() => setDpr((d) => Math.max(1, d - 0.5))}
           onIncline={() => setDpr((d) => Math.min(lite ? 1.5 : 2, d + 0.5))}
         />
-        <ambientLight intensity={0.65} />
-        <pointLight position={[5, 5, 6]} intensity={1.5} color="#34e2ff" />
-        <pointLight position={[-5, -4, 4]} intensity={1.1} color="#ff4d9d" />
-        <pointLight position={[0, 0, 7]} intensity={0.8} color="#ffffff" />
+        <ambientLight intensity={0.7} />
+        <pointLight position={[5, 5, 6]} intensity={1.6} color="#34e2ff" />
+        <pointLight position={[-5, -4, 4]} intensity={1.2} color="#ff4d9d" />
 
         <CameraRig
           zoom={zoom}

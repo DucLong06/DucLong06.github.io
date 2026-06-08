@@ -164,7 +164,10 @@
   gap: 0.4rem;
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
+  /* NOTE: NO backdrop-filter here. These labels orbit over a canvas that repaints
+     every frame (idle spin + frameloop="always"); a blur would re-sample the whole
+     backdrop per frame ×6 → severe compositor jank. Solid-ish bg instead. */
+  background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
   border: 1px solid color-mix(in srgb, var(--wedge-color, #34e2ff) 45%, transparent);
   color: var(--text-primary);
   font-family: var(--font-mono);
@@ -173,7 +176,6 @@
   letter-spacing: 0.02em;
   white-space: nowrap;
   cursor: pointer;
-  backdrop-filter: blur(6px);
   transition: box-shadow 150ms ease, transform 150ms ease, background-color 150ms ease;
 }
 .wedge-label__icon { font-size: 0.85rem; }
@@ -195,10 +197,10 @@
   gap: 0.1rem;
   padding: 0.28rem 0.55rem;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--bg-elevated) 78%, transparent);
+  background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
   border: 1px solid color-mix(in srgb, var(--bar-color, #34e2ff) 50%, transparent);
   box-shadow: 0 4px 18px color-mix(in srgb, var(--bar-color, #34e2ff) 28%, transparent);
-  backdrop-filter: blur(7px);
+  /* No backdrop-filter — sits over the animating stage canvas (see .wedge-label). */
   font-family: var(--font-mono);
   white-space: nowrap;
   pointer-events: none;
@@ -282,13 +284,13 @@
   gap: 0.35rem;
   padding: 0.4rem 0.75rem;
   border-radius: var(--r-sm);
-  background: color-mix(in srgb, var(--bg-elevated) 75%, transparent);
+  background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
   border: 1px solid var(--border-strong);
   color: var(--text-primary);
   font-size: 0.78rem;
   font-weight: 600;
   text-decoration: none;
-  backdrop-filter: blur(8px);
+  /* No backdrop-filter — always visible over the animating hub canvas. */
   transition: background-color 150ms ease;
 }
 .hud-btn:hover { background: var(--bg-subtle); }
