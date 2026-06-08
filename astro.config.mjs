@@ -26,10 +26,4 @@ export default defineConfig({
     sitemap(),
     tailwind(),
   ],
-  vite: {
-    ssr: {
-      // OGL uses browser globals — must be bundled, not treated as external in SSR
-      noExternal: ['ogl'],
-    },
-  },
 });
