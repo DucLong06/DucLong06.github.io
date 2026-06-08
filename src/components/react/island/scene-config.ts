@@ -112,3 +112,14 @@ export function getSection(id: SectionId): SectionConfig {
   if (!s) throw new Error(`Unknown section: ${id}`);
   return s;
 }
+
+/* ── Guided auto-tour timing (single source of truth) ─────────────────────── */
+
+/** Auto-tour: order of stops, then return home (null). Derived from SECTIONS. */
+export const TOUR_ORDER: SectionId[] = SECTIONS.map((s) => s.id); // about→…→contact
+/** Dwell at each stop (ms) — time the popup card is readable. */
+export const TOUR_DWELL_MS = 10_000;
+/** Idle wait at home before auto-starting / re-looping (ms). */
+export const TOUR_IDLE_MS = 15_000;
+/** Flight tween allowance (ms) — matches CameraControls smoothTime 0.55. */
+export const TOUR_FLIGHT_MS = 700;

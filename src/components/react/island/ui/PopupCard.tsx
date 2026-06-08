@@ -13,15 +13,21 @@ interface Props {
   data: SceneData;
   label: string;
   onClose: () => void;
+  /**
+   * Steal focus into the panel + trap Tab (true = normal modal behaviour).
+   * During an AUTO tour we pass false so the popup never yanks keyboard focus
+   * and the first Tab keystroke escapes to cancel the tour. Default true.
+   */
+  autoFocus?: boolean;
 }
 
-export function PopupCard({ id, data, label, onClose }: Props) {
+export function PopupCard({ id, data, label, onClose, autoFocus = true }: Props) {
   const panel = useRef<HTMLDivElement>(null);
   const color = getSection(id).color;
 
   useEffect(() => {
-    const prev = document.activeElement as HTMLElement | null;
-    panel.current?.focus();
+    const prev = autoFocus ? (document.activeElement as HTMLElement | null) : null;
+    if (autoFocus) panel.current?.focus();
 
     const focusables = () =>
       Array.from(
@@ -36,7 +42,8 @@ export function PopupCard({ id, data, label, onClose }: Props) {
         onClose();
         return;
       }
-      if (e.key !== 'Tab') return;
+      // During an auto tour, let Tab propagate so the tour cancels (no trap).
+      if (e.key !== 'Tab' || !autoFocus) return;
       const items = focusables();
       if (items.length === 0) {
         e.preventDefault();
@@ -60,7 +67,7 @@ export function PopupCard({ id, data, label, onClose }: Props) {
       window.removeEventListener('keydown', onKey);
       prev?.focus?.();
     };
-  }, [id, onClose]);
+  }, [id, onClose, autoFocus]);
 
   return (
     <div className="scene-popup-wrap" onPointerDown={(e) => e.target === e.currentTarget && onClose()}>

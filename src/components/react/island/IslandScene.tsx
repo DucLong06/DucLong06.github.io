@@ -3,7 +3,7 @@
  * Owns scene state (focused section + hero visibility), the <Canvas> world,
  * the click-to-focus camera, the floating pins, and the DOM overlay chrome.
  */
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { AdaptiveDpr, ContactShadows } from '@react-three/drei';
 import { ACESFilmicToneMapping } from 'three';
@@ -16,6 +16,8 @@ import { HeroOverlay } from './ui/HeroOverlay';
 import { PinDock } from './ui/PinDock';
 import { SceneChrome } from './ui/SceneChrome';
 import { PopupCard } from './ui/PopupCard';
+import { TourControl } from './ui/tour-control';
+import { useGuidedTour } from './use-guided-tour';
 
 interface Props {
   data: SceneData;
@@ -28,11 +30,47 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
 
   const t = useCallback((key: string) => data.strings[key] ?? key, [data.strings]);
 
-  const select = useCallback((id: SectionId) => {
-    setHeroVisible(false);
-    setFocusedId(id);
-  }, []);
-  const goHome = useCallback(() => setFocusedId(null), []);
+  // Guided auto-tour: drives focusedId/heroVisible on a timer (controller only).
+  const tour = useGuidedTour({
+    onFocus: (id) => {
+      setHeroVisible(false);
+      setFocusedId(id);
+    },
+    onHome: () => setFocusedId(null),
+  });
+
+  // User-driven actions cancel any running tour before applying their effect.
+  const select = useCallback(
+    (id: SectionId) => {
+      tour.notifyUserInteract();
+      setHeroVisible(false);
+      setFocusedId(id);
+    },
+    [tour],
+  );
+  const goHome = useCallback(() => {
+    tour.notifyUserInteract();
+    setFocusedId(null);
+  }, [tour]);
+  const exitClassic = useCallback(() => {
+    tour.notifyUserInteract();
+    onExitToClassic();
+  }, [tour, onExitToClassic]);
+
+  // Camera drag: cancel a running tour; if idling at home, reset the idle
+  // countdown (drag = activity). The re-arm effect below won't fire on a drag
+  // because focusedId/active don't change, so re-arm here where home is known.
+  const onCameraDrag = useCallback(() => {
+    tour.notifyUserInteract();
+    if (focusedId === null && !tour.active) tour.armIdle();
+  }, [tour, focusedId]);
+
+  // Re-arm idle auto-start whenever settled at home & not touring (covers both
+  // the initial hero idle and post-loop re-arm). Clears otherwise.
+  useEffect(() => {
+    if (focusedId === null && !tour.active) tour.armIdle();
+    else tour.clearIdle();
+  }, [focusedId, tour.active, tour.armIdle, tour.clearIdle]);
 
   return (
     <>
@@ -77,7 +115,7 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
 
         <IslandWorld />
         <Pins activeId={focusedId} labelFor={t} onSelect={select} />
-        <CameraController focusedId={focusedId} />
+        <CameraController focusedId={focusedId} onUserDragStart={onCameraDrag} />
         <AdaptiveDpr />
       </Canvas>
 
@@ -86,7 +124,7 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
         name={data.profile.name}
         focusedId={focusedId}
         onHome={goHome}
-        onExitToClassic={onExitToClassic}
+        onExitToClassic={exitClassic}
       />
 
       {heroVisible && (
@@ -95,10 +133,13 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
           t={t}
           onExplore={() => setHeroVisible(false)}
           onViewWork={() => select('projects')}
+          onPlayTour={tour.start}
         />
       )}
 
       {!heroVisible && <PinDock activeId={focusedId} t={t} onSelect={select} />}
+
+      {tour.active && <TourControl onStop={tour.stop} />}
 
       {focusedId && (
         <PopupCard
@@ -106,6 +147,7 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
           data={data}
           label={t(getSection(focusedId).labelKey)}
           onClose={goHome}
+          autoFocus={!tour.active}
         />
       )}
     </>

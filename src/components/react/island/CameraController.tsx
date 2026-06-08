@@ -13,11 +13,17 @@ import { HOME_POSE, getSection } from './scene-config';
 
 interface Props {
   focusedId: SectionId | null;
+  /** Fired when the user grabs the camera (drag) — cancels an active tour. */
+  onUserDragStart?: () => void;
 }
 
-export function CameraController({ focusedId }: Props) {
+export function CameraController({ focusedId, onUserDragStart }: Props) {
   const controls = useRef<CameraControls>(null);
   const dragging = useRef(false);
+
+  // Keep latest callback in a ref so the mount-only listener effect stays stable.
+  const onDragRef = useRef(onUserDragStart);
+  onDragRef.current = onUserDragStart;
 
   // Apply orbit constraints once the controls instance exists.
   useEffect(() => {
@@ -28,7 +34,10 @@ export function CameraController({ focusedId }: Props) {
     c.minPolarAngle = 0.55;
     c.maxPolarAngle = Math.PI / 2.15;
     c.dollyToCursor = false;
-    const onStart = () => (dragging.current = true);
+    const onStart = () => {
+      dragging.current = true;
+      onDragRef.current?.();
+    };
     const onEnd = () => (dragging.current = false);
     c.addEventListener('controlstart', onStart);
     c.addEventListener('controlend', onEnd);

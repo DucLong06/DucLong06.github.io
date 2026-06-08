@@ -10,9 +10,10 @@ interface Props {
   t: (key: string) => string;
   onExplore: () => void;
   onViewWork: () => void;
+  onPlayTour: () => void;
 }
 
-export function HeroOverlay({ data, t, onExplore, onViewWork }: Props) {
+export function HeroOverlay({ data, t, onExplore, onViewWork, onPlayTour }: Props) {
   const p = data.profile;
   const awards = [t('hero_award_alqac'), t('hero_award_saokhe')].filter(Boolean);
 
@@ -34,6 +35,9 @@ export function HeroOverlay({ data, t, onExplore, onViewWork }: Props) {
         <div className="scene-hero__cta">
           <button type="button" className="scene-btn scene-btn--primary" onClick={onExplore}>
             Explore the island
+          </button>
+          <button type="button" className="scene-btn" onClick={onPlayTour}>
+            ▶ Auto tour
           </button>
           <button type="button" className="scene-btn" onClick={onViewWork}>
             {t('hero_cta_work')}

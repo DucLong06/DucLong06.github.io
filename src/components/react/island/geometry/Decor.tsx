@@ -2,12 +2,10 @@
  * Decor.tsx — Ambient low-poly dressing: low-poly trees, bushes, and slow
  * drifting clouds. Fills gaps between the section props. Decorative only.
  */
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import type { Group } from 'three';
 import type { Vec3 } from '../scene-config';
 import { PALETTE } from '../scene-config';
 import { Clay } from './clay-material';
+import { Clouds } from './clouds';
 
 function Tree({ position, scale = 1 }: { position: Vec3; scale?: number }) {
   return (
@@ -34,32 +32,6 @@ function Bush({ position }: { position: Vec3 }) {
       <dodecahedronGeometry args={[0.35, 0]} />
       <Clay color={PALETTE.grassMid} />
     </mesh>
-  );
-}
-
-function Clouds() {
-  const ref = useRef<Group>(null);
-  useFrame(({ clock }) => {
-    if (ref.current) ref.current.position.x = Math.sin(clock.elapsedTime * 0.05) * 1.5;
-  });
-  const puffs: Vec3[] = [
-    [-6, 5.5, -3],
-    [6.5, 6.2, 1],
-    [2, 6.8, -5],
-  ];
-  return (
-    <group ref={ref}>
-      {puffs.map((p, i) => (
-        <group key={i} position={p}>
-          {[[0, 0, 0, 0.7], [0.7, -0.1, 0, 0.5], [-0.7, -0.1, 0.1, 0.55]].map(([x, y, z, s], j) => (
-            <mesh key={j} position={[x, y, z]}>
-              <sphereGeometry args={[s as number, 8, 8]} />
-              <meshStandardMaterial color={PALETTE.white} flatShading roughness={1} />
-            </mesh>
-          ))}
-        </group>
-      ))}
-    </group>
   );
 }
 
