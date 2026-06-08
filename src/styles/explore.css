@@ -390,7 +390,10 @@
   background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
   border-right: 1px solid var(--border-strong);
   backdrop-filter: blur(10px);
-  animation: detail-in 280ms var(--ease-soft);
+  /* 120ms stagger: sprout-bars spring starts the instant the camera parks on stage;
+     the panel slides in just after so the two don't co-spike on the same frame.
+     `both` keeps the card at its `from` (hidden) state during the delay. */
+  animation: detail-in 280ms var(--ease-soft) 120ms both;
 }
 @keyframes detail-in { from { transform: translateX(-12px); opacity: 0; } to { transform: none; opacity: 1; } }
 .detail-overlay__close {

@@ -23,7 +23,6 @@ interface Props {
   idle: boolean;
   reducedMotion: boolean;
   lite: boolean;
-  full: boolean;
   t: TFn;
   spinRef: React.MutableRefObject<number>;
   onHover: (id: WedgeId | null) => void;
@@ -39,7 +38,6 @@ export default function PieHub({
   idle,
   reducedMotion,
   lite,
-  full,
   t,
   spinRef,
   onHover,
@@ -87,7 +85,6 @@ export default function PieHub({
               hovered={hoveredId === w.id}
               focused={focused}
               dimmed={dimmed}
-              acrylic={focused && full && !reducedMotion}
               reducedMotion={reducedMotion}
               onHover={onHover}
               onSelect={onSelect}
