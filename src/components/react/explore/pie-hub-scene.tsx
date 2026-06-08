@@ -124,7 +124,6 @@ export default function PieHubScene({ locale, tier, classicUrl, cvHref, data }: 
           idle={idle}
           reducedMotion={reducedMotion}
           lite={lite}
-          full={full}
           t={t}
           spinRef={spinRef}
           onHover={setHoveredId}
