@@ -1,11 +1,12 @@
 ---
 /**
- * Hero.astro — Full-viewport hero section.
- * Copy from brainstorm §16.9. LiquidShader canvas behind text (client:visible).
+ * Hero.astro — Full-viewport hero section (dark-techy).
+ * OGL liquid shader retired → static CSS techy backdrop (grid + scanline glow,
+ * reduced-motion safe). Adds a prominent "Explore in 3D" CTA to /explore while
+ * keeping the recruiter path (View work / CV / Email) verbatim.
  * Profile data pulled from content collection. Bilingual via lang prop.
  */
 import { getEntry } from 'astro:content';
-import LiquidShader from '../react/LiquidShader';
 import { t, type Lang } from '../../lib/i18n-helpers';
 
 interface Props {
@@ -18,17 +19,20 @@ const name    = profile.data.name[lang] ?? profile.data.name.en;
 const tagline = profile.data.tagline[lang] ?? profile.data.tagline.en;
 const email   = profile.data.email;
 const cvFile  = profile.data.cvFile;
+const exploreHref = lang === 'vi' ? '/vi/explore' : '/explore';
 ---
 
 <section class="hero" aria-label="Introduction">
-  <!-- Shader canvas — absolutely behind text, aria-hidden. client:only avoids an
-       SSR canvas hydrating into the <img> fallback (reduced-motion / no-WebGL). -->
-  <div class="hero-canvas-wrap" aria-hidden="true">
-    <LiquidShader client:only="react" />
+  <!-- Static techy backdrop — grid + neon glow, purely decorative -->
+  <div class="hero-backdrop" aria-hidden="true">
+    <div class="hero-grid"></div>
+    <div class="hero-glow hero-glow--cyan"></div>
+    <div class="hero-glow hero-glow--magenta"></div>
   </div>
 
   <!-- Hero content -->
   <div class="hero-content">
+    <p class="hero-eyebrow"><span aria-hidden="true">$</span> whoami</p>
     <h1 class="hero-name">{name}</h1>
 
     <p class="hero-tagline">
@@ -44,22 +48,16 @@ const cvFile  = profile.data.cvFile;
 
     <!-- CTAs -->
     <div class="hero-ctas" role="list">
-      <a href="#work" class="hero-cta hero-cta--primary" role="listitem">
+      <a href={exploreHref} class="hero-cta hero-cta--primary" role="listitem">
+        {t('explore_to_3d', lang)} <span aria-hidden="true">✦</span>
+      </a>
+      <a href="#work" class="hero-cta hero-cta--secondary" role="listitem">
         {t('hero_cta_work', lang)} <span aria-hidden="true">→</span>
       </a>
-      <a
-        href={cvFile}
-        class="hero-cta hero-cta--secondary"
-        role="listitem"
-        download
-      >
+      <a href={cvFile} class="hero-cta hero-cta--secondary" role="listitem" download>
         {t('hero_cta_cv', lang)}
       </a>
-      <a
-        href={`mailto:${email}`}
-        class="hero-cta hero-cta--secondary"
-        role="listitem"
-      >
+      <a href={`mailto:${email}`} class="hero-cta hero-cta--secondary" role="listitem">
         {t('hero_cta_email', lang)}
       </a>
     </div>
@@ -81,14 +79,57 @@ const cvFile  = profile.data.cvFile;
     overflow: hidden;
   }
 
-  /* Canvas fill — behind everything */
-  .hero-canvas-wrap {
+  /* ── Techy backdrop ── */
+  .hero-backdrop {
     position: absolute;
     inset: 0;
     z-index: 0;
+    overflow: hidden;
   }
 
-  /* Content stack above canvas */
+  .hero-grid {
+    position: absolute;
+    inset: -2px;
+    background-image:
+      linear-gradient(rgba(230, 233, 245, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(230, 233, 245, 0.04) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 25%, transparent 78%);
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 60vw;
+    height: 60vw;
+    max-width: 720px;
+    max-height: 720px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.5;
+  }
+
+  .hero-glow--cyan {
+    top: -10%;
+    left: 5%;
+    background: radial-gradient(circle, rgba(52, 226, 255, 0.35), transparent 70%);
+    animation: hero-drift-a 16s ease-in-out infinite alternate;
+  }
+
+  .hero-glow--magenta {
+    bottom: -15%;
+    right: 0%;
+    background: radial-gradient(circle, rgba(255, 77, 157, 0.28), transparent 70%);
+    animation: hero-drift-b 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes hero-drift-a {
+    to { transform: translate(8%, 10%) scale(1.1); }
+  }
+  @keyframes hero-drift-b {
+    to { transform: translate(-8%, -6%) scale(1.08); }
+  }
+
+  /* Content stack above backdrop */
   .hero-content {
     position: relative;
     z-index: 1;
@@ -101,32 +142,24 @@ const cvFile  = profile.data.cvFile;
     gap: 1.25rem;
   }
 
-  /* Soft readability scrim — feathered light glow behind the text so the aurora
-     never drops contrast below WCAG, while staying vibrant around the edges. */
-  .hero-content::before {
-    content: '';
-    position: absolute;
-    inset: -8% -12%;
-    z-index: -1;
-    background: radial-gradient(
-      ellipse at center,
-      color-mix(in srgb, var(--bg-base) 82%, transparent) 0%,
-      color-mix(in srgb, var(--bg-base) 55%, transparent) 45%,
-      transparent 72%
-    );
-    pointer-events: none;
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(52, 226, 255, 0.35);
+    margin: 0;
   }
 
-  /* Giant Instrument Serif italic — §16.9 */
+  /* Display name — Space Grotesk, neon gradient clip with solid fallback */
   .hero-name {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    font-size: clamp(3rem, 10vw, 5.5rem); /* ~88px at wide viewport */
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-style: normal;
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    font-weight: 700;
     line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    /* Soft aurora gradient text on hover / always in dark mode */
+    letter-spacing: -0.03em;
+    color: var(--text-primary); /* fallback if clip unsupported */
     background: var(--aurora-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -162,7 +195,7 @@ const cvFile  = profile.data.cvFile;
     padding: 0.625rem 1.375rem;
     border-radius: var(--r-md);
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 600;
     text-decoration: none;
     transition:
       transform var(--duration-fast) var(--ease-soft),
@@ -170,20 +203,22 @@ const cvFile  = profile.data.cvFile;
       background-color var(--duration-fast) var(--ease-soft);
   }
 
+  /* Primary = neon cyan fill, dark text (AA-safe) + glow */
   .hero-cta--primary {
-    background: var(--aurora-gradient);
-    color: #fff;
+    background: var(--neon-cyan-deep);
+    color: #04121a;
+    box-shadow: 0 0 22px rgba(52, 226, 255, 0.30);
   }
 
-  .hero-cta--primary:hover {
+  .hero-cta--primary:hover,
+  .hero-cta--primary:focus-visible {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-aurora);
+    box-shadow: 0 0 30px rgba(52, 226, 255, 0.45);
+    outline: none;
   }
 
   .hero-cta--primary:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-aurora);
-    outline: 2px solid #fff;
+    outline: 2px solid var(--neon-cyan);
     outline-offset: 3px;
   }
 
@@ -201,9 +236,8 @@ const cvFile  = profile.data.cvFile;
 
   .hero-cta--secondary:focus-visible {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
     background: var(--bg-subtle);
-    outline: 2px solid var(--aurora-1);
+    outline: 2px solid var(--neon-cyan);
     outline-offset: 2px;
   }
 
@@ -225,7 +259,9 @@ const cvFile  = profile.data.cvFile;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-scroll-arrow {
+    .hero-scroll-arrow,
+    .hero-glow--cyan,
+    .hero-glow--magenta {
       animation: none;
     }
     .hero-cta {

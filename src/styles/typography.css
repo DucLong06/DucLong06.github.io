@@ -1,12 +1,15 @@
 /*
- * typography.css — Font loading + type scale
+ * typography.css — Font loading + type scale ("Dark Techy")
  * Uses @fontsource packages (NO Google Fonts CDN).
  * font-display: swap on all faces for perf.
  *
+ * Display = Space Grotesk 700 (geometric, techy — replaces Instrument Serif).
+ * Body    = Inter variable. Mono = JetBrains Mono variable.
+ *
  * Scale:
- *   h1  88px  Instrument Serif italic  — hero name
- *   h2  48px  Inter 700                — section title
- *   h3  32px  Inter 600                — sub-section
+ *   h1  88px  Space Grotesk 700  — hero name (upright, not italic)
+ *   h2  48px  Inter 700          — section title
+ *   h3  32px  Inter 600          — sub-section
  *   h4  22px  Inter 600
  *   body-lg  18px  Inter 400
  *   body     16px  Inter 400
@@ -16,9 +19,9 @@
 
 /* ─── FONT IMPORTS (@fontsource — no CDN) ───────────────────────────────────── */
 
-/* Instrument Serif — upright + italic, latin only */
-@import '@fontsource/instrument-serif/400.css';
-@import '@fontsource/instrument-serif/400-italic.css';
+/* Space Grotesk — display face (techy, geometric) */
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/700.css';
 
 /* Inter variable — wght axis, all subsets declared but browser fetches only needed ranges */
 @import '@fontsource-variable/inter/wght.css';
@@ -28,7 +31,7 @@
 
 /* ─── FONT FAMILY TOKENS ────────────────────────────────────────────────────── */
 :root {
-  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body:    'Inter Variable', 'Inter', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 }
@@ -49,12 +52,12 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
 }
 
-/* h1 — hero / display: Instrument Serif italic */
+/* h1 — hero / display: Space Grotesk bold, upright */
 h1 {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(3rem, 8vw, 5.5rem); /* 48px → 88px fluid */
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: -0.03em;
 }
 

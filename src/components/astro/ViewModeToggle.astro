@@ -1,0 +1,65 @@
+---
+/**
+ * ViewModeToggle.astro — "Explore in 3D ⇄ Classic view" link control.
+ * On classic pages → links to /explore (locale-aware). On explore pages →
+ * links back to classic. A real <a> so it's keyboard-reachable with no JS.
+ */
+import { t, type Lang } from '../../lib/i18n-helpers';
+
+interface Props {
+  lang?: Lang;
+  /** 'classic' → show "Explore in 3D"; 'explore' → show "Classic view". */
+  mode?: 'classic' | 'explore';
+}
+const { lang = 'en', mode = 'classic' } = Astro.props;
+
+const exploreHref = lang === 'vi' ? '/vi/explore' : '/explore';
+const classicHref = lang === 'vi' ? '/vi/' : '/';
+const href = mode === 'classic' ? exploreHref : classicHref;
+const label = mode === 'classic' ? t('explore_to_3d', lang) : t('explore_to_classic', lang);
+const icon = mode === 'classic' ? '✦' : '←';
+---
+
+<a class="view-toggle" href={href} data-mode={mode}>
+  <span class="view-toggle__icon" aria-hidden="true">{icon}</span>
+  <span>{label}</span>
+</a>
+
+<style>
+  .view-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--r-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--neon-cyan);
+    text-decoration: none;
+    border: 1px solid color-mix(in srgb, var(--neon-cyan) 35%, transparent);
+    background: color-mix(in srgb, var(--neon-cyan) 8%, transparent);
+    transition:
+      background-color var(--duration-fast) var(--ease-soft),
+      box-shadow var(--duration-fast) var(--ease-soft);
+    white-space: nowrap;
+  }
+
+  .view-toggle:hover {
+    background: color-mix(in srgb, var(--neon-cyan) 16%, transparent);
+    box-shadow: 0 0 16px rgba(52, 226, 255, 0.25);
+  }
+
+  .view-toggle:focus-visible {
+    outline: 2px solid var(--neon-cyan);
+    outline-offset: 2px;
+  }
+
+  .view-toggle__icon {
+    font-size: 0.85rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .view-toggle { transition: none; }
+  }
+</style>

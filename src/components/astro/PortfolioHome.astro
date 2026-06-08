@@ -2,9 +2,9 @@
 /**
  * PortfolioHome.astro — Shared home body for EN (/) and VI (/vi/).
  *
- * Content-first single page (SEO/no-JS/a11y baseline). The only enhancement is
- * the decorative OGL aurora liquid shader behind the Hero (see Hero.astro →
- * LiquidShader island). Everything else is scannable server-rendered HTML.
+ * Content-first single page (SEO/no-JS/a11y baseline). Dark-techy theme; the Hero
+ * carries a static CSS backdrop + an "Explore in 3D" CTA to the /explore route.
+ * Everything here is scannable server-rendered HTML.
  */
 import Nav from './Nav.astro';
 import Hero from './Hero.astro';
@@ -16,6 +16,7 @@ import Skills from './Skills.astro';
 import ProjectsGrid from './ProjectsGrid.astro';
 import Papers from './Papers.astro';
 import GitHubStats from './GitHubStats.astro';
+import OffClock from './OffClock.astro';
 import Contact from './Contact.astro';
 import Footer from './Footer.astro';
 import type { Lang } from '../../lib/i18n-helpers';
@@ -38,6 +39,7 @@ const { lang, currentPath } = Astro.props;
   <ProjectsGrid id="work" lang={lang} />
   <Papers lang={lang} />
   <GitHubStats lang={lang} />
+  <OffClock lang={lang} />
   <Contact lang={lang} />
 </main>
 <Footer lang={lang} currentPath={currentPath} />

@@ -1,12 +1,12 @@
 ---
 /**
- * Skills.astro — Skills section with 6 groups in 2-col grid.
+ * Skills.astro — Skills section, 6 groups in a 2-col grid.
+ * Power-bars retired (SkillBar deleted) → compact chips with a level indicator
+ * (●●●●○ = 4/5). a11y-native: each chip carries an aria-label with the level.
  * Data from skills/main.yaml via getEntry('skills', 'main').
- * Each group renders SkillBar items (level 1–5, aurora gradient fill).
  */
 import { getEntry } from 'astro:content';
 import SectionTitle from './SectionTitle.astro';
-import SkillBar from './SkillBar.astro';
 import { t, type Lang } from '../../lib/i18n-helpers';
 
 interface Props {
@@ -29,10 +29,18 @@ const groups = skillsData!.data.groups as Array<{
       {groups.map((group) => (
         <div class="skill-group">
           <h3 class="skill-group__title">{group.category}</h3>
-          <ul class="skill-group__list" role="list">
+          <ul class="skill-group__chips" role="list">
             {group.items.map((item) => (
-              <li role="listitem">
-                <SkillBar name={item.name} level={item.level} years={item.years} />
+              <li
+                class="skill-chip"
+                role="listitem"
+                aria-label={`${item.name}: level ${item.level} of 5`}
+                title={item.years ? `${item.name} · ${item.years}y` : item.name}
+              >
+                <span class="skill-chip__name">{item.name}</span>
+                <span class="skill-chip__level" aria-hidden="true">
+                  {'●'.repeat(item.level)}{'○'.repeat(5 - item.level)}
+                </span>
               </li>
             ))}
           </ul>
@@ -43,9 +51,7 @@ const groups = skillsData!.data.groups as Array<{
 </section>
 
 <style>
-  .section-gap {
-    padding: 6rem 0;
-  }
+  .section-gap { padding: 6rem 0; }
 
   .container {
     max-width: 1120px;
@@ -53,7 +59,6 @@ const groups = skillsData!.data.groups as Array<{
     padding: 0 1.5rem;
   }
 
-  /* 2-col grid at md+ */
   .skills-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -61,9 +66,7 @@ const groups = skillsData!.data.groups as Array<{
   }
 
   @media (min-width: 768px) {
-    .skills-grid {
-      grid-template-columns: 1fr 1fr;
-    }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
   }
 
   .skill-group {
@@ -80,16 +83,38 @@ const groups = skillsData!.data.groups as Array<{
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--aurora-1);
+    color: var(--neon-cyan);
     margin: 0 0 1.25rem;
   }
 
-  .skill-group__list {
+  .skill-group__chips {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .skill-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    font-size: 0.8125rem;
+  }
+
+  .skill-chip__name {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .skill-chip__level {
+    font-size: 0.55rem;
+    letter-spacing: 0.05em;
+    color: var(--neon-cyan);
   }
 </style>

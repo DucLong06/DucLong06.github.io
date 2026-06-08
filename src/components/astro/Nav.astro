@@ -5,6 +5,7 @@
  * Accepts lang prop to translate nav labels.
  */
 import LangToggle from '../react/LangToggle';
+import ViewModeToggle from './ViewModeToggle.astro';
 import { t, type Lang } from '../../lib/i18n-helpers';
 
 interface Props {
@@ -50,6 +51,7 @@ const homeHref = lang === 'vi' ? '/vi/' : '/';
 
     <!-- Controls -->
     <div class="nav-controls">
+      <ViewModeToggle lang={lang} mode="classic" />
       <LangToggle client:idle />
     </div>
   </nav>

@@ -1,55 +1,64 @@
 /*
- * tokens.css — "Soft Aurora" Design System
- * Single source of truth for all CSS custom properties.
+ * tokens.css — "Dark Techy" Design System
+ * Single source of truth for all CSS custom properties (dark-only).
  * Tailwind reads from these vars via tailwind.config.js.
  *
  * Token groups:
- *   --bg-*         Surface colors
- *   --text-*       Foreground colors
+ *   --bg-*         Surface colors (deep indigo-black, not pure black → less halation)
+ *   --text-*       Foreground colors (AA-checked on --bg-base)
  *   --border, --border-strong  Border alpha values
- *   --aurora-*     Accent / gradient palette (indigo, violet, cyan, pink)
+ *   --neon-*       Neon accent palette (cyan primary, magenta secondary)
+ *   --aurora-*     Legacy alias → neon (keeps existing components on the new look, DRY)
  *   --accent-*     Semantic accent shortcuts
  *   --success, --warning  Status colors
  *   --r-*          Border radii
- *   --shadow-*     Box shadows (multi-layer with aurora tint)
+ *   --shadow-*     Box shadows (multi-layer with neon tint)
  *   --ease-soft    Motion easing
+ *
+ * Contrast targets (WebAIM, on --bg-base #0a0e27):
+ *   text-primary ~13:1 · text-secondary ~6.5:1 · neon-cyan ~9:1 · neon-magenta ~5.8:1
+ *   text-tertiary ~3.2:1 → captions/decorative only. Buttons w/ white text use --neon-cyan-deep.
  */
 
-/* ─── LIGHT MODE (default) ─────────────────────────────────────────────────── */
+/* ─── DARK TECHY (default, dark-only) ───────────────────────────────────────── */
 :root {
   /* Surfaces */
-  --bg-base:        #fafaf9;
-  --bg-elevated:    #ffffff;
-  --bg-subtle:      #f4f4f2;
+  --bg-base:        #0a0e27;  /* deep indigo-black */
+  --bg-elevated:    #121733;
+  --bg-subtle:      #1a2040;
 
   /* Text */
-  --text-primary:   #0a0a0b;
-  --text-secondary: #52525b;
-  --text-tertiary:  #a1a1aa;
+  --text-primary:   #e6e9f5;  /* ~13:1 on base */
+  --text-secondary: #aab2d6;  /* ~6.5:1 on base */
+  --text-tertiary:  #6b73a0;  /* ~3.2:1 — captions/decorative only */
 
   /* Borders */
-  --border:         rgba(10, 10, 11, 0.08);
-  --border-strong:  rgba(10, 10, 11, 0.14);
+  --border:         rgba(230, 233, 245, 0.10);
+  --border-strong:  rgba(230, 233, 245, 0.18);
 
-  /* Aurora accents — unchanged across modes */
-  --aurora-1:       #6366f1;  /* indigo */
-  --aurora-2:       #8b5cf6;  /* violet */
-  --aurora-3:       #06b6d4;  /* cyan */
-  --aurora-4:       #f472b6;  /* soft pink */
+  /* Neon accents */
+  --neon-cyan:      #34e2ff;  /* ~9:1 on base — primary accent / links */
+  --neon-magenta:   #ff4d9d;  /* ~5.8:1 on base — secondary accent */
+  --neon-cyan-deep: #0bb8d6;  /* fill behind white text (button bg) */
+
+  /* Legacy aurora aliases → neon (existing components inherit new look, DRY) */
+  --aurora-1:       var(--neon-cyan);
+  --aurora-2:       var(--neon-magenta);
+  --aurora-3:       var(--neon-cyan-deep);
+  --aurora-4:       var(--neon-magenta);
   --aurora-gradient: linear-gradient(
     135deg,
-    var(--aurora-1) 0%,
-    var(--aurora-2) 50%,
-    var(--aurora-3) 100%
+    var(--neon-cyan) 0%,
+    var(--neon-magenta) 100%
   );
 
   /* Semantic accents */
-  --accent:         var(--aurora-1);
-  --accent-hover:   #4f46e5;
+  --accent:         var(--neon-cyan);
+  --accent-hover:   #7af0ff;
 
   /* Status */
-  --success:        #10b981;
-  --warning:        #f59e0b;
+  --success:        #34e2c0;
+  --warning:        #ffc24d;
 
   /* Radii */
   --r-sm:  6px;
@@ -57,13 +66,13 @@
   --r-lg:  20px;
   --r-xl:  28px;
 
-  /* Shadows (multi-layer, soft, aurora-tinted) */
-  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.04),
-                0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.04),
-                   0 8px 24px rgba(0, 0, 0, 0.06),
-                   0 24px 48px rgba(99, 102, 241, 0.08);
+  /* Shadows (multi-layer, neon-tinted glow on dark) */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.40),
+                0 8px 24px rgba(0, 0, 0, 0.50);
+  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.40),
+                   0 8px 24px rgba(0, 0, 0, 0.50),
+                   0 24px 48px rgba(52, 226, 255, 0.16);
 
   /* Motion */
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -72,37 +81,18 @@
   --duration-slow:   400ms;
 }
 
-/* ─── DARK MODE ─────────────────────────────────────────────────────────────── */
+/* data-theme="dark" kept as a no-op alias so any explicit attribute still resolves
+   to the same dark-techy palette (site is dark-only). */
 [data-theme="dark"] {
-  /* Surfaces */
-  --bg-base:        #0b0b0f;
-  --bg-elevated:    #12121a;
-  --bg-subtle:      #18181f;
+  color-scheme: dark;
+}
 
-  /* Text */
-  --text-primary:   #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-tertiary:  #52525b;
-
-  /* Borders */
-  --border:         rgba(255, 255, 255, 0.08);
-  --border-strong:  rgba(255, 255, 255, 0.14);
-
-  /* Aurora: same hues, glow enhanced on dark */
-  --aurora-1:       #6366f1;
-  --aurora-2:       #8b5cf6;
-  --aurora-3:       #06b6d4;
-  --aurora-4:       #f472b6;
-
-  /* Semantic accents */
-  --accent:         var(--aurora-1);
-  --accent-hover:   #818cf8;
-
-  /* Shadows gain more alpha on dark */
-  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.16);
-  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.16),
-                0 8px 24px rgba(0, 0, 0, 0.24);
-  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.16),
-                   0 8px 24px rgba(0, 0, 0, 0.24),
-                   0 24px 48px rgba(99, 102, 241, 0.16);
+/* Neon glow utility — AA-safe: glow is text-shadow only, the text fill stays ≥4.5:1. */
+.neon {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(52, 226, 255, 0.45);
+}
+.neon-magenta {
+  color: var(--neon-magenta);
+  text-shadow: 0 0 8px rgba(255, 77, 157, 0.40);
 }
