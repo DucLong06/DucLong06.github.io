@@ -1,6 +1,6 @@
 # Hoàng Đức Long — Portfolio
 
-Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Science student at EPU). Built with **Astro 5 + React islands** featuring a **Neovim/LazyVim-inspired shell UI** (dark TokyoNight) as the primary interactive layer. The classic 2D portfolio site remains in the DOM as an SEO/no-JS baseline, and the 3D island is accessible via the `:island` command inside the shell. Fully static, ships near-zero client JS by default, supports EN/VI i18n, and auto-deploys to GitHub Pages on every push to `master`.
+Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Science student at EPU). Built with **Astro 5 + React islands** following a "Soft Aurora" aesthetic — warm neutrals, aurora gradient accents, and a signature WebGL liquid-shader hero. Fully static, ships near-zero client JS by default, supports EN/VI i18n, and auto-deploys to GitHub Pages on every push to `master`.
 
 ## Stack
 
@@ -73,19 +73,10 @@ DucLong06.github.io/
     ├── content/                   ← all site content (markdown + yaml)
     ├── components/
     │   ├── astro/                 ← zero-JS Astro components
-    │   └── react/
-    │       ├── nvim/              ← NvimShell + buffers + editor (new)
-    │       └── ...                ← legacy islands (LangToggle, MagneticTilt, etc.)
-    ├── lib/
-    │   ├── nvim/                  ← buildNvimData + types + nvim-projects (new)
-    │   └── ...
-    ├── styles/
-    │   ├── nvim-theme.css         ← TokyoNight dark shell styles (new)
-    │   ├── nvim-content.css       ← buffer & editor content styles (new)
-    │   └── ...
+    │   └── react/                 ← interactive React islands
     ├── layouts/
     ├── pages/
-    └── i18n/strings.ts            ← nvim_cmd_hint translations added
+    └── styles/
 ```
 
 ## Deploy Setup (one-time manual step)

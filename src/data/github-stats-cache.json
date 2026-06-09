@@ -1,28 +1,28 @@
 {
-  "totalRepos": 73,
+  "totalRepos": 72,
   "totalStars": 57,
   "topLanguages": [
     {
       "name": "C++",
-      "percentage": 29.2
+      "percentage": 28.2
     },
     {
       "name": "Python",
-      "percentage": 28.7
+      "percentage": 27.7
     },
     {
       "name": "Jupyter Notebook",
-      "percentage": 17
+      "percentage": 16.4
     },
     {
       "name": "Go Template",
-      "percentage": 10.3
+      "percentage": 9.5
     },
     {
       "name": "Smarty",
-      "percentage": 9.5
+      "percentage": 9.1
     }
   ],
   "contributionsThisYear": 0,
-  "fetchedAt": "2026-06-09T08:32:33.850Z"
+  "fetchedAt": "2026-06-05T08:42:19.217Z"
 }

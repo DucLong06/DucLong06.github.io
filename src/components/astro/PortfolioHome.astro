@@ -3,15 +3,13 @@
  * PortfolioHome.astro — Shared home body for EN (/) and VI (/vi/).
  *
  * Renders TWO layers:
- *   1. The Neovim/LazyVim shell (React island, client:only) — the primary
- *      interactive experience. On mount it adds `html.nvim-active`, which the
- *      theme CSS reacts to by hiding #classic-site. The 3D island lives inside
- *      the shell, reachable via `:island`.
- *   2. The full server-rendered 2D site inside #classic-site — the SEO / no-JS /
- *      a11y baseline, always present in the DOM (crawlers + no-JS see this).
+ *   1. The 3D island (React island, client:only) — progressive enhancement.
+ *   2. The full server-rendered 2D site inside #classic-site — the SEO/no-JS/
+ *      a11y baseline. When the 3D layer mounts it adds `html.scene-3d-active`
+ *      and global CSS hides #classic-site.
  *
- * Both layers read the SAME content collections (via buildNvimData →
- * buildSceneData), so editing src/content/** updates everything.
+ * The 3D popups read from the SAME content collections (via buildSceneData),
+ * so editing src/content/** updates both layers with no 3D code changes.
  */
 import Nav from './Nav.astro';
 import Hero from './Hero.astro';
@@ -24,22 +22,20 @@ import Papers from './Papers.astro';
 import GitHubStats from './GitHubStats.astro';
 import Contact from './Contact.astro';
 import Footer from './Footer.astro';
-import NvimShell from '../react/nvim/NvimShell';
-import { buildNvimData } from '../../lib/nvim/build-nvim-data';
+import IslandExperience from '../react/island/IslandExperience';
+import Scene3DToggle from './Scene3DToggle.astro';
+import { buildSceneData } from '../../lib/scene/build-scene-data';
 import type { Lang } from '../../lib/i18n-helpers';
-import '@fontsource-variable/jetbrains-mono';
-import '../../styles/nvim-theme.css';
-import '../../styles/nvim-content.css';
 
 interface Props {
   lang: Lang;
   currentPath: string;
 }
 const { lang, currentPath } = Astro.props;
-const nvimData = await buildNvimData(lang);
+const sceneData = await buildSceneData(lang);
 ---
 
-<NvimShell client:only="react" data={nvimData} />
+<IslandExperience client:only="react" data={sceneData} />
 
 <div id="classic-site">
   <Nav lang={lang} />
@@ -55,4 +51,5 @@ const nvimData = await buildNvimData(lang);
     <Contact lang={lang} />
   </main>
   <Footer lang={lang} currentPath={currentPath} />
+  <Scene3DToggle lang={lang} />
 </div>
