@@ -91,6 +91,9 @@ export const STRINGS = {
     project_readme_heading: 'From the README',
     project_readme_vi_note: 'Technical content in English',
     project_updated_label: 'Updated',
+
+    // Neovim shell UI
+    nvim_cmd_hint:      'type : for command · f find · t terminal · q back',
   },
 
   vi: {
@@ -177,6 +180,9 @@ export const STRINGS = {
     project_readme_heading: 'Từ README',
     project_readme_vi_note: 'Nội dung kỹ thuật bằng tiếng Anh',
     project_updated_label: 'Cập nhật',
+
+    // Neovim shell UI
+    nvim_cmd_hint:      'gõ : để nhập lệnh · f tìm · t terminal · q quay lại',
   },
 } as const satisfies Record<Lang, Record<string, string>>;
 

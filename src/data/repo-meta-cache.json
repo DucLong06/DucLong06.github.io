@@ -1,1 +1,64 @@
-{}
+{
+  "alqac-2023": {
+    "slug": "alqac-2023",
+    "stars": 0,
+    "pushedAt": "2026-06-07T12:47:40Z",
+    "topics": [
+      "deep-learning",
+      "information-retrieval",
+      "legal-ai",
+      "legal-prompts",
+      "prompt-engineering",
+      "question-answering"
+    ],
+    "primaryLanguage": "Python",
+    "fetchedAt": "2026-06-09T08:32:32.967Z"
+  },
+  "legal-prompts": {
+    "slug": "legal-prompts",
+    "stars": 11,
+    "pushedAt": "2023-11-29T09:51:04Z",
+    "topics": [
+      "legal-prompts",
+      "prompt-engineering",
+      "prompts"
+    ],
+    "primaryLanguage": null,
+    "fetchedAt": "2026-06-09T08:32:33.028Z"
+  },
+  "ocr-api": {
+    "slug": "ocr-api",
+    "stars": 0,
+    "pushedAt": "2023-08-14T11:37:01Z",
+    "topics": [
+      "ant-design",
+      "attention-ocr",
+      "docker-compose",
+      "flask",
+      "ocr-recognition",
+      "python",
+      "reactjs",
+      "tailwind-css",
+      "typescript",
+      "yolov5"
+    ],
+    "primaryLanguage": "Python",
+    "fetchedAt": "2026-06-09T08:32:33.084Z"
+  },
+  "text2sql-vietnamese": {
+    "slug": "text2sql-vietnamese",
+    "stars": 0,
+    "pushedAt": "2026-01-27T14:12:15Z",
+    "topics": [],
+    "primaryLanguage": "Python",
+    "fetchedAt": "2026-06-09T08:32:33.199Z"
+  },
+  "face-detection-ml-system": {
+    "slug": "face-detection-ml-system",
+    "stars": 39,
+    "pushedAt": "2026-06-08T02:49:02Z",
+    "topics": [],
+    "primaryLanguage": "Go Template",
+    "fetchedAt": "2026-06-09T08:32:33.463Z"
+  }
+}
