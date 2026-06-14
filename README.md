@@ -1,6 +1,6 @@
 # Hoàng Đức Long — Portfolio
 
-Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Science student at EPU). Built with **Astro 5 + React islands** following a "Soft Aurora" aesthetic — warm neutrals, aurora gradient accents, and a signature WebGL liquid-shader hero. Fully static, ships near-zero client JS by default, supports EN/VI i18n, and auto-deploys to GitHub Pages on every push to `master`.
+Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Science student at EPU). Built with **Astro 5 + React islands** featuring a **3D neon-glass "Quantum Data World"** as the primary 3D experience. Interactive Quantum Core (About) at center surrounded by 5 compass-ring structures (Experience/Skills/Projects/Papers/Contact) rendered via three.js WebGL. Full-content HTML bodies rendered at build time, shipped as scene payloads. Fully static, ships near-zero client JS by default, supports EN/VI i18n, and auto-deploys to GitHub Pages on every push to `master`.
 
 ## Stack
 
@@ -9,9 +9,10 @@ Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Scien
 | Framework | Astro 5 (static output) |
 | UI islands | React 18 |
 | Styling | Tailwind CSS v3 |
-| 3D shader | OGL (WebGL liquid gradient mesh) |
+| 3D Graphics | three + @react-three/fiber + @react-three/drei (WebGL Quantum Data World) |
+| 3D Assets (Classic Fallback) | OGL (WebGL liquid gradient mesh hero) |
 | Animation | framer-motion |
-| Fonts | @fontsource (self-hosted, no Google CDN) |
+| Fonts | @fontsource + @fontsource/bitcount (self-hosted Bitcount LED monospace, no Google CDN) |
 | OG images | satori (edge-rendered at build time) |
 | i18n | Astro native i18n (EN default, `/vi/` prefix) |
 | Deployment | GitHub Actions → GitHub Pages native |

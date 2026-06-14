@@ -1,111 +1,127 @@
 /**
- * scene-config.ts — Single source of truth for the island's layout & look.
+ * scene-config.ts — Single source of truth for the Quantum Data World layout & look.
  *
- * Defines the clay palette, where each section prop sits on the island, and the
- * camera "focus" pose used when a pin is clicked (Phase 03). Geometry (Phase 02),
- * pins/camera (Phase 03), and the dock UI (Phase 04) all read from here so the
- * scene stays internally consistent.
+ * Defines the neon-glass palette, where each section structure sits on the compass
+ * ring (R=7.5, About at the core), and the camera "fly" pose used when a stop is
+ * focused. Geometry (Phase 02), camera (Phase 03), and the auto-tour (Phase 04)
+ * all read from here so the scene stays internally consistent.
+ *
+ * Positions + poses are computed with the SAME formula the approved prototype uses
+ * (concept-d-quantum-data-world-3d.html) so structures and the fly-to camera agree.
  */
 import type { SectionId } from '../../../lib/scene/scene-data-types';
 
 export type Vec3 = [number, number, number];
 
-/** Playful low-poly clay palette (matches wireframe style-c). */
+/** Neon-glass palette (matches the Quantum Data World prototype tokens). */
 export const PALETTE = {
-  grassTop: '#7bd88f',
-  grassMid: '#5cc47a',
-  soil: '#b98a5e',
-  soilDark: '#9c6f48',
-  water: '#62d6e8',
   violet: '#7c5cff',
-  violetDark: '#6b46ff',
+  cyan: '#38e1ff',
+  lime: '#8df0a0',
   pink: '#ff5ea8',
-  yellow: '#ffd06b',
-  mint: '#62f0c8',
-  sky: '#37c2ff',
-  cream: '#fff4e6',
-  wood: '#c98a52',
-  woodDark: '#9a6736',
-  stone: '#aeb4cf',
-  roof: '#ff6f91',
-  white: '#fffaf3',
-  ink: '#3a3450',
+  amber: '#ffd166',
+  gold: '#ffd166',
+  bg0: '#05030f',
+  bg1: '#0c0824',
+  fog: '#0a0622',
 } as const;
 
-/** Default orbit/home camera pose (whole island in frame). */
+/** Numeric color tokens for Three.js material/light constructors. */
+export const COL = {
+  violet: 0x7c5cff,
+  cyan: 0x38e1ff,
+  lime: 0x8df0a0,
+  pink: 0xff5ea8,
+  amber: 0xffd166,
+  bg0: 0x05030f,
+  bg1: 0x0c0824,
+  fog: 0x0a0622,
+} as const;
+
+/** Default wide establishing pose — whole world in frame, gentle home orbit. */
 export const HOME_POSE = {
-  position: [11, 8, 13] as Vec3,
-  target: [0, 1.2, 0] as Vec3,
+  position: [0, 15, 27] as Vec3,
+  target: [0, 2.4, 0] as Vec3,
 };
 
 export interface SectionConfig {
   id: SectionId;
-  /** UI string key for the pin/dock label. */
+  /** UI string key for the nav/dock label. */
   labelKey: string;
-  /** Ground position of the prop on the island top. */
+  /** In-world label shown on the structure / dock (e.g. "Quantum Core"). */
+  worldLabel: string;
+  /** Ground position of the structure on the compass ring (About = core). */
   prop: Vec3;
-  /** World-space anchor where the pin floats (above the prop). */
+  /** World-space anchor above the structure (kept for a11y/legacy pin math). */
   pin: Vec3;
-  /** Camera pose when this section is focused. */
+  /** Camera fly pose when this section is focused. */
   focus: { position: Vec3; target: Vec3 };
-  /** Accent color for the pin + popup header. */
+  /** Accent color for the dock + panel header. */
   color: string;
 }
 
-/**
- * Section props arranged around the island top (y≈0). Camera focus poses are
- * hand-tuned to frame each prop with the popup card to its side.
+/* ── Compass ring layout (prototype formula) ──────────────────────────────────
+ * RING radius 7.5. Five structures at 72° spacing starting at angle 0 (=-Z),
+ * About at the centre (rendered as the floating Quantum Core at y≈3.2).
+ *   pos(angle) = [ R·sin(angle), 0, -R·cos(angle) ]
  */
-export const SECTIONS: SectionConfig[] = [
-  {
-    id: 'about',
-    labelKey: 'nav_about',
-    prop: [-3.2, 0, 2.4],
-    pin: [-3.2, 2.6, 2.4],
-    focus: { position: [-1.0, 3.6, 7.2], target: [-3.2, 1.4, 2.4] },
-    color: PALETTE.violet,
-  },
-  {
-    id: 'experience',
-    labelKey: 'experience_eyebrow',
-    prop: [-4.4, 0, -1.4],
-    pin: [-4.4, 2.4, -1.4],
-    focus: { position: [-7.4, 3.4, 3.0], target: [-4.4, 1.2, -1.4] },
-    color: PALETTE.sky,
-  },
-  {
-    id: 'skills',
-    labelKey: 'skills_eyebrow',
-    prop: [0, 0, -3.8],
-    pin: [0, 3.6, -3.8],
-    focus: { position: [3.0, 4.2, 1.6], target: [0, 1.8, -3.8] },
-    color: PALETTE.mint,
-  },
-  {
-    id: 'projects',
-    labelKey: 'projects_eyebrow',
-    prop: [3.2, 0, 1.8],
-    pin: [3.2, 2.4, 1.8],
-    focus: { position: [6.4, 3.4, 6.0], target: [3.2, 1.1, 1.8] },
-    color: PALETTE.yellow,
-  },
-  {
-    id: 'papers',
-    labelKey: 'papers_eyebrow',
-    prop: [4.2, 0, -1.6],
-    pin: [4.2, 2.6, -1.6],
-    focus: { position: [7.6, 3.6, 2.6], target: [4.2, 1.3, -1.6] },
-    color: PALETTE.pink,
-  },
-  {
-    id: 'contact',
-    labelKey: 'contact_eyebrow',
-    prop: [0.2, 0, 4.4],
-    pin: [0.2, 2.2, 4.4],
-    focus: { position: [2.2, 3.0, 8.2], target: [0.2, 1.0, 4.4] },
-    color: PALETTE.violetDark,
-  },
+const RING = 7.5;
+const TAU = Math.PI * 2;
+const ringPos = (angle: number): Vec3 => [RING * Math.sin(angle), 0, -RING * Math.cos(angle)];
+
+/**
+ * Fly-to pose for a stop — replicates the prototype `poseFor()`:
+ *   - About: a fixed close establishing pose on the core.
+ *   - Ring stops: dolly out from origin past the structure (+dir·6) and up (+5.2),
+ *     looking at the structure at y=1.8.
+ */
+function poseFor(id: SectionId, prop: Vec3): { position: Vec3; target: Vec3 } {
+  if (id === 'about') {
+    return { position: [0, 7, 13], target: [0, 3.0, 0] };
+  }
+  const [x, , z] = prop;
+  const len = Math.hypot(x, z) || 1;
+  const dx = x / len;
+  const dz = z / len;
+  return {
+    position: [x + dx * 6, 5.2, z + dz * 6],
+    target: [x, 1.8, z],
+  };
+}
+
+interface SectionSeed {
+  id: SectionId;
+  labelKey: string;
+  worldLabel: string;
+  angle: number | null; // null = core (About)
+  color: string;
+}
+
+/** Seeds in tour order; positions + poses derived below. */
+const SEEDS: SectionSeed[] = [
+  { id: 'about', labelKey: 'nav_about', worldLabel: 'Quantum Core', angle: null, color: PALETTE.violet },
+  { id: 'experience', labelKey: 'experience_eyebrow', worldLabel: 'GPU Cluster', angle: 0, color: PALETTE.cyan },
+  { id: 'skills', labelKey: 'skills_eyebrow', worldLabel: 'Blockchain Ledger', angle: (1 * TAU) / 5, color: PALETTE.amber },
+  { id: 'projects', labelKey: 'projects_eyebrow', worldLabel: 'LED Matrix', angle: (2 * TAU) / 5, color: PALETTE.lime },
+  { id: 'papers', labelKey: 'papers_eyebrow', worldLabel: 'Award Pedestals', angle: (3 * TAU) / 5, color: PALETTE.pink },
+  { id: 'contact', labelKey: 'contact_eyebrow', worldLabel: 'Ground Station', angle: (4 * TAU) / 5, color: PALETTE.cyan },
 ];
+
+export const SECTIONS: SectionConfig[] = SEEDS.map((s) => {
+  // About is the core: rendered floating at y≈3.2; ring stops sit on the ground.
+  const prop: Vec3 = s.angle === null ? [0, 3.2, 0] : ringPos(s.angle);
+  const focusProp: Vec3 = s.angle === null ? [0, 0, 0] : prop;
+  const pin: Vec3 = [prop[0], prop[1] + 2.4, prop[2]];
+  return {
+    id: s.id,
+    labelKey: s.labelKey,
+    worldLabel: s.worldLabel,
+    prop,
+    pin,
+    focus: poseFor(s.id, focusProp),
+    color: s.color,
+  };
+});
 
 export function getSection(id: SectionId): SectionConfig {
   const s = SECTIONS.find((x) => x.id === id);
@@ -115,11 +131,13 @@ export function getSection(id: SectionId): SectionConfig {
 
 /* ── Guided auto-tour timing (single source of truth) ─────────────────────── */
 
-/** Auto-tour: order of stops, then return home (null). Derived from SECTIONS. */
+/** Auto-tour: order of stops, then return home (About). Derived from SECTIONS. */
 export const TOUR_ORDER: SectionId[] = SECTIONS.map((s) => s.id); // about→…→contact
-/** Dwell at each stop (ms) — time the popup card is readable. */
-export const TOUR_DWELL_MS = 10_000;
-/** Idle wait at home before auto-starting / re-looping (ms). */
-export const TOUR_IDLE_MS = 15_000;
-/** Flight tween allowance (ms) — matches CameraControls smoothTime 0.55. */
-export const TOUR_FLIGHT_MS = 700;
+/** Dwell at each stop (ms) — time the reading panel is shown. */
+export const TOUR_DWELL_MS = 4_500;
+/** Delay after mount before the first auto-start (ms). */
+export const TOUR_BOOT_MS = 2_500;
+/** Idle wait at home before re-arming the loop after an interruption (ms). */
+export const TOUR_REARM_MS = 6_000;
+/** Back-compat alias used by the tour hook for the idle/re-arm countdown. */
+export const TOUR_IDLE_MS = TOUR_REARM_MS;

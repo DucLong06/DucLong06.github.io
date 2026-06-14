@@ -73,6 +73,40 @@ export const STRINGS = {
     contact_email_label: 'Reach me directly',
     contact_download_cv: 'Download CV',
 
+    // Quantum HUD panels (3D scene)
+    panel_about_eyebrow:        'Identity',
+    panel_exp_eyebrow:          'Experience',
+    panel_exp_title:            '5 years shipping ML',
+    panel_exp_subhead:          'Career timeline',
+    panel_skills_eyebrow:       'Skills · Stack',
+    panel_skills_title:         'Backend + AI, end to end',
+    panel_skills_punch:         'LLM / RAG · Docker · Kubernetes',
+    panel_skills_narrative:     'From research prototype to a system that survives production traffic — Python and C++ are my sharpest tools; TypeScript, Vue3, React and Django round out the full-stack side.',
+    panel_skills_stat_accuracy: 'model accuracy',
+    panel_skills_stat_uptime:   'pipeline uptime',
+    panel_skills_levels:        'Skill levels',
+    panel_proj_eyebrow:         'Projects',
+    panel_proj_shipped:         'shipped systems',
+    panel_proj_subhead:         'Selected work',
+    panel_papers_eyebrow:       'Papers · Awards',
+    panel_papers_title:         'Recognised research',
+    panel_papers_punch:         'peer-reviewed venues',
+    panel_papers_subhead:       'Peer-reviewed & awards',
+    panel_contact_eyebrow:      'Contact · Comms',
+    panel_contact_title:        'Let’s build',
+    panel_contact_cv:           'Download CV',
+
+    // Guided tour pill
+    tour_touring:  'Touring…',
+    tour_idle:     'Idle · re-arming…',
+    tour_stopped:  'Tour stopped',
+    tour_stop:     'Stop',
+
+    // Scene chrome / dock
+    scene_back:     '← Back to overview',
+    scene_classic:  'Classic view',
+    scene_sections: 'Sections',
+
     // Footer
     footer_rights:      'All rights reserved.',
     footer_built_with:  'Built with',
@@ -158,6 +192,40 @@ export const STRINGS = {
     contact_open_badge: 'Hiện đang mở cơ hội việc làm',
     contact_email_label: 'Liên hệ trực tiếp',
     contact_download_cv: 'Tải CV',
+
+    // Quantum HUD panels (3D scene)
+    panel_about_eyebrow:        'Hồ sơ',
+    panel_exp_eyebrow:          'Kinh nghiệm',
+    panel_exp_title:            '5 năm xây dựng hệ thống ML',
+    panel_exp_subhead:          'Dòng thời gian sự nghiệp',
+    panel_skills_eyebrow:       'Kỹ năng · Công nghệ',
+    panel_skills_title:         'Backend + AI, từ đầu đến cuối',
+    panel_skills_punch:         'LLM / RAG · Docker · Kubernetes',
+    panel_skills_narrative:     'Từ nguyên mẫu nghiên cứu đến hệ thống chịu được tải production — Python và C++ là thế mạnh; TypeScript, Vue3, React và Django bổ trợ phần full-stack.',
+    panel_skills_stat_accuracy: 'độ chính xác mô hình',
+    panel_skills_stat_uptime:   'pipeline ổn định',
+    panel_skills_levels:        'Mức độ kỹ năng',
+    panel_proj_eyebrow:         'Dự án',
+    panel_proj_shipped:         'hệ thống đã triển khai',
+    panel_proj_subhead:         'Dự án tiêu biểu',
+    panel_papers_eyebrow:       'Bài báo · Giải thưởng',
+    panel_papers_title:         'Nghiên cứu được ghi nhận',
+    panel_papers_punch:         'hội nghị bình duyệt',
+    panel_papers_subhead:       'Bình duyệt & giải thưởng',
+    panel_contact_eyebrow:      'Liên hệ',
+    panel_contact_title:        'Cùng xây dựng',
+    panel_contact_cv:           'Tải CV',
+
+    // Guided tour pill
+    tour_touring:  'Đang tham quan…',
+    tour_idle:     'Chờ · sắp chạy lại…',
+    tour_stopped:  'Đã dừng tham quan',
+    tour_stop:     'Dừng',
+
+    // Scene chrome / dock
+    scene_back:     '← Về tổng quan',
+    scene_classic:  'Xem bản cổ điển',
+    scene_sections: 'Mục',
 
     // Footer
     footer_rights:      'Đã đăng ký bản quyền.',

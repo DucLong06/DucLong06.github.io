@@ -1,0 +1,276 @@
+/*
+ * quantum-hud.css — Neon-glass HUD for the Quantum Data World 3D home.
+ * Loaded after island-scene.css so it re-themes the shared scene chrome (top bar,
+ * dock, tour pill) to the dark neon palette and adds the reading-panel styles.
+ * Everything is scoped under .island-root / .scene-* so it has no effect on the
+ * 2D classic site.
+ */
+
+:root {
+  --q-violet: #7c5cff;
+  --q-cyan: #38e1ff;
+  --q-lime: #8df0a0;
+  --q-pink: #ff5ea8;
+  --q-amber: #ffd166;
+  --q-txt: #e9e6ff;
+  --q-mut: #9a93c4;
+  --q-glass: rgba(24, 18, 52, 0.46);
+  --q-line: rgba(124, 92, 255, 0.3);
+  --q-glow-cy: 0 0 14px rgba(56, 225, 255, 0.55);
+  --q-glow-li: 0 0 14px rgba(141, 240, 160, 0.55);
+}
+
+/* Font utilities for LED titles + mono labels. */
+.font-bitcount { font-family: 'Bitcount Prop Single', ui-monospace, monospace; }
+.font-bitcount-grid { font-family: 'Bitcount Grid Double', 'Bitcount Prop Single', ui-monospace, monospace; }
+
+/* The Quantum scene is dark space, not the clay sky. */
+.island-root {
+  background: #05030f;
+  color: var(--q-txt);
+}
+/* Subtle scanline veil over the whole stage. */
+.island-root::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+}
+
+.scene-loader { color: #cfeeff; }
+
+/* ── HUD reading-panel layer ─────────────────────────────────────────────── */
+.hud-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: grid;
+  place-items: center;
+  padding: 4.5rem 1rem 5rem;
+  pointer-events: none;
+}
+.hud-slot { pointer-events: none; display: contents; }
+
+.hud-panel {
+  pointer-events: auto;
+  width: min(418px, 92vw);
+  max-height: 72vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 18px 18px;
+  border-radius: 16px;
+  background: var(--q-glass);
+  border: 1px solid var(--q-cyan);
+  color: #d9d5f2;
+  font-size: 13.5px;
+  line-height: 1.62;
+  backdrop-filter: blur(15px) saturate(140%);
+  -webkit-backdrop-filter: blur(15px) saturate(140%);
+  box-shadow: 0 0 0 1px var(--q-cyan), 0 18px 60px rgba(56, 225, 255, 0.32), 0 0 90px rgba(124, 92, 255, 0.4);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 225, 255, 0.5) rgba(124, 92, 255, 0.08);
+  animation: hud-in 0.6s cubic-bezier(0.22, 0.65, 0.18, 1) both;
+}
+.hud-panel:focus { outline: none; }
+.hud-panel::-webkit-scrollbar { width: 8px; }
+.hud-panel::-webkit-scrollbar-track { background: rgba(124, 92, 255, 0.08); border-radius: 8px; }
+.hud-panel::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--q-cyan), var(--q-violet));
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+@keyframes hud-in {
+  from { opacity: 0; transform: scale(0.94) translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* eyebrow + index */
+.hud-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(56, 225, 255, 0.7);
+}
+.hud-ic {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  background: rgba(124, 92, 255, 0.18);
+  border: 1px solid var(--q-line);
+}
+.hud-idx { margin-left: auto; color: var(--q-mut); font-size: 10px; letter-spacing: 0.1em; }
+
+/* headline + punchline (text is the hero) */
+.hud-headline { margin: 2px 0 10px; }
+.hud-title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.12;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(56, 225, 255, 0.5), 0 0 40px rgba(124, 92, 255, 0.35);
+}
+.hud-title.font-bitcount-grid { letter-spacing: 0.04em; font-weight: 700; }
+.hud-punch { margin-top: 4px; font-size: 11.5px; color: var(--q-mut); }
+.hud-sub { color: var(--q-mut); font-size: 11px; margin: 0 0 8px; }
+
+/* reading body */
+.hud-body { color: #d9d5f2; }
+.hud-rich p, .hud-lede { margin: 0 0 10px; }
+.hud-lede { color: #efecff; }
+.hud-rich h4, .hud-body > h4 {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--q-cyan);
+  margin: 13px 0 5px;
+  text-shadow: 0 0 10px rgba(56, 225, 255, 0.4);
+}
+.hud-rich ul { list-style: none; margin: 4px 0 10px; padding: 0; }
+.hud-rich li { position: relative; padding-left: 15px; margin: 4px 0; color: #cfcbe8; }
+.hud-rich li::before { content: '›'; position: absolute; left: 0; color: var(--q-cyan); font-weight: 700; }
+.hud-rich code {
+  font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
+  font-size: 0.92em;
+  color: #cfeeff;
+  background: rgba(56, 225, 255, 0.1);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+.hud-rich a, .hud-pmeta a { color: var(--q-cyan); text-decoration: none; border-bottom: 1px dashed rgba(56, 225, 255, 0.4); }
+.hud-rich a:hover, .hud-pmeta a:hover { text-shadow: var(--q-glow-cy); }
+
+.hud-role { color: #fff; font-weight: 700; font-size: 13px; }
+.hud-meta { color: var(--q-mut); font-size: 11px; letter-spacing: 0.03em; margin-bottom: 4px; }
+.hud-div { height: 1px; margin: 11px 0; background: linear-gradient(90deg, transparent, rgba(124, 92, 255, 0.4), transparent); }
+
+/* project titles in Bitcount LED */
+.hud-ptitle {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 14px;
+  color: #cfeeff;
+  text-decoration: none;
+  text-shadow: 0 0 9px rgba(56, 225, 255, 0.55);
+}
+.hud-pmeta { color: var(--q-lime); font-size: 11px; font-family: 'Bitcount Prop Single', ui-monospace, monospace; margin: 1px 0 4px; }
+
+/* skills stat chips + bars */
+.hud-statchips { display: flex; gap: 8px; margin: 11px 0 4px; flex-wrap: wrap; }
+.hud-statchip {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(124, 92, 255, 0.1);
+  border: 1px solid var(--q-line);
+  border-radius: 11px;
+  padding: 8px 10px;
+}
+.hud-statchip .scval { font-size: 18px; font-weight: 800; color: var(--q-cyan); text-shadow: var(--q-glow-cy); line-height: 1; }
+.hud-statchip.li .scval { color: var(--q-lime); text-shadow: var(--q-glow-li); }
+.hud-statchip .sclab { font-size: 9.5px; color: var(--q-mut); letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.25; }
+.hud-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; margin-top: 4px; }
+.hud-bar { font-size: 10px; }
+.hud-bt { display: flex; justify-content: space-between; color: var(--q-mut); }
+.hud-bt b { color: var(--q-txt); }
+.hud-bb { height: 5px; margin-top: 2px; border-radius: 99px; background: rgba(255, 255, 255, 0.06); overflow: hidden; border: 1px solid var(--q-line); }
+.hud-bb i { display: block; height: 100%; background: linear-gradient(90deg, var(--q-violet), var(--q-cyan)); box-shadow: 0 0 8px rgba(56, 225, 255, 0.4); }
+
+/* contact links + CV */
+.hud-links { display: flex; flex-direction: column; gap: 5px; margin-top: 6px; }
+.hud-links a { color: var(--q-cyan); text-decoration: none; font-size: 11.5px; }
+.hud-links a:hover { text-shadow: var(--q-glow-cy); }
+.hud-cv {
+  display: block;
+  width: 100%;
+  margin-top: 11px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 11px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #06031a;
+  text-decoration: none;
+  background: linear-gradient(90deg, var(--q-cyan), var(--q-violet), var(--q-pink));
+  box-shadow: 0 0 26px rgba(124, 92, 255, 0.6);
+}
+.hud-cv:hover { transform: translateY(-2px); }
+
+/* inline highlight chips (also used inside punchlines + bodyHtml) */
+.island-root .hi {
+  display: inline-block;
+  padding: 1px 8px;
+  margin: 1px 1px;
+  border-radius: 7px;
+  font-weight: 700;
+  color: #06121a;
+  background: linear-gradient(90deg, var(--q-cyan), var(--q-lime));
+  box-shadow: 0 0 14px rgba(56, 225, 255, 0.55);
+}
+.island-root .hi.vi { background: linear-gradient(90deg, var(--q-violet), var(--q-cyan)); color: #fff; box-shadow: 0 0 14px rgba(124, 92, 255, 0.55); }
+.island-root .hi.am { background: linear-gradient(90deg, var(--q-amber), #ffe9a8); color: #3a2a00; box-shadow: 0 0 14px rgba(255, 209, 102, 0.55); }
+.island-root .hu { color: #fff; font-weight: 700; border-bottom: 2px solid var(--q-cyan); padding-bottom: 1px; }
+
+/* ── Re-theme the shared chrome to neon (overrides island-scene.css) ──────── */
+.scene-chrome__home { color: #e9e6ff; text-shadow: 0 0 12px rgba(124, 92, 255, 0.5); }
+.island-root .scene-btn {
+  background: rgba(24, 18, 52, 0.55);
+  border-color: var(--q-line);
+  color: var(--q-txt);
+}
+.island-root .scene-btn:hover { background: rgba(40, 30, 80, 0.7); box-shadow: 0 0 18px rgba(124, 92, 255, 0.3); }
+
+.island-root .scene-dock {
+  top: 3.4rem;
+  bottom: auto;
+  background: rgba(20, 14, 44, 0.55);
+  border-color: var(--q-line);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+.island-root .scene-dock__btn { color: var(--q-mut); }
+.island-root .scene-dock__btn:hover { background: rgba(124, 92, 255, 0.18); color: #fff; }
+.island-root .scene-dock__btn.is-active {
+  background: linear-gradient(90deg, var(--q-cyan), var(--q-violet));
+  color: #06031a;
+  box-shadow: var(--q-glow-cy);
+}
+
+.island-root .scene-tour-pill {
+  left: auto;
+  right: 18px;
+  bottom: 18px;
+  transform: none;
+  background: rgba(20, 14, 44, 0.82);
+  border-color: var(--q-line);
+  color: var(--q-txt);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 30px rgba(124, 92, 255, 0.35);
+}
+.island-root .scene-tour-pill__dot { background: var(--q-cyan); box-shadow: var(--q-glow-cy); }
+.scene-tour-pill__now { color: var(--q-mut); font-size: 11px; }
+.scene-tour-pill.is-paused { opacity: 0.6; }
+.scene-tour-pill.is-paused .scene-tour-pill__dot { background: var(--q-mut); box-shadow: none; animation: none; }
+.island-root .scene-tour-pill__stop { background: rgba(255, 94, 168, 0.16); color: #ffb3d4; }
+.island-root .scene-tour-pill__stop:hover { background: rgba(255, 94, 168, 0.28); color: #fff; }
+
+@media (max-width: 640px) {
+  .hud-panel { width: calc(100% - 1rem); max-height: 64vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hud-panel { animation: none !important; }
+}

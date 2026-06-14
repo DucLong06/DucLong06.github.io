@@ -10,9 +10,10 @@ interface Props {
   focusedId: SectionId | null;
   onHome: () => void;
   onExitToClassic: () => void;
+  t: (key: string) => string;
 }
 
-export function SceneChrome({ name, focusedId, onHome, onExitToClassic }: Props) {
+export function SceneChrome({ name, focusedId, onHome, onExitToClassic, t }: Props) {
   return (
     <div className="scene-chrome">
       <button type="button" className="scene-chrome__home" onClick={onHome} aria-label={`${name} — reset view`}>
@@ -22,11 +23,11 @@ export function SceneChrome({ name, focusedId, onHome, onExitToClassic }: Props)
       <div className="scene-chrome__actions">
         {focusedId && (
           <button type="button" className="scene-btn scene-btn--ghost" onClick={onHome}>
-            ← Back to island
+            {t('scene_back')}
           </button>
         )}
         <button type="button" className="scene-btn scene-btn--ghost" onClick={onExitToClassic}>
-          Classic view
+          {t('scene_classic')}
         </button>
       </div>
     </div>
