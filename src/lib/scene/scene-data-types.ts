@@ -33,6 +33,8 @@ export interface SceneExperience {
   start: string;
   end: string | null;
   stack: string[];
+  /** Highlighted HTML of the role's full markdown body (3D reading panel). */
+  bodyHtml?: string;
 }
 
 export interface SceneSkillGroup {
@@ -48,6 +50,8 @@ export interface SceneProject {
   repo?: string;
   demo?: string;
   href: string;
+  /** Highlighted HTML of the project's full markdown write-up (3D reading panel). */
+  bodyHtml?: string;
 }
 
 export interface ScenePaper {
@@ -55,6 +59,8 @@ export interface ScenePaper {
   venue: string;
   year: number;
   award?: string;
+  /** Highlighted HTML of the paper's full markdown write-up (3D reading panel). */
+  bodyHtml?: string;
 }
 
 export interface SceneGitHub {
@@ -67,7 +73,7 @@ export interface SceneGitHub {
 export interface SceneData {
   lang: Lang;
   profile: SceneProfile;
-  about: { title: string; paragraphs: string[] };
+  about: { title: string; paragraphs: string[]; bioHtml: string };
   experience: SceneExperience[];
   skills: SceneSkillGroup[];
   projects: { featured: SceneProject[]; all: SceneProject[]; total: number };

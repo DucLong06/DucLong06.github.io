@@ -1,21 +1,20 @@
 /**
  * IslandScene.tsx — The heavy R3F layer (lazy-loaded only when 3D is enabled).
- * Owns scene state (focused section + hero visibility), the <Canvas> world,
- * the click-to-focus camera, the floating pins, and the DOM overlay chrome.
+ * Owns scene state (the focused stop), the neon <Canvas> Quantum world, the
+ * custom fly camera, the guided auto-tour, and the DOM overlay chrome + HUD
+ * reading panels. Exactly one panel shows at a time (home → About, never blank).
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { AdaptiveDpr, ContactShadows } from '@react-three/drei';
+import { AdaptiveDpr } from '@react-three/drei';
 import { ACESFilmicToneMapping } from 'three';
 import type { SceneData, SectionId } from '../../../lib/scene/scene-data-types';
-import { HOME_POSE, PALETTE, getSection } from './scene-config';
-import { IslandWorld } from './IslandWorld';
-import { Pins } from './Pins';
-import { CameraController } from './CameraController';
-import { HeroOverlay } from './ui/HeroOverlay';
-import { PinDock } from './ui/PinDock';
+import { HOME_POSE, COL, getSection } from './scene-config';
+import { QuantumWorld } from './geometry/quantum-world';
+import { QuantumCamera } from './quantum-camera';
 import { SceneChrome } from './ui/SceneChrome';
-import { PopupCard } from './ui/PopupCard';
+import { PinDock } from './ui/PinDock';
+import { HudPanels } from './ui/hud-panels';
 import { TourControl } from './ui/tour-control';
 import { useGuidedTour } from './use-guided-tour';
 
@@ -26,27 +25,21 @@ interface Props {
 
 export default function IslandScene({ data, onExitToClassic }: Props) {
   const [focusedId, setFocusedId] = useState<SectionId | null>(null);
-  const [heroVisible, setHeroVisible] = useState(true);
+  // Home maps to the About panel so a reading panel is always present.
+  const activeStop: SectionId = focusedId ?? 'about';
 
   const t = useCallback((key: string) => data.strings[key] ?? key, [data.strings]);
 
-  // Guided auto-tour: drives focusedId/heroVisible on a timer (controller only).
+  // Guided auto-tour: drives focusedId on a timer (controller only).
   const tour = useGuidedTour({
-    onFocus: (id) => {
-      setHeroVisible(false);
-      setFocusedId(id);
-    },
-    onHome: () => {
-      setFocusedId(null);
-      setHeroVisible(true); // returning to the floating home view re-shows the overview
-    },
+    onFocus: (id) => setFocusedId(id),
+    onHome: () => setFocusedId(null),
   });
 
   // User-driven actions cancel any running tour before applying their effect.
   const select = useCallback(
     (id: SectionId) => {
       tour.notifyUserInteract();
-      setHeroVisible(false);
       setFocusedId(id);
     },
     [tour],
@@ -54,72 +47,73 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
   const goHome = useCallback(() => {
     tour.notifyUserInteract();
     setFocusedId(null);
-    setHeroVisible(true); // back-to-island restores the initial overview card
   }, [tour]);
   const exitClassic = useCallback(() => {
     tour.notifyUserInteract();
     onExitToClassic();
   }, [tour, onExitToClassic]);
 
-  // Camera drag: cancel a running tour; if idling at home, reset the idle
-  // countdown (drag = activity). The re-arm effect below won't fire on a drag
-  // because focusedId/active don't change, so re-arm here where home is known.
+  // Camera drag/scroll: cancel a running tour; if idling at home, reset the idle
+  // countdown (drag = activity).
   const onCameraDrag = useCallback(() => {
     tour.notifyUserInteract();
     if (focusedId === null && !tour.active) tour.armIdle();
   }, [tour, focusedId]);
 
-  // Re-arm idle auto-start whenever settled at home & not touring (covers both
-  // the initial hero idle and post-loop re-arm). Clears otherwise.
+  // Re-arm idle auto-start whenever settled at home & not touring (covers initial
+  // boot and post-loop / post-interrupt re-arm). Clears otherwise.
   useEffect(() => {
     if (focusedId === null && !tour.active) tour.armIdle();
     else tour.clearIdle();
   }, [focusedId, tour.active, tour.armIdle, tour.clearIdle]);
 
+  // Escape returns to the home/About view (the tour hook handles key-to-cancel).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && focusedId !== null) goHome();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [focusedId, goHome]);
+
+  // Returning to the tab while idle at home re-arms the loop (the blur handler in
+  // the hook clears the idle timer; no state change would otherwise restart it).
+  useEffect(() => {
+    const onVisible = () => {
+      if (!document.hidden && focusedId === null && !tour.active) tour.armIdle();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, [focusedId, tour.active, tour.armIdle]);
+
+  const nowLabel = useMemo(() => getSection(activeStop).worldLabel, [activeStop]);
+
   return (
     <>
       <Canvas
-        shadows
         dpr={[1, 1.8]}
-        gl={{ antialias: true, toneMapping: ACESFilmicToneMapping, powerPreference: 'high-performance' }}
-        camera={{ position: HOME_POSE.position, fov: 38, near: 0.1, far: 100 }}
-        aria-label={`${data.profile.name} — interactive 3D portfolio island`}
+        gl={{
+          antialias: true,
+          toneMapping: ACESFilmicToneMapping,
+          toneMappingExposure: 1.15,
+          powerPreference: 'high-performance',
+        }}
+        camera={{ position: HOME_POSE.position, fov: 52, near: 0.1, far: 400 }}
+        aria-label={`${data.profile.name} — Quantum Data World, interactive 3D portfolio`}
         role="img"
       >
-        <color attach="background" args={[PALETTE.cream]} />
-        <fog attach="fog" args={[PALETTE.cream, 22, 46]} />
+        {/* Neon-glass space: deep violet-black backdrop + exponential fog for depth. */}
+        <color attach="background" args={[COL.bg0]} />
+        <fogExp2 attach="fog" args={[COL.fog, 0.018]} />
 
-        <hemisphereLight args={['#ffffff', '#cdb8ff', 0.85]} />
-        <ambientLight intensity={0.35} />
-        <directionalLight
-          position={[8, 12, 6]}
-          intensity={1.6}
-          castShadow
-          shadow-mapSize={[1024, 1024]}
-          shadow-camera-near={1}
-          shadow-camera-far={40}
-          shadow-camera-left={-14}
-          shadow-camera-right={14}
-          shadow-camera-top={14}
-          shadow-camera-bottom={-14}
-        />
+        {/* Cool ambient + three colored points (cyan key, violet rim, pink fill). */}
+        <ambientLight color={0x4a3a8a} intensity={0.9} />
+        <pointLight color={COL.cyan} intensity={2.2} distance={120} position={[0, 22, 8]} />
+        <pointLight color={COL.violet} intensity={1.8} distance={140} position={[-30, 16, -18]} />
+        <pointLight color={COL.pink} intensity={1.0} distance={120} position={[26, 10, 18]} />
 
-        {/* Soft contact shadow grounds props on the island top — procedural,
-            baked once (frames={1}), zero network payload. */}
-        <ContactShadows
-          position={[0, 0.02, 0]}
-          scale={26}
-          resolution={512}
-          blur={2.6}
-          opacity={0.38}
-          far={6}
-          color={PALETTE.soilDark}
-          frames={1}
-        />
-
-        <IslandWorld />
-        <Pins activeId={focusedId} labelFor={t} onSelect={select} />
-        <CameraController focusedId={focusedId} onUserDragStart={onCameraDrag} />
+        <QuantumWorld />
+        <QuantumCamera focusedId={focusedId} onUserInteract={onCameraDrag} />
         <AdaptiveDpr />
       </Canvas>
 
@@ -129,31 +123,14 @@ export default function IslandScene({ data, onExitToClassic }: Props) {
         focusedId={focusedId}
         onHome={goHome}
         onExitToClassic={exitClassic}
+        t={t}
       />
 
-      {heroVisible && (
-        <HeroOverlay
-          data={data}
-          t={t}
-          onExplore={() => setHeroVisible(false)}
-          onViewWork={() => select('projects')}
-          onPlayTour={tour.start}
-        />
-      )}
+      <PinDock activeId={activeStop} t={t} onSelect={select} />
 
-      {!heroVisible && <PinDock activeId={focusedId} t={t} onSelect={select} />}
+      <HudPanels activeStop={activeStop} data={data} t={t} />
 
-      {tour.active && <TourControl onStop={tour.stop} />}
-
-      {focusedId && (
-        <PopupCard
-          id={focusedId}
-          data={data}
-          label={t(getSection(focusedId).labelKey)}
-          onClose={goHome}
-          autoFocus={!tour.active}
-        />
-      )}
+      <TourControl phase={tour.phase} nowLabel={nowLabel} onStop={tour.stop} t={t} />
     </>
   );
 }

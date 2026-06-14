@@ -26,6 +26,13 @@
 /* JetBrains Mono variable — wght axis */
 @import '@fontsource-variable/jetbrains-mono/wght.css';
 
+/* Bitcount LED / dot-matrix faces — self-hosted, used by the 3D Quantum scene
+   (project titles + in-world mono labels). 400 + 700 only to limit payload. */
+@import '@fontsource/bitcount-prop-single/400.css';
+@import '@fontsource/bitcount-prop-single/700.css';
+@import '@fontsource/bitcount-grid-double/400.css';
+@import '@fontsource/bitcount-grid-double/700.css';
+
 /* ─── FONT FAMILY TOKENS ────────────────────────────────────────────────────── */
 :root {
   --font-display: 'Instrument Serif', Georgia, serif;

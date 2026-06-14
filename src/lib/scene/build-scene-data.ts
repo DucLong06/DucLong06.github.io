@@ -10,6 +10,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { FEATURED_ORDER } from '../featured-projects-order';
 import { getGitHubStats } from '../github-stats';
 import { STRINGS, type Lang } from '../../i18n/strings';
+import { renderBodyHtml } from './render-body-html';
 import type {
   SceneData,
   SceneProject,
@@ -66,6 +67,8 @@ async function buildProjects(lang: Lang) {
     repo: e.data.repo,
     demo: e.data.demo,
     href: `${prefix}/projects/${entrySlug(e.id)}/`,
+    // Project write-ups are single-language; same body serves EN + VI (Phase 06).
+    bodyHtml: renderBodyHtml(e.body ?? ''),
   });
 
   const all = ordered.map(toProject);
@@ -90,6 +93,7 @@ export async function buildSceneData(lang: Lang): Promise<SceneData> {
       start: e.data.period.start,
       end: e.data.period.end,
       stack: e.data.stack,
+      bodyHtml: renderBodyHtml(e.body ?? ''),
     }));
 
   const skills = (await getCollection('skills'))
@@ -106,6 +110,7 @@ export async function buildSceneData(lang: Lang): Promise<SceneData> {
       venue: e.data.venue,
       year: e.data.year,
       award: e.data.award,
+      bodyHtml: renderBodyHtml(e.body ?? ''),
     }));
 
   const bioEntry = (await getCollection('about')).find(
@@ -114,6 +119,7 @@ export async function buildSceneData(lang: Lang): Promise<SceneData> {
   const about = {
     title: STRINGS[lang].about_title,
     paragraphs: bioEntry ? markdownToParagraphs(bioEntry.body ?? '') : [],
+    bioHtml: bioEntry ? renderBodyHtml(bioEntry.body ?? '') : '',
   };
 
   const gh = await getGitHubStats();

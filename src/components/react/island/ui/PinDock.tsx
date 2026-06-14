@@ -13,7 +13,7 @@ interface Props {
 
 export function PinDock({ activeId, t, onSelect }: Props) {
   return (
-    <nav className="scene-dock" aria-label="Sections">
+    <nav className="scene-dock" aria-label={t('scene_sections')}>
       {SECTIONS.map((s) => (
         <button
           key={s.id}

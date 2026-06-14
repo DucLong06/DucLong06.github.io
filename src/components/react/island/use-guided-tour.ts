@@ -11,17 +11,21 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { SectionId } from '../../../lib/scene/scene-data-types';
-import { TOUR_ORDER, TOUR_DWELL_MS, TOUR_IDLE_MS } from './scene-config';
+import { TOUR_ORDER, TOUR_DWELL_MS, TOUR_BOOT_MS, TOUR_REARM_MS } from './scene-config';
 
 export interface TourCallbacks {
-  /** Sets heroVisible=false + focusedId=id (focus a section). */
+  /** Focus a section (drives camera + reveals its HUD panel). */
   onFocus: (id: SectionId) => void;
-  /** focusedId=null (return to island home). */
+  /** Return to home (focusedId=null → About panel shown, never blank). */
   onHome: () => void;
 }
 
+/** Pill state: actively touring, idle/re-arming a loop, or manually stopped. */
+export type TourPhase = 'touring' | 'idle' | 'stopped';
+
 export interface TourApi {
   active: boolean;
+  phase: TourPhase;
   start: () => void;
   stop: () => void;
   armIdle: () => void;
@@ -31,6 +35,7 @@ export interface TourApi {
 
 export function useGuidedTour(cb: TourCallbacks): TourApi {
   const [active, setActive] = useState(false);
+  const [phase, setPhase] = useState<TourPhase>('idle');
 
   // Keep latest callbacks in a ref so timer closures stay stable across renders.
   const cbRef = useRef(cb);
@@ -40,8 +45,8 @@ export function useGuidedTour(cb: TourCallbacks): TourApi {
   const dwellTimer = useRef<number | null>(null);
   const indexRef = useRef(0);
   const activeRef = useRef(false);
-  const suppressRef = useRef(false); // set on manual stop → no auto-restart this session
   const pausedAtRef = useRef<number | null>(null);
+  const hasBootedRef = useRef(false); // first auto-start uses TOUR_BOOT_MS; later re-arms use TOUR_REARM_MS
 
   const clearTimer = (t: React.MutableRefObject<number | null>) => {
     if (t.current !== null) {
@@ -58,7 +63,8 @@ export function useGuidedTour(cb: TourCallbacks): TourApi {
     cbRef.current.onHome();
     activeRef.current = false;
     setActive(false);
-    armIdleRef.current(); // loop — unless suppressed
+    setPhase('idle');
+    armIdleRef.current(); // loop after a short idle
   }, []);
 
   const step = useCallback(() => {
@@ -78,43 +84,46 @@ export function useGuidedTour(cb: TourCallbacks): TourApi {
 
   const start = useCallback(() => {
     clearTimer(idleTimer);
-    suppressRef.current = false; // explicit start re-enables looping + idle this session
+    hasBootedRef.current = true; // any start past this point makes future waits re-arms
     activeRef.current = true;
     setActive(true);
+    setPhase('touring');
     indexRef.current = 0;
     pausedAtRef.current = null;
     step();
   }, [step]);
 
   const armIdle = useCallback(() => {
-    if (suppressRef.current) return;
     clearTimer(idleTimer);
-    idleTimer.current = window.setTimeout(start, TOUR_IDLE_MS);
+    // First wait after mount is the short "boot" delay; later waits re-arm slower.
+    const delay = hasBootedRef.current ? TOUR_REARM_MS : TOUR_BOOT_MS;
+    idleTimer.current = window.setTimeout(start, delay);
   }, [start]);
   armIdleRef.current = armIdle;
 
   const clearIdle = useCallback(() => clearTimer(idleTimer), []);
 
-  const stop = useCallback(() => {
-    // Manual stop: cancel everything and suppress auto-restart for the session.
-    clearTimer(idleTimer);
+  // End the tour and return home. Always re-arms (the idle countdown restarts via
+  // IslandScene's home effect). `manual` only changes the pill label.
+  const end = useCallback((manual: boolean) => {
     clearTimer(dwellTimer);
     pausedAtRef.current = null;
     activeRef.current = false;
     setActive(false);
-    suppressRef.current = true;
+    setPhase(manual ? 'stopped' : 'idle');
     cbRef.current.onHome();
   }, []);
 
+  const stop = useCallback(() => end(true), [end]); // pill ✕ → "Tour stopped", still re-arms
+
   const notifyUserInteract = useCallback(() => {
     if (activeRef.current) {
-      stop(); // cancelling a running tour suppresses restart (acts like manual stop)
+      end(false); // interrupting a running tour → "re-arming…"
     } else {
-      // Not touring: stop any pending idle countdown. IslandScene decides whether
-      // to re-arm (it owns focusedId → knows if we're at home). See onCameraDrag.
-      clearTimer(idleTimer);
+      setPhase('idle');
+      armIdle(); // restart the idle countdown so the loop re-arms after the wait
     }
-  }, [stop]);
+  }, [end, armIdle]);
 
   // Tab-blur pause/resume + global key cancel while touring. Single mount effect.
   useEffect(() => {
@@ -146,5 +155,5 @@ export function useGuidedTour(cb: TourCallbacks): TourApi {
     };
   }, [notifyUserInteract]);
 
-  return { active, start, stop, armIdle, clearIdle, notifyUserInteract };
+  return { active, phase, start, stop, armIdle, clearIdle, notifyUserInteract };
 }
