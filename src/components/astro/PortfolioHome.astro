@@ -22,9 +22,9 @@ import Papers from './Papers.astro';
 import GitHubStats from './GitHubStats.astro';
 import Contact from './Contact.astro';
 import Footer from './Footer.astro';
-import IslandExperience from '../react/island/IslandExperience';
+import QuantumWorldIsland from '../vue/world/QuantumWorldIsland.vue';
 import Scene3DToggle from './Scene3DToggle.astro';
-import { buildSceneData } from '../../lib/scene/build-scene-data';
+import { buildWorldStations } from '../../lib/scene/build-world-stations';
 import type { Lang } from '../../lib/i18n-helpers';
 
 interface Props {
@@ -32,10 +32,12 @@ interface Props {
   currentPath: string;
 }
 const { lang, currentPath } = Astro.props;
-const sceneData = await buildSceneData(lang);
+// Quantum World island is the primary 3D experience. The old R3F island
+// (../react/island/) is kept dormant (not mounted) until this is verified.
+const worldData = await buildWorldStations();
 ---
 
-<IslandExperience client:only="react" data={sceneData} />
+<QuantumWorldIsland client:only="vue" data={worldData} />
 
 <div id="classic-site">
   <Nav lang={lang} />

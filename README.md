@@ -7,12 +7,12 @@ Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Scien
 | Layer | Technology |
 |---|---|
 | Framework | Astro 5 (static output) |
-| UI islands | React 18 |
+| UI islands | React 18 + Vue 3 (Quantum Data World primary island) |
 | Styling | Tailwind CSS v3 |
-| 3D Graphics | three + @react-three/fiber + @react-three/drei (WebGL Quantum Data World) |
+| 3D Graphics | three.js (imperative for Quantum World in Vue) + @react-three/fiber + @react-three/drei (dormant R3F fallback) |
 | 3D Assets (Classic Fallback) | OGL (WebGL liquid gradient mesh hero) |
 | Animation | framer-motion |
-| Fonts | @fontsource + @fontsource/bitcount (self-hosted Bitcount LED monospace, no Google CDN) |
+| Fonts | @fontsource + @fontsource/bitcount + @fontsource/space-grotesk (self-hosted, no Google CDN) |
 | OG images | satori (edge-rendered at build time) |
 | i18n | Astro native i18n (EN default, `/vi/` prefix) |
 | Deployment | GitHub Actions → GitHub Pages native |
