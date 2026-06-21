@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
+import vue from '@astrojs/vue';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
@@ -21,7 +22,10 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
-    react(),
+    // React (classic R3F island, kept dormant) + Vue (Quantum World island, primary).
+    // jsx config keeps each renderer scoped to its own file extensions.
+    react({ include: ['**/react/**'] }),
+    vue({ jsx: false }),
     mdx(),
     sitemap(),
     tailwind(),

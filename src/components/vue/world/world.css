@@ -1,0 +1,242 @@
+/* =====================================================================
+   world.css — Quantum World HUD styles (port of prototype world.css).
+   Scoped under `.quantum-world-root` so it never leaks into the 2D site
+   (the island JS loads on every home visit). Only the color TOKENS live on
+   :root, because the imperative chart renderers read them from documentElement.
+   ===================================================================== */
+:root {
+  --qw-bg: #05070e;
+  --qw-ink: #eaf3ff;
+  --qw-muted: #8da4c4;
+  --qw-faint: #5f769a;
+  --a1: #38e1ff;
+  --a2: #a06bff;
+  --a3: #f5b449;
+  --qw-line: rgba(120, 150, 200, 0.16);
+  --qw-line2: rgba(120, 150, 200, 0.10);
+  --qw-mono: 'JetBrains Mono Variable', 'JetBrains Mono', monospace;
+  --qw-sans: 'Space Grotesk', system-ui, sans-serif;
+  --qw-glass: rgba(9, 14, 26, 0.72);
+  /* aliases consumed by chart renderers via --muted/--ink/--faint */
+  --muted: #8da4c4;
+  --ink: #eaf3ff;
+  --faint: #5f769a;
+}
+
+.quantum-world-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: var(--qw-bg);
+  color: var(--qw-ink);
+  font-family: var(--qw-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+.quantum-world-root a { color: inherit; }
+
+.quantum-world-root canvas.world-canvas {
+  position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 0;
+}
+
+/* vignette over the canvas */
+.quantum-world-root .vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 42%, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ================= top chrome ================= */
+.quantum-world-root .brand {
+  position: fixed; top: 22px; left: 26px; z-index: 10;
+  font-weight: 700; font-size: 16px; letter-spacing: 0.01em;
+  display: flex; align-items: center; gap: 10px;
+}
+.quantum-world-root .brand .q { color: var(--a1); filter: drop-shadow(0 0 8px var(--a1)); }
+.quantum-world-root .brand small { display: block; font-family: var(--qw-mono); font-size: 10px; color: var(--qw-muted); font-weight: 400; letter-spacing: 0.18em; margin-top: 2px; }
+
+.quantum-world-root .topright {
+  position: fixed; top: 20px; right: 24px; z-index: 10;
+  display: flex; align-items: center; gap: 10px;
+}
+.quantum-world-root .lang {
+  display: flex; border: 1px solid var(--qw-line); border-radius: 999px; overflow: hidden;
+  background: var(--qw-glass); backdrop-filter: blur(10px); font-family: var(--qw-mono); font-size: 11px;
+}
+.quantum-world-root .lang button {
+  background: none; border: 0; color: var(--qw-muted); padding: 7px 12px; cursor: pointer; letter-spacing: 0.1em;
+  transition: all 0.2s;
+}
+.quantum-world-root .lang button.on { color: #04070e; background: var(--a1); font-weight: 600; }
+.quantum-world-root .classic {
+  display: inline-flex; align-items: center; gap: 7px; text-decoration: none;
+  border: 1px solid var(--qw-line); border-radius: 999px; padding: 8px 14px;
+  background: var(--qw-glass); backdrop-filter: blur(10px); font-size: 12.5px; color: var(--qw-ink);
+  cursor: pointer; transition: border-color 0.2s, background 0.2s;
+}
+.quantum-world-root .classic:hover { border-color: var(--a1); background: rgba(56, 225, 255, 0.08); }
+.quantum-world-root .classic::before { content: '⊞'; color: var(--a1); }
+
+/* ================= nav pills ================= */
+.quantum-world-root .pills {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10;
+  display: flex; gap: 4px; padding: 5px; border-radius: 999px;
+  background: var(--qw-glass); backdrop-filter: blur(12px); border: 1px solid var(--qw-line);
+  max-width: calc(100vw - 360px); overflow-x: auto; scrollbar-width: none;
+}
+.quantum-world-root .pills::-webkit-scrollbar { display: none; }
+.quantum-world-root .pill {
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  background: none; border: 0; color: var(--qw-muted); font-family: var(--qw-sans); font-size: 12.5px;
+  padding: 7px 13px; border-radius: 999px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.01em;
+}
+.quantum-world-root .pill .pdot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+.quantum-world-root .pill:hover { color: var(--qw-ink); }
+.quantum-world-root .pill.active { color: #04070e; background: var(--a1); font-weight: 600; }
+.quantum-world-root .pill.active .pdot { background: #04070e; opacity: 1; }
+
+/* ================= info card ================= */
+.quantum-world-root .card {
+  position: fixed; z-index: 9; left: 38px; top: 50%; transform: translateY(-50%) translateX(-14px);
+  width: 430px; max-width: calc(100vw - 60px); max-height: 78vh; overflow-y: auto;
+  background: linear-gradient(180deg, rgba(11, 17, 30, 0.86), rgba(8, 12, 22, 0.9));
+  border: 1px solid var(--qw-line); border-radius: 18px; padding: 24px 24px 22px;
+  backdrop-filter: blur(16px); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(56, 225, 255, 0.05) inset, 0 0 40px rgba(56, 225, 255, 0.06);
+  opacity: 0; pointer-events: none; transition: opacity 0.45s ease, transform 0.55s cubic-bezier(.2, .8, .2, 1);
+  scrollbar-width: thin; scrollbar-color: var(--qw-line) transparent;
+}
+.quantum-world-root .card::-webkit-scrollbar { width: 6px; }
+.quantum-world-root .card::-webkit-scrollbar-thumb { background: var(--qw-line); border-radius: 3px; }
+.quantum-world-root .card.show { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateX(0); }
+.quantum-world-root .card::before {
+  content: ''; position: absolute; left: 0; top: 22px; bottom: 22px; width: 2px; border-radius: 2px;
+  background: linear-gradient(var(--a1), var(--a2)); box-shadow: 0 0 12px var(--a1);
+}
+
+/* right-side data sheet */
+.quantum-world-root .cardR {
+  left: auto; right: 34px; width: 312px; transform: translateY(-50%) translateX(14px); padding: 22px 22px 20px;
+}
+.quantum-world-root .cardR.show { transform: translateY(-50%) translateX(0); }
+.quantum-world-root .cardR::before { left: auto; right: 0; background: linear-gradient(var(--a2), var(--a1)); box-shadow: 0 0 12px var(--a2); }
+.quantum-world-root .aside-h { display: inline-flex; align-items: center; gap: 8px; font-family: var(--qw-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--a2); margin-bottom: 4px; }
+.quantum-world-root .aside-h .cdot { background: var(--a2); box-shadow: 0 0 10px var(--a2); }
+.quantum-world-root .asec { margin-top: 16px; }
+.quantum-world-root .asec-t { font-family: var(--qw-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--qw-faint); text-transform: uppercase; margin-bottom: 9px; }
+.quantum-world-root .drow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--qw-line2); }
+.quantum-world-root .drow:last-child { border-bottom: 0; }
+.quantum-world-root .drow span { font-size: 12.5px; color: var(--qw-muted); }
+.quantum-world-root .drow b { font-size: 12.5px; color: var(--qw-ink); font-weight: 600; font-family: var(--qw-mono); text-align: right; }
+.quantum-world-root .timeline { display: flex; flex-direction: column; }
+.quantum-world-root .tlrow { display: grid; grid-template-columns: 16px 1fr; gap: 10px; padding-bottom: 13px; position: relative; }
+.quantum-world-root .tlrow:not(:last-child)::before { content: ''; position: absolute; left: 4.5px; top: 12px; bottom: -1px; width: 1px; background: linear-gradient(var(--a2), transparent); }
+.quantum-world-root .tldot { width: 9px; height: 9px; border-radius: 50%; margin-top: 3px; background: var(--a2); box-shadow: 0 0 8px var(--a2); }
+.quantum-world-root .tlh { font-size: 12.5px; font-weight: 600; color: var(--qw-ink); }
+.quantum-world-root .tls { font-size: 11.5px; color: var(--qw-muted); line-height: 1.4; margin-top: 2px; }
+.quantum-world-root .lrow { padding: 7px 0; border-bottom: 1px solid var(--qw-line2); }
+.quantum-world-root .lrow:last-child { border-bottom: 0; }
+.quantum-world-root .lrh { font-size: 12.5px; font-weight: 600; color: var(--qw-ink); }
+.quantum-world-root .lrs { font-size: 11.5px; color: var(--qw-muted); line-height: 1.4; margin-top: 2px; }
+.quantum-world-root .atags { display: flex; flex-wrap: wrap; gap: 6px; }
+.quantum-world-root .atags span { font-family: var(--qw-mono); font-size: 10.5px; color: var(--a1); border: 1px solid rgba(56, 225, 255, 0.28); background: rgba(56, 225, 255, 0.06); padding: 4px 9px; border-radius: 6px; }
+
+.quantum-world-root .chead { display: flex; justify-content: space-between; align-items: center; }
+.quantum-world-root .ckick { display: inline-flex; align-items: center; gap: 8px; font-family: var(--qw-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--a1); }
+.quantum-world-root .cdot { width: 7px; height: 7px; border-radius: 50%; background: var(--a1); box-shadow: 0 0 10px var(--a1); animation: qw-blink 2s infinite; }
+@keyframes qw-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.quantum-world-root .cnum { font-family: var(--qw-mono); font-size: 13px; color: var(--qw-ink); font-weight: 600; }
+.quantum-world-root .cnum i { color: var(--qw-faint); font-style: normal; font-size: 11px; }
+
+.quantum-world-root .ctitle { font-size: 27px; line-height: 1.1; font-weight: 700; margin-top: 12px; letter-spacing: -0.01em; }
+.quantum-world-root .crole { color: var(--a2); font-size: 13.5px; margin-top: 8px; line-height: 1.45; }
+.quantum-world-root .cloc { font-family: var(--qw-mono); font-size: 11.5px; color: var(--qw-muted); margin-top: 12px; }
+.quantum-world-root .cloc .pin { color: var(--a1); margin-right: 6px; }
+.quantum-world-root .cloc a { color: var(--a1); text-decoration: none; border-bottom: 1px solid rgba(56, 225, 255, 0.4); }
+.quantum-world-root .cbody { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.quantum-world-root .cbody p { font-size: 13.5px; line-height: 1.6; color: #c3d2e8; text-wrap: pretty; }
+.quantum-world-root .cbody strong { color: var(--qw-ink); font-weight: 600; }
+
+.quantum-world-root .cbadges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.quantum-world-root .cbadge {
+  font-family: var(--qw-mono); font-size: 11px; color: var(--a1);
+  border: 1px solid rgba(56, 225, 255, 0.3); background: rgba(56, 225, 255, 0.07);
+  padding: 5px 10px; border-radius: 7px;
+}
+
+.quantum-world-root .clinks { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.quantum-world-root .cbtn {
+  text-decoration: none; font-size: 13px; padding: 10px 16px; border-radius: 10px;
+  border: 1px solid var(--qw-line); color: var(--qw-ink); transition: all 0.2s;
+}
+.quantum-world-root .cbtn:hover { border-color: var(--a1); background: rgba(56, 225, 255, 0.07); }
+.quantum-world-root .cbtn.primary { background: var(--a1); color: #04070e; font-weight: 600; border-color: var(--a1); }
+.quantum-world-root .cbtn.primary:hover { box-shadow: 0 0 24px rgba(56, 225, 255, 0.4); }
+
+/* visualization blocks inside card */
+.quantum-world-root .vis {
+  margin-top: 16px; border: 1px solid var(--qw-line2); border-radius: 12px; padding: 14px;
+  background: rgba(8, 13, 24, 0.5);
+}
+.quantum-world-root .vhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.quantum-world-root .vhead span { font-family: var(--qw-mono); font-size: 11px; color: var(--qw-muted); letter-spacing: 0.04em; }
+.quantum-world-root .vhead b { font-family: var(--qw-mono); font-size: 9.5px; font-weight: 600; color: var(--a1); display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.12em; }
+.quantum-world-root .dotlive::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--a1); box-shadow: 0 0 8px var(--a1); animation: qw-blink 1.6s infinite; }
+.quantum-world-root .dotlive.gold { color: var(--a3); }
+.quantum-world-root .dotlive.gold::before { background: var(--a3); box-shadow: 0 0 8px var(--a3); }
+
+/* ================= tour controller ================= */
+.quantum-world-root .tour {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 10;
+  display: flex; align-items: center; gap: 6px; padding: 6px;
+  background: var(--qw-glass); backdrop-filter: blur(12px); border: 1px solid var(--qw-line); border-radius: 999px;
+}
+.quantum-world-root .tour button { background: none; border: 0; cursor: pointer; color: var(--qw-ink); font-family: var(--qw-sans); }
+.quantum-world-root .tnav {
+  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid var(--qw-line); color: var(--qw-muted); font-size: 14px; transition: all 0.2s;
+}
+.quantum-world-root .tnav:hover { color: var(--qw-ink); border-color: var(--a1); }
+.quantum-world-root .tourbtn {
+  display: inline-flex; align-items: center; gap: 9px; padding: 8px 16px 8px 13px; border-radius: 999px;
+  background: rgba(56, 225, 255, 0.1); border: 1px solid rgba(56, 225, 255, 0.3) !important; color: var(--qw-ink);
+  font-size: 13px; transition: all 0.2s;
+}
+.quantum-world-root .tourbtn:hover { background: rgba(56, 225, 255, 0.18); }
+.quantum-world-root .tourbtn .tour-icon { font-size: 11px; color: var(--a1); }
+.quantum-world-root .tourbtn.touring { background: rgba(160, 107, 255, 0.12); border-color: rgba(160, 107, 255, 0.35) !important; }
+.quantum-world-root .tourbtn.touring .tour-icon { color: var(--a2); }
+.quantum-world-root .tdot { width: 7px; height: 7px; border-radius: 50%; background: var(--a2); box-shadow: 0 0 8px var(--a2); }
+.quantum-world-root .tourbtn.touring .tdot { animation: qw-blink 1.4s infinite; }
+
+.quantum-world-root .hint {
+  position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); z-index: 9;
+  font-family: var(--qw-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--qw-faint);
+  pointer-events: none; text-align: center;
+}
+
+/* ================= boot splash ================= */
+.quantum-world-root .boot {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
+  background: var(--qw-bg); transition: opacity 0.8s ease; pointer-events: none;
+}
+.quantum-world-root .boot.hide { opacity: 0; }
+.quantum-world-root .boot .bcore { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--a1); border-top-color: transparent; animation: qw-spin 0.9s linear infinite; box-shadow: 0 0 30px var(--a1); }
+.quantum-world-root .boot .btxt { position: absolute; bottom: 38%; font-family: var(--qw-mono); font-size: 11px; letter-spacing: 0.3em; color: var(--qw-muted); }
+@keyframes qw-spin { to { transform: rotate(360deg); } }
+
+/* ================= responsive ================= */
+@media (max-width: 1180px) {
+  .quantum-world-root .cardR { display: none; }
+}
+@media (max-width: 820px) {
+  .quantum-world-root .card { left: 50%; right: auto; top: auto; bottom: 92px; transform: translateX(-50%) translateY(14px); width: calc(100vw - 28px); max-height: 56vh; }
+  .quantum-world-root .card.show { transform: translateX(-50%) translateY(0); }
+  .quantum-world-root .card::before { display: none; }
+  .quantum-world-root .pills { max-width: calc(100vw - 32px); top: auto; bottom: 152px; }
+  .quantum-world-root .topright { top: 16px; right: 14px; }
+  .quantum-world-root .brand { top: 16px; left: 16px; font-size: 14px; }
+  .quantum-world-root .hint { display: none; }
+  .quantum-world-root .ctitle { font-size: 22px; }
+}
+@media (max-width: 480px) {
+  .quantum-world-root .classic span { display: none; }
+}

@@ -1,0 +1,33 @@
+/* =====================================================================
+   charts.css — Chart reveal animations + primitives (port of prototype
+   world.css ~210–245). Scoped under `.quantum-world-root`; the imperative
+   renderers create elements with these bare class names inside the card.
+   ===================================================================== */
+.quantum-world-root .chart { width: 100%; height: auto; display: block; overflow: visible; }
+.quantum-world-root .bar { animation: qw-barGrow .75s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes qw-barGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.quantum-world-root .radar-shape { transform-origin: center; transform-box: fill-box; animation: qw-pop .6s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes qw-pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+.quantum-world-root .donut { animation: qw-spinIn .9s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes qw-spinIn { from { opacity: 0; transform: rotate(-40deg) scale(.85); } to { opacity: 1; transform: none; } }
+.quantum-world-root .gauge-arc { animation: qw-fadeIn .9s ease both; }
+@keyframes qw-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.quantum-world-root .hm-cell { opacity: 0; animation: qw-hmIn .45s var(--d) cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes qw-hmIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+
+.quantum-world-root .chart-mount { width: 100%; }
+
+.quantum-world-root .ledger { display: flex; align-items: stretch; gap: 4px; overflow-x: auto; padding-bottom: 6px; }
+.quantum-world-root .lblock { flex: 1 0 138px; border: 1px solid var(--qw-line); border-radius: 8px; padding: 12px 13px; background: rgba(245, 180, 73, 0.05); position: relative; }
+.quantum-world-root .lblock .lh { font-family: var(--qw-mono); font-size: 10px; color: var(--a3); letter-spacing: 0.1em; }
+.quantum-world-root .lblock .lt { font-size: 13px; font-weight: 600; margin: 6px 0; line-height: 1.25; }
+.quantum-world-root .lblock .lhash { font-family: var(--qw-mono); font-size: 9px; color: var(--qw-faint); word-break: break-all; }
+.quantum-world-root .lblock .lmeta { font-family: var(--qw-mono); font-size: 9.5px; color: var(--qw-muted); margin-top: 6px; }
+.quantum-world-root .llink { display: flex; align-items: center; color: var(--a3); opacity: 0.6; font-size: 13px; flex: none; }
+
+/* k8s topology animations */
+.quantum-world-root .k8s-pod { opacity: 0; animation: qw-hmIn .5s var(--d) cubic-bezier(.2, .8, .2, 1) both; }
+.quantum-world-root .k8s-pulse { animation: qw-podPulse 2s var(--d) ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes qw-podPulse { 0%, 100% { opacity: 0.4; r: 2.4px; } 50% { opacity: 1; r: 3.2px; } }
+.quantum-world-root .k8s-link { stroke-dashoffset: 20; animation: qw-dash 1.4s linear infinite; }
+@keyframes qw-dash { to { stroke-dashoffset: 0; } }
