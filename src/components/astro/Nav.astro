@@ -14,7 +14,7 @@ interface Props {
 const { lang = 'en' } = Astro.props;
 
 const navLinks = [
-  { label: t('nav_about',   lang), href: '#about'   },
+  // '#about' was dropped when Metamorphosis replaced the Hero+About sections.
   { label: t('nav_work',    lang), href: '#work'    },
   { label: t('nav_papers',  lang), href: '#papers'  },
   { label: t('nav_contact', lang), href: '#contact' },
