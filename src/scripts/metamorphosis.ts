@@ -224,20 +224,39 @@ export function initMM(root: HTMLElement, d: MMData): void {
         rr(-s * .72, -s * .1, s * .6, s * .6, s * .06); g.stroke();
         g.beginPath(); g.moveTo(s * .05, .02 * s); g.lineTo(s * .72, .02 * s); g.moveTo(s * .05, .28 * s); g.lineTo(s * .55, .28 * s); g.stroke();
       } else if (k === 'mlops') {
-        [-.75, 0, .75].forEach(function (dd, i) { g.beginPath(); g.arc(dd * s, i === 1 ? -s * .35 : s * .3, s * .22, 0, 6.283); g.stroke(); });
-        g.beginPath(); g.moveTo(-s * .55, s * .2); g.lineTo(-s * .2, -s * .25); g.moveTo(s * .2, -s * .25); g.lineTo(s * .55, s * .2); g.stroke();
-        g.beginPath(); g.moveTo(-s * .95, s * .85); g.lineTo(s * .95, s * .85); g.stroke();
-        g.beginPath(); g.moveTo(s * .7, s * .7); g.lineTo(s * .95, s * .85); g.lineTo(s * .7, s); g.stroke();
+        /* monitoring gauge: 270° dial, tick marks, needle at ~70% */
+        var cy = s * .18, r = s * .82;
+        g.beginPath(); g.arc(0, cy, r, Math.PI * .78, Math.PI * 2.22); g.stroke();
+        for (var ti = 0; ti <= 8; ti++) {
+          var ta = Math.PI * .78 + ti / 8 * Math.PI * 1.44,
+            tr1 = ti % 2 ? r * .82 : r * .72;
+          g.beginPath(); g.moveTo(Math.cos(ta) * tr1, cy + Math.sin(ta) * tr1); g.lineTo(Math.cos(ta) * r, cy + Math.sin(ta) * r); g.stroke();
+        }
+        var na = Math.PI * .78 + .68 * Math.PI * 1.44;
+        g.lineWidth = s * .14; g.beginPath(); g.moveTo(0, cy); g.lineTo(Math.cos(na) * r * .58, cy + Math.sin(na) * r * .58); g.stroke();
+        g.beginPath(); g.arc(0, cy, s * .12, 0, 6.283); g.fill();
+        g.lineWidth = s * .1;
       } else if (k === 'cicd') {
-        g.beginPath();
-        for (var t = 0; t <= 64; t++) { var u = t / 64 * 6.283, X = Math.sin(u) * s, Y = Math.sin(u) * Math.cos(u) * s * .9; t ? g.lineTo(X, Y) : g.moveTo(X, Y); }
-        g.stroke();
-        g.beginPath(); g.moveTo(-s * .05, -s * .28); g.lineTo(s * .22, 0); g.lineTo(-s * .05, s * .28); g.stroke();
-        g.beginPath(); g.moveTo(s * .05, s * .28); g.lineTo(-s * .22, 0); g.lineTo(s * .05, -s * .28); g.stroke();
+        /* continuous cycle: two opposed arcs with arrowheads */
+        var r2 = s * .8;
+        g.beginPath(); g.arc(0, 0, r2, .42, Math.PI - .42); g.stroke();
+        g.beginPath(); g.arc(0, 0, r2, .42 + Math.PI, 2 * Math.PI - .42); g.stroke();
+        var a1 = Math.PI - .42, x1 = Math.cos(a1) * r2, y1 = Math.sin(a1) * r2;
+        g.lineWidth = s * .13;
+        g.beginPath(); g.moveTo(x1 - s * .5 * Math.cos(a1 - 1.1), y1 - s * .5 * Math.sin(a1 - 1.1));
+        g.lineTo(x1, y1); g.lineTo(x1 - s * .5 * Math.cos(a1 + 1.1), y1 - s * .5 * Math.sin(a1 + 1.1)); g.stroke();
+        var a2 = 2 * Math.PI - .42, x2 = Math.cos(a2) * r2, y2 = Math.sin(a2) * r2;
+        g.beginPath(); g.moveTo(x2 - s * .5 * Math.cos(a2 - 1.1), y2 - s * .5 * Math.sin(a2 - 1.1));
+        g.lineTo(x2, y2); g.lineTo(x2 - s * .5 * Math.cos(a2 + 1.1), y2 - s * .5 * Math.sin(a2 + 1.1)); g.stroke();
+        g.lineWidth = s * .1;
       } else if (k === 'security') {
-        g.beginPath(); g.moveTo(0, -s); g.lineTo(s * .85, -s * .62); g.lineTo(s * .75, s * .2); g.quadraticCurveTo(s * .5, s * .8, 0, s * 1.05);
-        g.quadraticCurveTo(-s * .5, s * .8, -s * .75, s * .2); g.lineTo(-s * .85, -s * .62); g.closePath(); g.stroke();
-        g.beginPath(); g.moveTo(-s * .38, 0); g.lineTo(-s * .08, s * .3); g.lineTo(s * .42, -s * .3); g.stroke();
+        /* shield: symmetric, rounded bottom; single-stroke check */
+        g.beginPath(); g.moveTo(-s * .68, -s * .5); g.lineTo(0, -s * .92); g.lineTo(s * .68, -s * .5);
+        g.lineTo(s * .58, s * .12); g.quadraticCurveTo(s * .44, s * .74, 0, s * .96);
+        g.quadraticCurveTo(-s * .44, s * .74, -s * .58, s * .12); g.closePath(); g.stroke();
+        g.lineWidth = s * .17;
+        g.beginPath(); g.moveTo(-s * .28, s * .02); g.lineTo(-s * .07, s * .26); g.lineTo(s * .36, -s * .3); g.stroke();
+        g.lineWidth = s * .1;
       } else if (k === 'cloud') {
         g.beginPath(); g.arc(-s * .45, s * .2, s * .42, 1.6, 4.7); g.arc(s * .05, -s * .15, s * .5, 3.4, 6.0); g.arc(s * .55, s * .25, s * .38, 4.7, 1.6); g.closePath(); g.stroke();
       } else if (k === 'data') {
@@ -246,29 +265,54 @@ export function initMM(root: HTMLElement, d: MMData): void {
         g.beginPath(); g.moveTo(s * .33, s * .6); g.lineTo(s * .33, s * .95); g.moveTo(s * .97, s * .6); g.lineTo(s * .97, s * .95); g.stroke();
         g.beginPath(); g.ellipse(s * .65, s * .95, s * .32, s * .12, 0, 0, 3.14); g.stroke();
       } else if (k === 'trophy') {
-        g.beginPath(); g.moveTo(-s * .6, -s); g.lineTo(s * .6, -s); g.quadraticCurveTo(s * .6, s * .15, 0, s * .25); g.quadraticCurveTo(-s * .6, s * .15, -s * .6, -s); g.closePath(); g.fill();
-        g.beginPath(); g.moveTo(-s * .6, -s * .8); g.quadraticCurveTo(-s * 1.15, -s * .6, -s * .5, -s * .1); g.moveTo(s * .6, -s * .8); g.quadraticCurveTo(s * 1.15, -s * .6, s * .5, -s * .1); g.stroke();
-        g.fillRect(-s * .1, s * .25, s * .2, s * .3); rr(-s * .45, s * .55, s * .9, s * .22, s * .05); g.fill();
-        g.fillStyle = rgba(COL.ink, a * .9);
-        g.beginPath(); g.moveTo(0, -s * .75); g.lineTo(s * .12, -s * .45); g.lineTo(s * .4, -s * .42); g.lineTo(s * .18, -s * .22); g.lineTo(s * .25, s * .05); g.lineTo(0, -s * .1); g.lineTo(-s * .25, s * .05); g.lineTo(-s * .18, -s * .22); g.lineTo(-s * .4, -s * .42); g.lineTo(-s * .12, -s * .45); g.closePath(); g.fill();
+        /* cup with handles, stem, base, star in the bowl */
+        g.beginPath(); g.moveTo(-s * .58, -s * .88);
+        g.quadraticCurveTo(-s * .58, s * .18, 0, s * .22); g.quadraticCurveTo(s * .58, s * .18, s * .58, -s * .88);
+        g.lineTo(-s * .58, -s * .88); g.stroke();
+        g.beginPath(); g.moveTo(-s * .58, -s * .78); g.quadraticCurveTo(-s * 1.08, -s * .7, -s * .5, -s * .18); g.stroke();
+        g.beginPath(); g.moveTo(s * .58, -s * .78); g.quadraticCurveTo(s * 1.08, -s * .7, s * .5, -s * .18); g.stroke();
+        g.fillRect(-s * .12, s * .22, s * .24, s * .24);
+        rr(-s * .42, s * .5, s * .84, s * .18, s * .05); g.fill();
+        /* five-point star, drawn as one closed path */
+        g.beginPath();
+        for (var pj = 0; pj < 10; pj++) {
+          var pa = -Math.PI / 2 + pj * Math.PI / 5, pr = pj % 2 ? s * .17 : s * .36;
+          var px = Math.cos(pa) * pr, py = -s * .32 + Math.sin(pa) * pr;
+          pj ? g.lineTo(px, py) : g.moveTo(px, py);
+        }
+        g.closePath(); g.fill();
       } else if (k === 'medal') {
+        /* ribbon V + outlined disc + star */
         g.fillStyle = rgba(COL.red, a);
-        g.beginPath(); g.moveTo(-s * .42, -s * 1.05); g.lineTo(s * .02, -s * 1.05); g.lineTo(-s * .15, -s * .35); g.lineTo(-s * .55, -s * .35); g.closePath(); g.fill();
+        g.beginPath(); g.moveTo(-s * .5, -s * 1.05); g.lineTo(-s * .08, -s * 1.05); g.lineTo(-s * .3, -s * .2); g.lineTo(-s * .72, -s * .2); g.closePath(); g.fill();
         g.fillStyle = rgba(COL.blue, a);
-        g.beginPath(); g.moveTo(s * .42, -s * 1.05); g.lineTo(-s * .02, -s * 1.05); g.lineTo(s * .15, -s * .35); g.lineTo(s * .55, -s * .35); g.closePath(); g.fill();
-        g.fillStyle = rgba(col, a); g.beginPath(); g.arc(0, s * .2, s * .62, 0, 6.283); g.fill();
-        g.strokeStyle = rgba(COL.ink, a * .8); g.lineWidth = s * .08;
-        g.beginPath(); g.arc(0, s * .2, s * .42, 0, 6.283); g.stroke();
+        g.beginPath(); g.moveTo(s * .5, -s * 1.05); g.lineTo(s * .08, -s * 1.05); g.lineTo(s * .3, -s * .2); g.lineTo(s * .72, -s * .2); g.closePath(); g.fill();
+        g.fillStyle = rgba(col, a);
+        g.beginPath(); g.arc(0, s * .32, s * .62, 0, 6.283); g.fill();
+        g.strokeStyle = rgba(COL.ink, a * .55); g.lineWidth = s * .07;
+        g.beginPath(); g.arc(0, s * .32, s * .48, 0, 6.283); g.stroke();
         g.fillStyle = rgba(COL.ink, a * .9);
         g.beginPath();
-        for (var j = 0; j < 10; j++) { var aa = -Math.PI / 2 + j * Math.PI / 5, rad = j % 2 ? s * .12 : s * .26; g.lineTo(Math.cos(aa) * rad, s * .2 + Math.sin(aa) * rad); }
+        for (var mj = 0; mj < 10; mj++) {
+          var ma = -Math.PI / 2 + mj * Math.PI / 5, mr = mj % 2 ? s * .12 : s * .26;
+          g.lineTo(Math.cos(ma) * mr, s * .32 + Math.sin(ma) * mr);
+        }
         g.closePath(); g.fill();
+        g.lineWidth = s * .1;
       } else if (k === 'cert') {
-        rr(-s * .9, -s * .7, s * 1.8, s * 1.4, s * .08); g.stroke();
-        [-.35, -.1, .15].forEach(function (dd, i) { g.beginPath(); g.moveTo(-s * .6, dd * s); g.lineTo(i === 0 ? s * .1 : s * .35, dd * s); g.stroke(); });
-        g.fillStyle = rgba(COL.yellow, a); g.beginPath(); g.arc(s * .5, s * .35, s * .2, 0, 6.283); g.fill();
-        g.strokeStyle = rgba(COL.yellow, a);
-        g.beginPath(); g.moveTo(s * .4, s * .5); g.lineTo(s * .35, s * .9); g.moveTo(s * .6, s * .5); g.lineTo(s * .65, s * .9); g.stroke();
+        /* document + lines + scalloped seal with ribbon tails */
+        rr(-s * .9, -s * .8, s * 1.5, s * 1.7, s * .08); g.stroke();
+        [-.42, -.18, .06].forEach(function (dd) { g.beginPath(); g.moveTo(-s * .7, dd * s); g.lineTo(-s * .1, dd * s); g.stroke(); });
+        var sx = s * .5, sy = s * .42, sr = s * .3;
+        g.beginPath();
+        for (var sj = 0; sj < 9; sj++) {
+          var sa2 = sj / 9 * 6.283, sm = sa2 + Math.PI / 9;
+          g.moveTo(sx + Math.cos(sa2) * sr, sy + Math.sin(sa2) * sr);
+          g.arc(sx + Math.cos(sm) * sr * .82, sy + Math.sin(sm) * sr * .82, sr * .42, sm - 1.7, sm + 1.7);
+        }
+        g.stroke();
+        g.beginPath(); g.moveTo(sx - s * .16, sy + sr); g.lineTo(sx - s * .28, sy + sr + s * .5); g.lineTo(sx, sy + sr + s * .34); g.lineTo(sx + s * .28, sy + sr + s * .5); g.lineTo(sx + s * .16, sy + sr); g.closePath(); g.stroke();
+        g.beginPath(); g.arc(sx, sy, sr * .18, 0, 6.283); g.fill();
       } else if (k === 'repo') {
         g.beginPath(); g.moveTo(-s * .6, s * .9); g.lineTo(-s * .6, -s * .7); g.quadraticCurveTo(-s * .6, -s, -s * .3, -s); g.lineTo(s * .6, -s); g.lineTo(s * .6, s * .6);
         g.lineTo(-s * .3, s * .6); g.quadraticCurveTo(-s * .6, s * .6, -s * .6, s * .9); g.lineTo(s * .6, s * .9); g.stroke();
