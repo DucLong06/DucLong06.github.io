@@ -12,19 +12,14 @@
  * so editing src/content/** updates both layers with no 3D code changes.
  */
 import Nav from './Nav.astro';
-import Hero from './Hero.astro';
-import About from './About.astro';
 import Marquee from './Marquee.astro';
 import Experience from './Experience.astro';
 import Skills from './Skills.astro';
 import ProjectsGrid from './ProjectsGrid.astro';
 import Papers from './Papers.astro';
-import GitHubStats from './GitHubStats.astro';
 import Contact from './Contact.astro';
 import Footer from './Footer.astro';
-import QuantumWorldIsland from '../vue/world/QuantumWorldIsland.vue';
-import Scene3DToggle from './Scene3DToggle.astro';
-import { buildWorldStations } from '../../lib/scene/build-world-stations';
+import Metamorphosis from './Metamorphosis.astro';
 import type { Lang } from '../../lib/i18n-helpers';
 
 interface Props {
@@ -32,26 +27,24 @@ interface Props {
   currentPath: string;
 }
 const { lang, currentPath } = Astro.props;
-// Quantum World island is the primary 3D experience. The old R3F island
-// (../react/island/) is kept dormant (not mounted) until this is verified.
-const worldData = await buildWorldStations();
 ---
 
-<QuantumWorldIsland client:only="vue" data={worldData} />
+{/*
+  Metamorphosis (canvas story) replaces the old Hero + About + Stats and the
+  Quantum World 3D island. The classic sections below the track are the
+  SEO/no-JS/a11y baseline — recruiters can still Ctrl+F them.
+*/}
+<Metamorphosis lang={lang} />
 
 <div id="classic-site">
   <Nav lang={lang} />
   <main id="main-content" tabindex="-1">
-    <Hero lang={lang} />
-    <About lang={lang} />
     <Marquee />
     <Experience lang={lang} />
     <Skills lang={lang} />
     <ProjectsGrid id="work" lang={lang} />
     <Papers lang={lang} />
-    <GitHubStats lang={lang} />
     <Contact lang={lang} />
   </main>
   <Footer lang={lang} currentPath={currentPath} />
-  <Scene3DToggle lang={lang} />
 </div>

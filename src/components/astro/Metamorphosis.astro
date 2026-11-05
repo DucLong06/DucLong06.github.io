@@ -1,0 +1,86 @@
+---
+/**
+ * Metamorphosis.astro — full-screen canvas story (name → network → matrix →
+ * expertise → evidence → output), followed by the classic site sections.
+ * Ported from metamorphosis/index.html — see metamorphosis/HANDOFF.md.
+ */
+import type { Lang } from '../lib/i18n-helpers';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const aria =
+  lang === 'vi'
+    ? 'Câu chuyện sự nghiệp của Hoàng Đức Long: tên trở thành mạng lưới kỹ năng, công cụ, hệ thống và kết quả, rồi thành ma trận, các mảng chuyên môn, giải thưởng và repository'
+    : "Animated story of Hoàng Đức Long's career: a name becomes a network of skills, tools, systems and results, then a matrix, expertise tiles, awards and repositories";
+---
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<div id="mm" class="mm" data-lang={lang}>
+  <canvas id="stage" aria-label={aria} role="img"></canvas>
+  <div id="bar"></div>
+  <div id="hud">
+    <span><b id="hl">Hoàng Đức Long</b></span>
+    <span id="hz"></span>
+  </div>
+  <div class="hint" id="hint">scroll<i></i></div>
+  <div id="contact">
+    <span id="email">hoangduclongg@gmail.com</span>
+    <button class="btn" id="copy" type="button">copy</button>
+    <a class="btn y" href="https://duclong06.github.io/cv.pdf">cv.pdf</a>
+    <a class="btn" href="https://github.com/DucLong06">github</a>
+    <a class="btn" href="https://linkedin.com/in/hoangduclong">linkedin</a>
+  </div>
+  <div id="ctl">
+    <button id="prev" type="button" aria-label="Previous">‹</button>
+    <button id="play" type="button" aria-label="Pause" aria-pressed="true">❚❚</button>
+    <button id="next" type="button" aria-label="Next">›</button>
+    <div class="dots" id="dots"></div>
+  </div>
+  <div id="track"><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+</div>
+
+<style>
+  .mm{
+    --mm-bg:#0B0D18; --mm-fg:#F2F2F2; --mm-fg2:#9FA3B5; --mm-line:#23243A;
+    --mm-blue:#58C4DD; --mm-yellow:#FFD24A;
+    --mm-serif:'STIX Two Text',Georgia,'Times New Roman',serif; --mm-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  .mm #stage{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%}
+  .mm #hud{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;gap:12px;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font:12px var(--mm-mono);color:var(--mm-fg2);pointer-events:none;transition:opacity .4s}
+  .mm #hud b{color:var(--mm-yellow);font-weight:500}
+  .mm #bar{position:fixed;left:0;top:env(safe-area-inset-top,0px);height:2px;width:0;background:var(--mm-blue);z-index:6;transition:opacity .4s}
+  .mm #track{position:relative;z-index:1}
+  .mm .step{height:150vh}
+  .mm #ctl{position:fixed;z-index:7;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:6px;padding:6px;background:rgba(11,13,24,.75);border:1px solid var(--mm-line);border-radius:999px;backdrop-filter:blur(8px);transition:opacity .4s}
+  .mm #ctl button{width:36px;height:36px;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--mm-fg);font:500 14px var(--mm-mono);cursor:pointer;display:grid;place-items:center}
+  .mm #ctl button:hover{border-color:var(--mm-line);background:rgba(255,255,255,.04)}
+  .mm #ctl .dots{display:flex;gap:6px;padding:0 6px}
+  .mm #ctl .dots button{width:22px;height:22px}
+  .mm #ctl .dots i{display:block;width:6px;height:6px;border-radius:50%;background:var(--mm-fg2);opacity:.45}
+  .mm #ctl .dots button.on i{background:var(--mm-yellow);opacity:1;transform:scale(1.3)}
+  .mm #contact{position:fixed;z-index:6;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;padding:10px 12px;background:rgba(11,13,24,.8);border:1px solid var(--mm-line);border-radius:10px;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;max-width:calc(100% - 180px)}
+  .mm #contact.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+  .mm #contact span{font:500 14px var(--mm-mono)}
+  .mm .btn{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:6px;font:500 13px var(--mm-mono);text-decoration:none;border:1px solid var(--mm-line);color:var(--mm-fg);background:transparent;cursor:pointer}
+  .mm .btn.y{background:var(--mm-yellow);border-color:var(--mm-yellow);color:#14120A}
+  .mm .btn:hover{border-color:var(--mm-blue)}
+  .mm .hint{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:5;font:12px var(--mm-mono);color:var(--mm-fg2);display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity .4s;pointer-events:none}
+  .mm .hint i{width:1px;height:28px;background:var(--mm-fg2);display:block;animation:mm-drip 1.6s infinite}
+  @keyframes mm-drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+  /* past the story: the classic sections own the viewport — hide the overlay UI and stop painting */
+  .mm.mm-past #stage{opacity:0;pointer-events:none}
+  .mm.mm-past #hud,.mm.mm-past #bar,.mm.mm-past #ctl,.mm.mm-past .hint{opacity:0;pointer-events:none}
+  .mm #stage{transition:opacity .4s}
+  @media (prefers-reduced-motion:reduce){.mm .hint i{animation:none}}
+  @media (max-width:600px){.mm #contact{max-width:calc(100% - 32px);bottom:max(70px,env(safe-area-inset-bottom,0px))}}
+</style>
+
+<script>
+  import { initMM } from '../../scripts/metamorphosis';
+  import { MM } from '../../data/metamorphosis';
+  const root = document.getElementById('mm')!;
+  const lang = (root.dataset.lang === 'vi' ? 'vi' : 'en') as 'en' | 'vi';
+  initMM(root, MM[lang]);
+</script>
