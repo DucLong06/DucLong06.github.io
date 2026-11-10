@@ -1,81 +1,40 @@
 ---
 /**
- * SkillBar.astro — Single skill row with name and filled bar (level/5).
- * Bar fill uses aurora gradient. Label truncated with ellipsis if overlong.
+ * SkillBar.astro — Single skill pill: name + optional yellow years suffix.
+ * `level` is accepted for data-compat but intentionally not displayed.
  */
 interface Props {
   name: string;
-  level: number; // 1–5
+  level?: number;
   years?: number;
 }
-const { name, level, years } = Astro.props;
-const fillPct = Math.round((level / 5) * 100);
+const { name, years } = Astro.props;
 ---
 
-<div class="skill-bar">
-  <div class="skill-bar__label">
-    <span class="skill-bar__name" title={name}>{name}</span>
-    {years && <span class="skill-bar__years">{years}y</span>}
-  </div>
-  <div
-    class="skill-bar__track"
-    role="meter"
-    aria-valuenow={level}
-    aria-valuemin={0}
-    aria-valuemax={5}
-    aria-label={`${name}: level ${level} of 5`}
-  >
-    <div class="skill-bar__fill" style={`width: ${fillPct}%`}></div>
-  </div>
-</div>
+<span class="skill">
+  <span class="skill__name">{name}</span>
+  {years && <span class="skill__years">{years}y</span>}
+</span>
 
 <style>
-  .skill-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
-  .skill-bar__label {
-    display: flex;
-    justify-content: space-between;
+  .skill {
+    display: inline-flex;
     align-items: baseline;
-  }
-
-  .skill-bar__name {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+    gap: 0.35rem;
+    padding: 0.25rem 0.625rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-pill);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 80%;
   }
 
-  .skill-bar__years {
-    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-    font-size: 0.6875rem;
-    color: var(--text-tertiary);
-    flex-shrink: 0;
+  .skill__name {
+    color: var(--text-primary);
   }
 
-  .skill-bar__track {
-    height: 4px;
-    background: var(--border);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-
-  .skill-bar__fill {
-    height: 100%;
-    background: var(--aurora-gradient);
-    border-radius: 999px;
-    transition: width 0.6s var(--ease-soft, ease);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .skill-bar__fill {
-      transition: none;
-    }
+  .skill__years {
+    color: var(--yellow);
   }
 </style>

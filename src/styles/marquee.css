@@ -41,17 +41,17 @@
   display: inline-flex;
   align-items: center;
   padding: 0 1.5rem;
-  font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-secondary);
   white-space: nowrap;
   transition: color var(--duration-fast, 150ms) ease;
   user-select: none;
 }
 
 .marquee__item:hover {
-  color: var(--aurora-1);
+  color: var(--cyan);
 }
 
 /* Separator dot between items */

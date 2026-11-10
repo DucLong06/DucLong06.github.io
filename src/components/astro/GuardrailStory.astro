@@ -1,0 +1,247 @@
+---
+/**
+ * GuardrailStory.astro — the home-page canvas story (4 scenes on a scaled
+ * stage): the name inspected as a request → work history as x · W = ŷ →
+ * expertise as a neural network → repos as modules around a chip.
+ * Ported from guardrail-story/index.html. Text is server-rendered from
+ * src/data/guardrail-story.ts (EN/VI) and positioned by the engine so it
+ * always matches the canvas lines; facts that live elsewhere (years, stars,
+ * GitHub totals) are merged here at build time.
+ */
+import { getEntry, getCollection, type CollectionEntry } from 'astro:content';
+import { GUARDRAIL_STORY, type StoryModule } from '../../data/guardrail-story';
+import { getAllRepoMeta } from '../../lib/github-repo-meta';
+import { getGitHubStats } from '../../lib/github-stats';
+import { PROJECT_REPOS } from '../../../scripts/project-repos.config.mjs';
+import type { Lang } from '../../lib/i18n-helpers';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = GUARDRAIL_STORY[lang];
+
+// Language years from skills/main.yaml — never typed by hand.
+const skills = await getEntry('skills', 'main');
+const years = new Map<string, number | undefined>();
+for (const g of skills!.data.groups) for (const it of g.items) years.set(it.name, it.years);
+
+// Stars (live → cache) and links from the projects collection.
+const repoMeta = await getAllRepoMeta(PROJECT_REPOS);
+const projects = await getCollection('projects');
+const linkOf = (slug: string): string | undefined => {
+  const e = projects.find((p: CollectionEntry<'projects'>) => p.id.replace(/\.(md|mdx)$/, '') === slug);
+  return e?.data.repo ?? e?.data.demo;
+};
+const accentOf = (m: StoryModule): string => {
+  if (m.accent !== 'stars') return m.accent ?? '';
+  const n = repoMeta[m.slug]?.stars;
+  return n && n > 0 ? `★ ${n}` : '';
+};
+
+// GitHub totals + top two languages for the chip core.
+const stats = await getGitHubStats();
+const reposLine = d.chip.reposLine.replace('{repos}', String(stats.totalRepos)).replace('{stars}', String(stats.totalStars));
+const langsLine = stats.topLanguages.slice(0, 2).map((l) => `${l.name} ${Math.round(l.percentage)}%`).join(' · ');
+
+// UTF-8 bytes of each token, e.g. "Hoàng" → 48 6F C3 A0 6E 67
+const hexOf = (w: string) => Array.from(new TextEncoder().encode(w)).map((b) => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
+
+const runtime = { words: d.words, sceneLabels: d.sceneLabels, hud: d.hud };
+const runtimeJson = JSON.stringify(runtime).replace(/</g, '\\u003c');
+const modules = [...d.chip.left.map((m, i) => ({ m, key: `s3-left-${i}` })), ...d.chip.right.map((m, i) => ({ m, key: `s3-right-${i}` }))];
+---
+
+<section class="gs" aria-label={d.aria}>
+  <noscript><style>.gs { display: none; }</style></noscript>
+  <script is:inline type="application/json" class="gs-runtime" set:html={runtimeJson} />
+  <div class="gs-track">
+    <div class="gs-sticky">
+      <div class="gs-stage">
+        <canvas class="gs-canvas" aria-hidden="true"></canvas>
+
+        <!-- Scene 0 · guardrail -->
+        <div class="gs-layer" data-o="0">
+          <div class="gs-abs gs-role" data-gs="role">{d.role}</div>
+          <div class="gs-abs gs-request" data-gs="request">{d.request}</div>
+          <h1 class="gs-h1">
+            <span class="sr-only">{d.name}</span>
+            {d.words.map((_, i) => <span class="gs-abs gs-word" data-gs={`word-${i}`} data-w={i} aria-hidden="true"></span>)}
+          </h1>
+          {d.words.map((w, i) => <div class="gs-abs gs-hex" data-gs={`hex-${i}`} aria-hidden="true">{hexOf(w)}</div>)}
+          {d.tokenLabels.map((t, i) => <div class="gs-abs gs-token" data-gs={`token-${i}`}>{t}</div>)}
+          <div class="gs-abs gs-checks" data-gs="checks">
+            {d.checks.map((c, i) => <span class="gs-check" data-c={i}>{c.label} <b>{c.verdict}</b></span>)}
+            <span class="gs-allow" data-c="4">{d.allow}</span>
+          </div>
+          <p class="gs-abs gs-tagline" data-gs="tagline">{d.tagline}</p>
+        </div>
+
+        <!-- Scene 1 · x · W = ŷ -->
+        <div class="gs-layer" data-o="1">
+          <h2 class="gs-abs gs-h2" data-gs="s1-title">{d.matrix.title}</h2>
+          <div class="gs-abs gs-head" data-gs="s1-head-0"><i>x</i> · {d.matrix.heads[0]}</div>
+          <div class="gs-abs gs-head" data-gs="s1-head-1"><i>W</i> · {d.matrix.heads[1]}</div>
+          <div class="gs-abs gs-head" data-gs="s1-head-2"><i class="y">ŷ</i> · {d.matrix.heads[2]}</div>
+          {d.matrix.rows.map((r, i) => (
+            <>
+              <div class="gs-abs gs-sys" data-gs={`s1-sys-${i}`}>
+                <div class="gs-sys-name">{r.system}</div>
+                <div class="gs-sys-co">{r.company}</div>
+              </div>
+              {r.stack.map((s, j) => <div class="gs-abs gs-cell" data-gs={`s1-cell-${i}-${j}`}>{s}</div>)}
+              <div class="gs-abs gs-res" data-gs={`s1-res-${i}`}>{r.result}</div>
+            </>
+          ))}
+        </div>
+
+        <!-- Scene 2 · network -->
+        <div class="gs-layer" data-o="2">
+          <h2 class="gs-abs gs-h2" data-gs="s2-title">{d.network.title}</h2>
+          {d.network.heads.map((h, i) => <div class="gs-abs gs-nhead" data-gs={`s2-head-${i}`}>{h}</div>)}
+          <div class="gs-abs gs-nhead y" data-gs="s2-head-3">ŷ</div>
+          {d.network.languages.map((n, i) => (
+            <div class="gs-abs gs-lang" data-gs={`s2-lang-${i}`}>{n}{years.get(n) ? <> <span class="y">{years.get(n)}y</span></> : null}</div>
+          ))}
+          {d.network.build.map((l, i) => <div class="gs-abs gs-node-label" data-gs={`s2-build-${i}`}><span>{l}</span></div>)}
+          {d.network.ship.map((l, i) => <div class="gs-abs gs-node-label" data-gs={`s2-ship-${i}`}><span>{l}</span></div>)}
+          <div class="gs-abs gs-node-label y" data-gs="s2-out"><span>{d.network.output}</span></div>
+        </div>
+
+        <!-- Scene 3 · chip -->
+        <div class="gs-layer" data-o="3">
+          <h2 class="gs-abs gs-h2" data-gs="s3-title">{d.chip.title}</h2>
+          {modules.map(({ m, key }) => {
+            const href = linkOf(m.slug);
+            const accent = accentOf(m);
+            return (
+              <div class="gs-abs gs-mod" data-gs={key}>
+                <div class="gs-mod-name">{href ? <a href={href} target="_blank" rel="noopener noreferrer">{m.name}</a> : m.name}</div>
+                <div class="gs-mod-meta">{m.meta}{accent && <> · <span class="y">{accent}</span></>}</div>
+              </div>
+            );
+          })}
+          <div class="gs-abs gs-core" data-gs="s3-core">
+            <div class="gs-core-handle">{d.chip.handle}</div>
+            <div>{reposLine}</div>
+            <div>{langsLine}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gs-label" aria-live="polite"></div>
+      <div class="gs-hud"></div>
+      <div class="gs-ctl">
+        <button type="button" class="gs-prev" aria-label={d.hud.prev}>‹</button>
+        <button type="button" class="gs-toggle" aria-pressed="true"></button>
+        <button type="button" class="gs-next" aria-label={d.hud.next}>›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gs { position: relative; background: var(--bg-base); color: var(--text-primary); }
+  .gs-track { position: relative; height: calc(100vh * 5); height: calc(100svh * 5); }
+  .gs-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: var(--bg-base); }
+  .gs-stage {
+    position: absolute; left: 50%; top: 50%; width: 1280px; height: 720px;
+    transform: translate(-50%, -50%) scale(var(--gs-k, 1)); transform-origin: center;
+    font: 13px/1.45 var(--font-mono); color: var(--text-primary); will-change: transform;
+  }
+  .gs-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .gs-layer { position: absolute; inset: 0; opacity: 0; transition: opacity .5s; }
+  .gs-abs { position: absolute; box-sizing: border-box; }
+  .y { color: var(--yellow); }
+
+  /* scene 0 */
+  .gs-role { text-align: center; font-weight: 500; letter-spacing: .08em; color: var(--cyan); }
+  .gs-request { font-size: 12px; color: var(--yellow); white-space: nowrap; }
+  .gs-h1 { margin: 0; font-size: 0; }
+  .gs-word { display: flex; align-items: center; justify-content: center; font: 600 84px/1 var(--font-serif); white-space: nowrap; color: var(--text-primary); }
+  .gs-hex { text-align: center; color: var(--yellow); white-space: nowrap; }
+  .gs-token { text-align: center; color: var(--text-secondary); font-size: 12px; }
+  .gs-checks { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; align-content: center; gap: 10px; font-size: 12px; }
+  .gs-check { padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg-base); transition: opacity .3s; opacity: 0; white-space: nowrap; }
+  .gs-check b { color: var(--green); font-weight: 500; }
+  .gs-allow { padding: 6px 14px; border-radius: 999px; background: var(--yellow); color: var(--yellow-ink); font-weight: 700; transition: opacity .3s; opacity: 0; white-space: nowrap; }
+  .gs-tagline { margin: 0; text-align: center; font: 400 21px/1.4 var(--font-serif); color: var(--text-soft); }
+
+  /* scenes 1–3 shared */
+  .gs-h2 { margin: 0; font: 400 36px/1.1 var(--font-serif); color: var(--text-primary); white-space: nowrap; }
+  .gs-head { text-align: center; color: var(--text-secondary); font-size: 12px; white-space: nowrap; }
+  .gs-head i { font: italic 400 18px var(--font-serif); color: var(--text-primary); }
+  .gs-head i.y { color: var(--yellow); }
+
+  /* scene 1 */
+  .gs-sys { display: flex; flex-direction: column; justify-content: center; padding: 0 22px; }
+  .gs-sys-name { font: 400 19px/1.2 var(--font-serif); }
+  .gs-sys-co { color: var(--text-secondary); font-size: 11px; }
+  .gs-cell { display: flex; align-items: center; justify-content: center; font-size: 12px; text-align: center; }
+  .gs-res { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--yellow); font-size: 14px; padding: 0 6px; }
+
+  /* scene 2 */
+  .gs-nhead { text-align: center; font: italic 400 18px var(--font-serif); color: var(--text-secondary); white-space: nowrap; }
+  .gs-nhead.y { color: var(--yellow); }
+  .gs-lang { text-align: right; white-space: nowrap; }
+  .gs-node-label { text-align: center; white-space: nowrap; }
+  .gs-node-label span { background: var(--bg-base); padding: 2px 8px; }
+
+  /* scene 3 */
+  .gs-mod { padding: 18px 20px; overflow: hidden; }
+  .gs-mod-name { color: var(--cyan); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gs-mod-name a { color: inherit; }
+  .gs-mod-name a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .gs-mod-meta { margin-top: 8px; color: var(--text-secondary); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gs-core { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; color: var(--text-secondary); font-size: 11px; }
+  .gs-core-handle { font: 600 22px/1.1 var(--font-serif); color: var(--text-primary); }
+
+  /* HUD + controls live outside the scaled stage so they keep real pixel sizes */
+  .gs-label, .gs-hud { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); font-size: 12px; pointer-events: none; }
+  .gs-label { left: max(16px, env(safe-area-inset-left, 0px)); font-weight: 500; color: var(--yellow); }
+  .gs-hud { right: max(16px, env(safe-area-inset-right, 0px)); color: var(--text-secondary); }
+  .gs-ctl {
+    position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    display: flex; align-items: center; gap: 4px; padding: 4px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg-elevated);
+  }
+  .gs-ctl button { height: 44px; border-radius: 999px; border: 0; background: transparent; color: var(--text-primary); font: 500 16px var(--font-mono); cursor: pointer; }
+  .gs-prev, .gs-next { width: 44px; }
+  .gs-toggle { min-width: 64px; padding: 0 12px; color: var(--yellow); font-size: 12px; }
+  .gs-ctl button:hover { background: var(--bg-subtle); }
+  .gs-toggle[hidden] { display: none; }
+
+  /* compact (portrait / phone) stage — positions come from layout-compact.ts */
+  .gs--compact .gs-stage { font-size: 12px; }
+  .gs--compact .gs-role { font-size: 11px; letter-spacing: .06em; line-height: 1.4; }
+  .gs--compact .gs-request { font-size: 11px; }
+  .gs--compact .gs-word { font-size: 56px; }
+  .gs--compact .gs-hex { font-size: 11px; }
+  .gs--compact .gs-token { font-size: 10.5px; }
+  .gs--compact .gs-checks { gap: 6px; font-size: 11px; }
+  .gs--compact .gs-check, .gs--compact .gs-allow { padding: 4px 9px; }
+  .gs--compact .gs-tagline { font-size: 15px; }
+  .gs--compact .gs-h2 { font-size: 24px; white-space: normal; }
+  .gs--compact .gs-head { font-size: 11px; }
+  .gs--compact .gs-head i { font-size: 14px; }
+  .gs--compact .gs-sys { padding: 0 8px; }
+  .gs--compact .gs-sys-name { font-size: 13px; line-height: 1.15; }
+  .gs--compact .gs-sys-co { font-size: 10px; }
+  .gs--compact .gs-cell { font-size: 10.5px; }
+  .gs--compact .gs-res { font-size: 12px; line-height: 1.25; padding: 0 4px; }
+  .gs--compact .gs-nhead { font-size: 14px; text-align: left; }
+  .gs--compact .gs-lang { text-align: center; font-size: 11px; }
+  .gs--compact .gs-node-label { font-size: 11px; }
+  .gs--compact .gs-node-label span { padding: 1px 6px; }
+  .gs--compact .gs-mod { padding: 10px; }
+  .gs--compact .gs-mod-name { font-size: 10px; }
+  .gs--compact .gs-mod-meta { margin-top: 6px; font-size: 10.5px; }
+  .gs--compact .gs-core { font-size: 10px; gap: 4px; }
+  .gs--compact .gs-core-handle { font-size: 18px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gs-layer, .gs-check, .gs-allow { transition: none; }
+  }
+</style>
+
+<script>
+  import { initGuardrailStory } from '../../scripts/guardrail-story';
+  document.querySelectorAll<HTMLElement>('.gs').forEach(initGuardrailStory);
+</script>

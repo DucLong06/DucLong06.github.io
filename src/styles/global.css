@@ -15,20 +15,19 @@
 }
 
 html {
-  /* Smooth scrolling — overridden by lenis in Phase 07 */
   scroll-behavior: smooth;
   /* Prevent layout shift from scrollbar appearing */
   scrollbar-gutter: stable;
-  /* iOS text size adjust */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  background-color: var(--bg-base);
+  color-scheme: dark;
 }
 
 body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   min-height: 100dvh;
-  /* Anti-aliasing for sharp text */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -56,10 +55,10 @@ p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }
 
-/* Focus ring — accessible, aurora-tinted */
+/* Focus ring — yellow, matches the story's controls */
 :focus-visible {
-  outline: 2px solid var(--aurora-1);
-  outline-offset: 3px;
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
   border-radius: var(--r-sm);
 }
 
@@ -98,7 +97,7 @@ a {
 /* ─── SELECTION ─────────────────────────────────────────────────────────────── */
 
 ::selection {
-  background-color: rgba(99, 102, 241, 0.18);
+  background-color: rgba(88, 196, 221, 0.28);
   color: var(--text-primary);
 }
 
@@ -108,7 +107,7 @@ a {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-subtle);
+  background: var(--bg-base);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border-strong);
@@ -116,13 +115,4 @@ a {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
-}
-
-/* ─── THEME TRANSITION ──────────────────────────────────────────────────────── */
-
-/* Smooth color swap when toggling theme (skipped on first paint by init script) */
-html.theme-ready {
-  transition:
-    background-color var(--duration-base) var(--ease-soft),
-    color var(--duration-base) var(--ease-soft);
 }

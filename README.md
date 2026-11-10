@@ -1,18 +1,17 @@
 # Hoàng Đức Long — Portfolio
 
-Personal portfolio for Hoàng Đức Long (Full-Stack Developer & Computer Science student at EPU). Built with **Astro 5 + React islands** featuring a **3D neon-glass "Quantum Data World"** as the primary 3D experience. Interactive Quantum Core (About) at center surrounded by 5 compass-ring structures (Experience/Skills/Projects/Papers/Contact) rendered via three.js WebGL. Full-content HTML bodies rendered at build time, shipped as scene payloads. Fully static, ships near-zero client JS by default, supports EN/VI i18n, and auto-deploys to GitHub Pages on every push to `master`.
+Personal portfolio for Hoàng Đức Long (full-stack AI engineer). Built with **Astro 5**. The home page opens with the **Guardrail Story** — a framework-free canvas that tells the career in four scenes (name inspected as an API request → work history as `x · W = ŷ` → expertise as a neural network → repos as modules around a chip), followed by the classic sections (Experience, Skills, Projects, Papers, Contact) in the same flat dark language. Fully static, EN/VI i18n, auto-deploys to GitHub Pages on every push to `master`. Design rules: `docs/design-guidelines.md`.
 
 ## Stack
 
 | Layer | Technology |
 |---|---|
 | Framework | Astro 5 (static output) |
-| UI islands | React 18 + Vue 3 (Quantum Data World primary island) |
-| Styling | Tailwind CSS v3 |
-| 3D Graphics | three.js (imperative for Quantum World in Vue) + @react-three/fiber + @react-three/drei (dormant R3F fallback) |
-| 3D Assets (Classic Fallback) | OGL (WebGL liquid gradient mesh hero) |
-| Animation | framer-motion |
-| Fonts | @fontsource + @fontsource/bitcount + @fontsource/space-grotesk (self-hosted, no Google CDN) |
+| Home story | Canvas 2D, framework-free (`src/scripts/guardrail-story/`), text in `src/data/guardrail-story.ts` |
+| UI islands | React 18 (LangToggle, TimelineAnimated, MagneticTilt); Vue/R3F 3D islands kept dormant |
+| Styling | Tailwind CSS v3 over CSS tokens (`src/styles/tokens.css`), dark only |
+| Animation | framer-motion (timeline reveal) |
+| Fonts | @fontsource/stix-two-text + @fontsource-variable/jetbrains-mono (self-hosted, no Google CDN) |
 | OG images | satori (edge-rendered at build time) |
 | i18n | Astro native i18n (EN default, `/vi/` prefix) |
 | Deployment | GitHub Actions → GitHub Pages native |
@@ -90,7 +89,7 @@ DucLong06.github.io/
 
 - [ ] Smoke test: `/`, `/vi/`, `/projects/*`, `/cv.pdf`, `/sitemap-index.xml`, `/robots.txt`
 - [ ] 404 page renders for unknown routes
-- [ ] Theme toggle persists across reload
+- [ ] Story plays on `/` and `/vi/`; prev / pause / next work; readable at 390px
 - [ ] Lang toggle preserves current path
 - [ ] OG preview valid (LinkedIn Post Inspector)
 - [ ] Lighthouse ≥ 95 on live URL

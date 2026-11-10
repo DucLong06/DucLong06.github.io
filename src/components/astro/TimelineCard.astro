@@ -73,8 +73,8 @@ const end   = periodEnd ? fmtPeriod(periodEnd) : presentLabel;
     width: 0.625rem;
     height: 0.625rem;
     border-radius: 50%;
-    background: var(--aurora-gradient);
-    box-shadow: 0 0 0 3px var(--bg-base), 0 0 0 4px var(--aurora-1);
+    background: var(--cyan);
+    box-shadow: 0 0 0 3px var(--bg-base);
     flex-shrink: 0;
   }
 
@@ -83,7 +83,6 @@ const end   = periodEnd ? fmtPeriod(periodEnd) : presentLabel;
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
   }
 
   .timeline-card__header {
@@ -96,9 +95,8 @@ const end   = periodEnd ? fmtPeriod(periodEnd) : presentLabel;
   }
 
   .timeline-card__company {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    font-size: 1.25rem;
+    font-family: var(--font-serif);
+    font-size: 1.1875rem;
     font-weight: 400;
     color: var(--text-primary);
     margin: 0 0 0.2rem;
@@ -106,15 +104,16 @@ const end   = periodEnd ? fmtPeriod(periodEnd) : presentLabel;
 
   .timeline-card__role {
     display: block;
-    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     font-weight: 500;
-    color: var(--aurora-1);
+    color: var(--cyan);
   }
 
   .timeline-card__period {
-    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
     white-space: nowrap;
     flex-shrink: 0;
   }
@@ -130,27 +129,27 @@ const end   = periodEnd ? fmtPeriod(periodEnd) : presentLabel;
   }
 
   .stack-pill {
-    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-family: var(--font-mono);
     font-size: 0.6875rem;
     font-weight: 500;
     padding: 0.2rem 0.6rem;
-    background: var(--bg-subtle);
+    background: transparent;
     border: 1px solid var(--border);
-    border-radius: var(--r-sm);
+    border-radius: var(--r-pill);
     color: var(--text-secondary);
   }
 
-  /* Prose content */
+  /* Prose content (serif via .prose) */
   .timeline-card__content {
+    font-family: var(--font-serif);
     color: var(--text-secondary);
     font-size: 0.9375rem;
     line-height: 1.7;
   }
 
   .timeline-card__content :global(h2) {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    font-size: 1.05rem;
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
     font-weight: 400;
     color: var(--text-primary);
     margin: 1.25rem 0 0.5rem;
@@ -175,7 +174,7 @@ const end   = periodEnd ? fmtPeriod(periodEnd) : presentLabel;
   }
 
   .timeline-card__content :global(a) {
-    color: var(--aurora-1);
+    color: var(--cyan);
     text-underline-offset: 3px;
   }
 </style>

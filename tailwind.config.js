@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  // Dark mode via data-theme attribute on <html>
-  darkMode: ['class', '[data-theme="dark"]'],
+  // Dark only — no theme toggle, no light palette.
   theme: {
     extend: {
       // ── Font families ────────────────────────────────────────────────────────
       fontFamily: {
         display: 'var(--font-display)',
+        serif:   'var(--font-serif)',
         body:    'var(--font-body)',
         mono:    'var(--font-mono)',
       },
@@ -28,12 +28,9 @@ export default {
           DEFAULT: 'var(--border)',
           strong:  'var(--border-strong)',
         },
-        aurora: {
-          1: 'var(--aurora-1)',
-          2: 'var(--aurora-2)',
-          3: 'var(--aurora-3)',
-          4: 'var(--aurora-4)',
-        },
+        cyan:   'var(--cyan)',
+        yellow: 'var(--yellow)',
+        green:  'var(--green)',
         accent: {
           DEFAULT: 'var(--accent)',
           hover:   'var(--accent-hover)',

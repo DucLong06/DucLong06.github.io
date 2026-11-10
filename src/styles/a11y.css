@@ -13,19 +13,19 @@
   left: 0;
   z-index: 9999;
   padding: 0.75rem 1.5rem;
-  background: var(--aurora-1, #6366f1);
-  color: #fff;
-  font-size: 0.9375rem;
+  background: var(--yellow, #FFD24A);
+  color: var(--yellow-ink, #14120A);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8125rem;
   font-weight: 600;
   text-decoration: none;
-  border-radius: 0 0 var(--r-sm, 6px) 0;
-  /* Smooth slide-in on focus */
+  border-radius: 0 0 var(--r-sm, 4px) 0;
   transition: top 0.15s ease;
 }
 
 .skip-link:focus {
   top: 0;
-  outline: 3px solid #fff;
+  outline: 3px solid var(--text-primary, #F2F2F2);
   outline-offset: -3px;
 }
 
@@ -33,9 +33,22 @@
 /* Reinforces global.css :focus-visible — kept in sync here as canonical source */
 
 :focus-visible {
-  outline: 2px solid var(--aurora-1, #6366f1);
+  outline: 2px solid var(--yellow, #FFD24A);
   outline-offset: 2px;
   border-radius: var(--r-sm, 4px);
+}
+
+/* ─── VISUALLY HIDDEN ────────────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ─── REDUCED-MOTION: disable smooth scroll ─────────────────────────────────── */
