@@ -27,22 +27,21 @@ const { eyebrow, title, align = 'left' } = Astro.props;
 
   .section-title__eyebrow {
     display: block;
-    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
-    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
     font-weight: 500;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--aurora-1);
+    color: var(--cyan);
     margin-bottom: 0.5rem;
   }
 
   .section-title__heading {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic;
-    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-family: var(--font-serif);
+    font-size: clamp(1.625rem, 3vw, 2.25rem);
     font-weight: 400;
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
     margin: 0;
   }

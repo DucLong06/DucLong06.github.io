@@ -40,8 +40,9 @@ export default function LangToggle() {
         borderRadius: 'var(--r-sm)',
         border: '1px solid var(--border)',
         overflow: 'hidden',
+        fontFamily: 'var(--font-mono)',
         fontSize: '0.75rem',
-        fontWeight: 600,
+        fontWeight: 500,
         letterSpacing: '0.04em',
       }}
     >
@@ -54,7 +55,7 @@ export default function LangToggle() {
           style={{
             padding: '0.25rem 0.625rem',
             background: activeLang === l ? 'var(--bg-subtle)' : 'transparent',
-            color: activeLang === l ? 'var(--text-primary)' : 'var(--text-tertiary)',
+            color: activeLang === l ? 'var(--text-primary)' : 'var(--text-secondary)',
             border: 'none',
             cursor: 'pointer',
             transition: 'background-color 150ms, color 150ms',

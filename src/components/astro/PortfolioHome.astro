@@ -2,14 +2,11 @@
 /**
  * PortfolioHome.astro — Shared home body for EN (/) and VI (/vi/).
  *
- * Renders TWO layers:
- *   1. The 3D island (React island, client:only) — progressive enhancement.
- *   2. The full server-rendered 2D site inside #classic-site — the SEO/no-JS/
- *      a11y baseline. When the 3D layer mounts it adds `html.scene-3d-active`
- *      and global CSS hides #classic-site.
- *
- * The 3D popups read from the SAME content collections (via buildSceneData),
- * so editing src/content/** updates both layers with no 3D code changes.
+ * Two parts, top to bottom:
+ *   1. <GuardrailStory> — the scroll/autoplay canvas story (name as an inspected
+ *      request → x · W = ŷ → network → chip). Text is server-rendered.
+ *   2. The classic sections inside #classic-site — Experience, Skills, Projects,
+ *      Papers, Contact — the SEO/no-JS/a11y baseline, all from src/content/**.
  */
 import Nav from './Nav.astro';
 import Marquee from './Marquee.astro';
@@ -19,7 +16,7 @@ import ProjectsGrid from './ProjectsGrid.astro';
 import Papers from './Papers.astro';
 import Contact from './Contact.astro';
 import Footer from './Footer.astro';
-import Metamorphosis from './Metamorphosis.astro';
+import GuardrailStory from './GuardrailStory.astro';
 import type { Lang } from '../../lib/i18n-helpers';
 
 interface Props {
@@ -30,11 +27,11 @@ const { lang, currentPath } = Astro.props;
 ---
 
 {/*
-  Metamorphosis (canvas story) replaces the old Hero + About + Stats and the
-  Quantum World 3D island. The classic sections below the track are the
-  SEO/no-JS/a11y baseline — recruiters can still Ctrl+F them.
+  Guardrail Story (canvas) replaces Metamorphosis as the home-page opener.
+  The classic sections below the track are the SEO/no-JS/a11y baseline —
+  recruiters can still Ctrl+F them.
 */}
-<Metamorphosis lang={lang} />
+<GuardrailStory lang={lang} />
 
 <div id="classic-site">
   <Nav lang={lang} />

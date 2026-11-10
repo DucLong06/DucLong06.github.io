@@ -1,108 +1,66 @@
 /*
- * tokens.css — "Soft Aurora" Design System
- * Single source of truth for all CSS custom properties.
- * Tailwind reads from these vars via tailwind.config.js.
- *
- * Token groups:
- *   --bg-*         Surface colors
- *   --text-*       Foreground colors
- *   --border, --border-strong  Border alpha values
- *   --aurora-*     Accent / gradient palette (indigo, violet, cyan, pink)
- *   --accent-*     Semantic accent shortcuts
- *   --success, --warning  Status colors
- *   --r-*          Border radii
- *   --shadow-*     Box shadows (multi-layer with aurora tint)
- *   --ease-soft    Motion easing
+ * tokens.css — "Guardrail" design system (dark only)
+ * Single source of truth for all CSS custom properties. Tailwind reads these
+ * via tailwind.config.js. Palette mirrors the Guardrail Story canvas:
+ *   background #0B0D18 · text #F2F2F2 · secondary #9FA3B5 · lines #23243A
+ *   cyan #58C4DD · yellow #FFD24A · pass-green #7DDB9C
+ * There is no light theme and no theme toggle.
  */
 
-/* ─── LIGHT MODE (default) ─────────────────────────────────────────────────── */
 :root {
   /* Surfaces */
-  --bg-base:        #fafaf9;
-  --bg-elevated:    #ffffff;
-  --bg-subtle:      #f4f4f2;
+  --bg-base:        #0B0D18;
+  --bg-elevated:    #0F1220;   /* control pill / card surface */
+  --bg-subtle:      #141729;   /* hover / chip surface */
 
   /* Text */
-  --text-primary:   #0a0a0b;
-  --text-secondary: #52525b;
-  --text-tertiary:  #a1a1aa;
+  --text-primary:   #F2F2F2;
+  --text-secondary: #9FA3B5;
+  --text-tertiary:  #6E7390;   /* captions only — not for body copy */
+  --text-soft:      #C9CCDA;   /* long serif paragraphs (story tagline) */
 
-  /* Borders */
-  --border:         rgba(10, 10, 11, 0.08);
-  --border-strong:  rgba(10, 10, 11, 0.14);
+  /* Lines */
+  --border:         #23243A;
+  --border-strong:  #343656;
 
-  /* Aurora accents — unchanged across modes */
-  --aurora-1:       #6366f1;  /* indigo */
-  --aurora-2:       #8b5cf6;  /* violet */
-  --aurora-3:       #06b6d4;  /* cyan */
-  --aurora-4:       #f472b6;  /* soft pink */
-  --aurora-gradient: linear-gradient(
-    135deg,
-    var(--aurora-1) 0%,
-    var(--aurora-2) 50%,
-    var(--aurora-3) 100%
-  );
+  /* Accents */
+  --cyan:           #58C4DD;
+  --cyan-soft:      #D6F4FB;
+  --cyan-hover:     #7FD6E8;
+  --yellow:         #FFD24A;
+  --yellow-soft:    #FFF1B8;
+  --yellow-ink:     #14120A;   /* text on a yellow fill */
+  --green:          #7DDB9C;   /* guardrail "pass" */
 
-  /* Semantic accents */
-  --accent:         var(--aurora-1);
-  --accent-hover:   #4f46e5;
+  /* Semantic shortcuts */
+  --accent:         var(--cyan);
+  --accent-hover:   var(--cyan-hover);
+  --success:        var(--green);
+  --warning:        var(--yellow);
 
-  /* Status */
-  --success:        #10b981;
-  --warning:        #f59e0b;
+  /* Legacy aliases — older components referenced the aurora palette.
+     Kept so nothing breaks; new code should use the names above. */
+  --aurora-1:       var(--cyan);
+  --aurora-2:       var(--yellow);
+  --aurora-3:       var(--cyan);
+  --aurora-4:       var(--yellow);
+  --aurora-gradient: var(--cyan);   /* flat — gradients are gone */
 
-  /* Radii */
-  --r-sm:  6px;
-  --r-md:  12px;
-  --r-lg:  20px;
-  --r-xl:  28px;
+  /* Radii — tight, flat UI */
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   10px;
+  --r-xl:   14px;
+  --r-pill: 999px;
 
-  /* Shadows (multi-layer, soft, aurora-tinted) */
-  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.04),
-                0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.04),
-                   0 8px 24px rgba(0, 0, 0, 0.06),
-                   0 24px 48px rgba(99, 102, 241, 0.08);
+  /* Shadows — none; depth comes from 1px lines */
+  --shadow-sm:     none;
+  --shadow-md:     none;
+  --shadow-aurora: none;
 
   /* Motion */
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast:   150ms;
   --duration-base:   250ms;
   --duration-slow:   400ms;
-}
-
-/* ─── DARK MODE ─────────────────────────────────────────────────────────────── */
-[data-theme="dark"] {
-  /* Surfaces */
-  --bg-base:        #0b0b0f;
-  --bg-elevated:    #12121a;
-  --bg-subtle:      #18181f;
-
-  /* Text */
-  --text-primary:   #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-tertiary:  #52525b;
-
-  /* Borders */
-  --border:         rgba(255, 255, 255, 0.08);
-  --border-strong:  rgba(255, 255, 255, 0.14);
-
-  /* Aurora: same hues, glow enhanced on dark */
-  --aurora-1:       #6366f1;
-  --aurora-2:       #8b5cf6;
-  --aurora-3:       #06b6d4;
-  --aurora-4:       #f472b6;
-
-  /* Semantic accents */
-  --accent:         var(--aurora-1);
-  --accent-hover:   #818cf8;
-
-  /* Shadows gain more alpha on dark */
-  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.16);
-  --shadow-md:  0 1px 2px rgba(0, 0, 0, 0.16),
-                0 8px 24px rgba(0, 0, 0, 0.24);
-  --shadow-aurora: 0 1px 2px rgba(0, 0, 0, 0.16),
-                   0 8px 24px rgba(0, 0, 0, 0.24),
-                   0 24px 48px rgba(99, 102, 241, 0.16);
 }

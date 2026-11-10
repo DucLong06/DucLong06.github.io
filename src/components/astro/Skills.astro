@@ -2,7 +2,7 @@
 /**
  * Skills.astro — Skills section with 6 groups in 2-col grid.
  * Data from skills/main.yaml via getEntry('skills', 'main').
- * Each group renders SkillBar items (level 1–5, aurora gradient fill).
+ * Each group renders SkillBar pills (name + optional years).
  */
 import { getEntry } from 'astro:content';
 import SectionTitle from './SectionTitle.astro';
@@ -57,7 +57,7 @@ const groups = skillsData!.data.groups as Array<{
   .skills-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 1.25rem;
   }
 
   @media (min-width: 768px) {
@@ -71,17 +71,16 @@ const groups = skillsData!.data.groups as Array<{
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
   }
 
   .skill-group__title {
-    font-family: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+    font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--aurora-1);
-    margin: 0 0 1.25rem;
+    color: var(--cyan);
+    margin: 0 0 1rem;
   }
 
   .skill-group__list {
@@ -89,7 +88,7 @@ const groups = skillsData!.data.groups as Array<{
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 </style>

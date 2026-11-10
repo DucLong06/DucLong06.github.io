@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoàng Đức Long — guardrail story demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#0B0D18;overflow:hidden}
+#fit{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center}
+button:focus-visible,a:focus-visible{outline:2px solid #FFD24A;outline-offset:2px}
+</style>
+</head>
+<body>
+<!--
+  Standalone reference build of the "guardrail story" (4 scenes on a fixed 1280x720 stage):
+    0 guardrail  - name as a request: particles form the letters, scan beam decodes them, checks pass
+    1 x . W = y  - work history as a matrix product
+    2 network    - expertise as a neural network
+    3 chip       - open-source repos as modules around a chip
+  All drawing is in class Component (build = geometry per scene, begin = retarget particles,
+  frame = render loop). Text lives in the DOM layers and is positioned to match the geometry.
+-->
+<div id="fit">
+<div style="position: relative; width: 1280px; height: 720px; overflow: hidden; background: #0B0D18; color: #F2F2F2; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px">
+
+<canvas id="cv" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 1280px; height: 720px"></canvas>
+
+<div style="position: absolute; left: 16px; top: 14px; font-size: 12px; font-weight: 500; color: #FFD24A" id="label"></div>
+<div style="position: absolute; right: 16px; top: 14px; font-size: 12px; color: #9FA3B5" id="hud"></div>
+
+<div style="position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transition: opacity .5s; opacity: 0" data-o="0">
+<div style="position: absolute; left: 0; top: 186px; width: 1280px; text-align: center; font-size: 13px; font-weight: 500; letter-spacing: .08em; color: #58C4DD">AI GATEWAY &amp; GUARDRAIL LEAD · FULL-STACK AI ENGINEER · HÀ NỘI</div>
+<div style="position: absolute; left: 150px; top: 208px; font-size: 12px; color: #FFD24A">POST /v1/identity · inspecting request</div>
+<div style="position: absolute; left: 0; top: 490px; width: 1280px; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 12px">
+<span style="padding: 6px 12px; border: 1px solid #23243A; border-radius: 999px; background: #0B0D18; transition: opacity .3s; opacity: 0" data-c="0">prompt injection <b style="color: #7DDB9C; font-weight: 500">pass</b></span>
+<span style="padding: 6px 12px; border: 1px solid #23243A; border-radius: 999px; background: #0B0D18; transition: opacity .3s; opacity: 0" data-c="1">PII leak <b style="color: #7DDB9C; font-weight: 500">pass</b></span>
+<span style="padding: 6px 12px; border: 1px solid #23243A; border-radius: 999px; background: #0B0D18; transition: opacity .3s; opacity: 0" data-c="2">jailbreak <b style="color: #7DDB9C; font-weight: 500">pass</b></span>
+<span style="padding: 6px 12px; border: 1px solid #23243A; border-radius: 999px; background: #0B0D18; transition: opacity .3s; opacity: 0" data-c="3">policy <b style="color: #7DDB9C; font-weight: 500">pass</b></span>
+<span style="padding: 6px 14px; border-radius: 999px; background: #FFD24A; color: #14120A; font-weight: 700; transition: opacity .3s; opacity: 0" data-c="4">200 · ALLOW</span>
+</div>
+<h1 style="margin: 0; font-size: 0">
+<span style="position: absolute; left: 170px; top: 250px; width: 300px; height: 140px; display: flex; align-items: center; justify-content: center; font: 600 84px/1 'STIX Two Text', Georgia, serif; white-space: nowrap" data-w="0"></span>
+<span style="position: absolute; left: 490px; top: 250px; width: 300px; height: 140px; display: flex; align-items: center; justify-content: center; font: 600 84px/1 'STIX Two Text', Georgia, serif; white-space: nowrap" data-w="1"></span>
+<span style="position: absolute; left: 810px; top: 250px; width: 300px; height: 140px; display: flex; align-items: center; justify-content: center; font: 600 84px/1 'STIX Two Text', Georgia, serif; white-space: nowrap" data-w="2"></span>
+</h1>
+<div style="position: absolute; left: 170px; top: 420px; width: 300px; text-align: center; color: #FFD24A">48 6F C3 A0 6E 67</div>
+<div style="position: absolute; left: 490px; top: 420px; width: 300px; text-align: center; color: #FFD24A">C4 90 E1 BB A9 63</div>
+<div style="position: absolute; left: 810px; top: 420px; width: 300px; text-align: center; color: #FFD24A">4C 6F 6E 67</div>
+<div style="position: absolute; left: 170px; top: 446px; width: 300px; text-align: center; color: #9FA3B5; font-size: 12px">token 0 · family name</div>
+<div style="position: absolute; left: 490px; top: 446px; width: 300px; text-align: center; color: #9FA3B5; font-size: 12px">token 1 · middle name</div>
+<div style="position: absolute; left: 810px; top: 446px; width: 300px; text-align: center; color: #9FA3B5; font-size: 12px">token 2 · given name</div>
+<p style="position: absolute; left: 240px; top: 556px; width: 800px; margin: 0; text-align: center; font: 400 21px/1.4 'STIX Two Text', Georgia, serif; color: #C9CCDA">Seven years of machine learning, told by one picture that keeps changing.</p>
+</div>
+
+<div style="position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transition: opacity .6s; opacity: 0" data-o="1">
+<h2 style="position: absolute; left: 120px; top: 60px; margin: 0; font: 400 36px/1.1 'STIX Two Text', Georgia, serif">Where I've shipped things</h2>
+<div style="position: absolute; left: 120px; top: 150px; width: 280px; text-align: center; color: #9FA3B5; font-size: 12px"><i style="font: italic 400 18px 'STIX Two Text', Georgia, serif; color: #F2F2F2">x</i> · systems</div>
+<div style="position: absolute; left: 470px; top: 150px; width: 360px; text-align: center; color: #9FA3B5; font-size: 12px"><i style="font: italic 400 18px 'STIX Two Text', Georgia, serif; color: #F2F2F2">W</i> · stack</div>
+<div style="position: absolute; left: 900px; top: 150px; width: 260px; text-align: center; color: #9FA3B5; font-size: 12px"><i style="font: italic 400 18px 'STIX Two Text', Georgia, serif; color: #FFD24A">ŷ</i> · results</div>
+
+<div style="position: absolute; left: 120px; top: 200px; height: 80px; display: flex; align-items: center">
+<div style="width: 280px; box-sizing: border-box; padding: 0 22px"><div style="font: 400 19px/1.2 'STIX Two Text', Georgia, serif">GitLab review bot</div><div style="color: #9FA3B5; font-size: 11px">FPT Telecom</div></div>
+<div style="width: 70px"></div>
+<div style="width: 120px; text-align: center; font-size: 12px">Langchain</div><div style="width: 120px; text-align: center; font-size: 12px">SAST</div><div style="width: 120px; text-align: center; font-size: 12px">FastAPI</div>
+<div style="width: 70px"></div>
+<div style="width: 260px; text-align: center; color: #FFD24A; font-size: 14px">6,000 MRs / month</div>
+</div>
+<div style="position: absolute; left: 120px; top: 280px; height: 80px; display: flex; align-items: center">
+<div style="width: 280px; box-sizing: border-box; padding: 0 22px"><div style="font: 400 19px/1.2 'STIX Two Text', Georgia, serif">RAG chatbot</div><div style="color: #9FA3B5; font-size: 11px">FPT Telecom</div></div>
+<div style="width: 70px"></div>
+<div style="width: 120px; text-align: center; font-size: 12px">Vertex AI</div><div style="width: 120px; text-align: center; font-size: 12px">ChromaDB</div><div style="width: 120px; text-align: center; font-size: 12px">GCS</div>
+<div style="width: 70px"></div>
+<div style="width: 260px; text-align: center; color: #FFD24A; font-size: 14px">75.5% accuracy</div>
+</div>
+<div style="position: absolute; left: 120px; top: 360px; height: 80px; display: flex; align-items: center">
+<div style="width: 280px; box-sizing: border-box; padding: 0 22px"><div style="font: 400 19px/1.2 'STIX Two Text', Georgia, serif">Blacklist bot</div><div style="color: #9FA3B5; font-size: 11px">FPT Telecom</div></div>
+<div style="width: 70px"></div>
+<div style="width: 120px; text-align: center; font-size: 12px">Selenium</div><div style="width: 120px; text-align: center; font-size: 12px">BS4</div><div style="width: 120px; text-align: center; font-size: 12px">web-check</div>
+<div style="width: 70px"></div>
+<div style="width: 260px; text-align: center; color: #FFD24A; font-size: 14px">90% security acc.</div>
+</div>
+<div style="position: absolute; left: 120px; top: 440px; height: 80px; display: flex; align-items: center">
+<div style="width: 280px; box-sizing: border-box; padding: 0 22px"><div style="font: 400 19px/1.2 'STIX Two Text', Georgia, serif">TechHub</div><div style="color: #9FA3B5; font-size: 11px">FPT Telecom</div></div>
+<div style="width: 70px"></div>
+<div style="width: 120px; text-align: center; font-size: 12px">Django</div><div style="width: 120px; text-align: center; font-size: 12px">Vue 3</div><div style="width: 120px; text-align: center; font-size: 12px">Figma</div>
+<div style="width: 70px"></div>
+<div style="width: 260px; text-align: center; color: #FFD24A; font-size: 14px">5,000+ users</div>
+</div>
+<div style="position: absolute; left: 120px; top: 520px; height: 80px; display: flex; align-items: center">
+<div style="width: 280px; box-sizing: border-box; padding: 0 22px"><div style="font: 400 19px/1.2 'STIX Two Text', Georgia, serif">AX-OCR engine</div><div style="color: #9FA3B5; font-size: 11px">Cyber Eye</div></div>
+<div style="width: 70px"></div>
+<div style="width: 120px; text-align: center; font-size: 12px">C++</div><div style="width: 120px; text-align: center; font-size: 12px">OpenCV</div><div style="width: 120px; text-align: center; font-size: 12px">PyTorch</div>
+<div style="width: 70px"></div>
+<div style="width: 260px; text-align: center; color: #FFD24A; font-size: 14px">98% · Sao Khuê 2022</div>
+</div>
+</div>
+
+<div style="position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transition: opacity .6s; opacity: 0" data-o="2">
+<h2 style="position: absolute; left: 120px; top: 60px; margin: 0; font: 400 36px/1.1 'STIX Two Text', Georgia, serif">Tools I reach for</h2>
+<div style="position: absolute; left: 180px; top: 150px; width: 160px; text-align: center; font: italic 400 18px 'STIX Two Text', Georgia, serif; color: #9FA3B5">languages</div>
+<div style="position: absolute; left: 460px; top: 150px; width: 160px; text-align: center; font: italic 400 18px 'STIX Two Text', Georgia, serif; color: #9FA3B5">build</div>
+<div style="position: absolute; left: 740px; top: 150px; width: 160px; text-align: center; font: italic 400 18px 'STIX Two Text', Georgia, serif; color: #9FA3B5">ship</div>
+<div style="position: absolute; left: 1000px; top: 150px; width: 160px; text-align: center; font: italic 400 18px 'STIX Two Text', Georgia, serif; color: #FFD24A">ŷ</div>
+
+<div style="position: absolute; left: 90px; top: 275px; width: 144px; text-align: right">Python <span style="color: #FFD24A">7y</span></div>
+<div style="position: absolute; left: 90px; top: 365px; width: 144px; text-align: right">C++ <span style="color: #FFD24A">5y</span></div>
+<div style="position: absolute; left: 90px; top: 455px; width: 144px; text-align: right">C#/.NET <span style="color: #FFD24A">4y</span></div>
+<div style="position: absolute; left: 90px; top: 545px; width: 144px; text-align: right">TypeScript <span style="color: #FFD24A">3y</span></div>
+
+<div style="position: absolute; left: 440px; top: 197px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">Computer vision</span></div>
+<div style="position: absolute; left: 440px; top: 287px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">LLM · RAG</span></div>
+<div style="position: absolute; left: 440px; top: 377px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">Edge AI</span></div>
+<div style="position: absolute; left: 440px; top: 467px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">Backend</span></div>
+<div style="position: absolute; left: 440px; top: 557px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">Frontend</span></div>
+
+<div style="position: absolute; left: 720px; top: 197px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">MLOps</span></div>
+<div style="position: absolute; left: 720px; top: 287px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">CI/CD</span></div>
+<div style="position: absolute; left: 720px; top: 377px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">Security</span></div>
+<div style="position: absolute; left: 720px; top: 467px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">Cloud</span></div>
+<div style="position: absolute; left: 720px; top: 557px; width: 200px; text-align: center"><span style="background: #0B0D18; padding: 2px 8px">Data pipelines</span></div>
+
+<div style="position: absolute; left: 970px; top: 452px; width: 220px; text-align: center; color: #FFD24A"><span style="background: #0B0D18; padding: 2px 8px">full-stack AI engineer</span></div>
+</div>
+
+<div style="position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transition: opacity .6s; opacity: 0" data-o="3">
+<h2 style="position: absolute; left: 120px; top: 60px; margin: 0; font: 400 36px/1.1 'STIX Two Text', Georgia, serif">Things I've built</h2>
+<div style="position: absolute; left: 120px; top: 180px; width: 280px; height: 96px; box-sizing: border-box; padding: 18px 20px"><div style="color: #58C4DD; font-weight: 500">face-detection-ml-system</div><div style="margin-top: 8px; color: #9FA3B5; font-size: 12px">YOLOv11 · GKE · <span style="color: #FFD24A">★ 39</span></div></div>
+<div style="position: absolute; left: 120px; top: 332px; width: 280px; height: 96px; box-sizing: border-box; padding: 18px 20px"><div style="color: #58C4DD; font-weight: 500">Legal-Prompts</div><div style="margin-top: 8px; color: #9FA3B5; font-size: 12px">prompt toolkit · <span style="color: #FFD24A">★ 11</span></div></div>
+<div style="position: absolute; left: 120px; top: 484px; width: 280px; height: 96px; box-sizing: border-box; padding: 18px 20px"><div style="color: #58C4DD; font-weight: 500">ALQAC2023</div><div style="margin-top: 8px; color: #9FA3B5; font-size: 12px">legal QA · <span style="color: #FFD24A">1st prize</span></div></div>
+<div style="position: absolute; left: 880px; top: 180px; width: 280px; height: 96px; box-sizing: border-box; padding: 18px 20px"><div style="color: #58C4DD; font-weight: 500">techleague</div><div style="margin-top: 8px; color: #9FA3B5; font-size: 12px">TypeScript · live</div></div>
+<div style="position: absolute; left: 880px; top: 332px; width: 280px; height: 96px; box-sizing: border-box; padding: 18px 20px"><div style="color: #58C4DD; font-weight: 500">booking-duongcam-art</div><div style="margin-top: 8px; color: #9FA3B5; font-size: 12px">Vue 3 · Django · live</div></div>
+<div style="position: absolute; left: 880px; top: 484px; width: 280px; height: 96px; box-sizing: border-box; padding: 18px 20px"><div style="color: #58C4DD; font-weight: 500">Text2SQL-Vietnamese</div><div style="margin-top: 8px; color: #9FA3B5; font-size: 12px">Python · LLM</div></div>
+<div style="position: absolute; left: 540px; top: 290px; width: 200px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center"><div style="font: 600 22px/1.1 'STIX Two Text', Georgia, serif">DucLong06</div><div style="color: #9FA3B5; font-size: 11px">79 repos · 60 stars</div><div style="color: #9FA3B5; font-size: 11px">C++ 29% · Python 29%</div></div>
+</div>
+
+<div style="position: absolute; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 4px; padding: 4px; border: 1px solid #23243A; border-radius: 999px; background: #0F1220">
+<button type="button" aria-label="Previous section" id="prev" style="width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; color: #F2F2F2; font: 500 16px 'JetBrains Mono', monospace; cursor: pointer">‹</button>
+<button type="button" id="toggle" style="min-width: 64px; height: 44px; padding: 0 12px; border-radius: 999px; border: 0; background: transparent; color: #FFD24A; font: 500 12px 'JetBrains Mono', monospace; cursor: pointer"></button>
+<button type="button" aria-label="Next section" id="next" style="width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; color: #F2F2F2; font: 500 16px 'JetBrains Mono', monospace; cursor: pointer">›</button>
+</div>
+</div>
+</div>
+<script>
+/* Minimal stand-in for the design-canvas runtime: state + repaint of the few dynamic values. */
+class DCLogic {
+  setState(s) { this.state = Object.assign({}, this.state, s); this.paint(); }
+  paint() {
+    var v = this.renderVals(), q = function (sel) { return document.querySelectorAll(sel); }, i, e;
+    document.getElementById('label').textContent = v.label;
+    document.getElementById('hud').textContent = v.hud;
+    document.getElementById('toggle').textContent = v.playLabel;
+    e = q('[data-o]'); for (i = 0; i < e.length; i++) e[i].style.opacity = v['o' + e[i].dataset.o];
+    e = q('[data-c]'); for (i = 0; i < e.length; i++) e[i].style.opacity = v['c' + e[i].dataset.c];
+    e = q('[data-w]'); for (i = 0; i < e.length; i++) e[i].textContent = v['w' + e[i].dataset.w];
+    if (!this.bound) {
+      this.bound = true;
+      document.getElementById('prev').addEventListener('click', v.prev);
+      document.getElementById('next').addEventListener('click', v.next);
+      document.getElementById('toggle').addEventListener('click', v.toggle);
+    }
+  }
+}
+class Component extends DCLogic {
+state = { scene: 0, formed: false, playing: true, scr: 0, chk: 0 };
+
+/* Static backdrop: two faint glows and a dot grid, rendered once. */
+makeBg() {
+  var c = document.createElement('canvas'); c.width = this.W; c.height = this.H;
+  var g = c.getContext('2d'), a, x, y;
+  a = g.createRadialGradient(260, 140, 0, 260, 140, 620); a.addColorStop(0, 'rgba(88,196,221,0.13)'); a.addColorStop(1, 'rgba(88,196,221,0)');
+  g.fillStyle = a; g.fillRect(0, 0, this.W, this.H);
+  a = g.createRadialGradient(1060, 640, 0, 1060, 640, 560); a.addColorStop(0, 'rgba(255,210,74,0.08)'); a.addColorStop(1, 'rgba(255,210,74,0)');
+  g.fillStyle = a; g.fillRect(0, 0, this.W, this.H);
+  g.fillStyle = 'rgba(159,163,181,0.22)';
+  for (y = 16; y < this.H; y += 32) for (x = 16; x < this.W; x += 32) g.fillRect(x, y, 1, 1);
+  this.bg = c; this.rain = [];
+  for (x = 0; x < 30; x++) this.rain.push({ x: 20 + x * 43 + Math.random() * 14, y: Math.random() * this.H, v: 18 + Math.random() * 34, s: Math.floor(Math.random() * 999) });
+}
+
+/* Moving backdrop: dim columns of hex bytes drifting down, like traffic through a gateway. */
+drawRain(ctx, now, dt) {
+  var hex = '0123456789ABCDEF', i, j, c, tick = Math.floor(now / 420);
+  ctx.font = "11px 'JetBrains Mono', ui-monospace, monospace"; ctx.textAlign = 'center'; ctx.fillStyle = '#58C4DD';
+  for (i = 0; i < this.rain.length; i++) {
+    c = this.rain[i]; c.y += c.v * dt; if (c.y - 200 > this.H) { c.y = -20; c.s = Math.floor(Math.random() * 999); }
+    for (j = 0; j < 10; j++) {
+      var n = (c.s * 31 + j * 17 + (j === 0 ? tick : 0) * 7) % 256;
+      ctx.globalAlpha = 0.16 * (1 - j / 10);
+      ctx.fillText(hex.charAt(n >> 4) + hex.charAt(n & 15), c.x, c.y - j * 18);
+    }
+  }
+  ctx.globalAlpha = 1; ctx.textAlign = 'start';
+}
+
+/* Name scene: sample the pixels of each word so particles can assemble the letters. */
+glyphs() {
+  var c = document.createElement('canvas'); c.width = this.W; c.height = this.H;
+  var g = c.getContext('2d'), words = ['Hoàng', 'Đức', 'Long'], out = [], x, y;
+  g.font = "600 84px 'STIX Two Text', Georgia, serif"; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff';
+  for (var i = 0; i < 3; i++) g.fillText(words[i], 320 + 320 * i, 322);
+  var d = g.getImageData(0, 240, this.W, 160).data;
+  for (y = 0; y < 160; y += 2) for (x = 0; x < this.W; x += 2) if (d[(y * this.W + x) * 4 + 3] > 128) out.push([x, y + 240]);
+  return out;
+}
+
+/* Decode effect: random hex glyphs resolve into the name, left to right. */
+scramble() {
+  var self = this, t0 = performance.now(); clearInterval(this.si);
+  if (this.reduced) { this.setState({ scr: 9999, chk: 9 }); return; }
+  this.setState({ scr: 0, chk: 0 });
+  this.si = setInterval(function () {
+    var e = performance.now() - t0;
+    if (e < 1300) self.setState({ scr: 150 + 980 * e / 1200 });
+    else { var c = Math.floor((e - 1300) / 240) + 1; self.setState({ scr: 9999, chk: c }); if (c >= 5) clearInterval(self.si); }
+  }, 45);
+}
+
+componentDidMount() {
+  this.W = 1280; this.H = 720; this.N = 1400; this.P = []; this.cache = {};
+  for (var i = 0; i < this.N; i++) {
+    this.P.push({ x: Math.random() * this.W, y: Math.random() * this.H, fx: 0, fy: 0, cx: 0, cy: 0, tx: 0, ty: 0, d: 0, yl: false, nyl: false, pi: 0, off: 0, sig: i % 6 === 0 });
+  }
+  this.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var self = this, started = false;
+  var go = function () { if (started) return; started = true; self.begin(0, performance.now()); };
+  try { document.fonts.load("600 84px 'STIX Two Text'", 'Hoàng Đức Long').then(go, go); } catch (e) { go(); }
+  this.st = setTimeout(go, 1800);
+  var tick = function (now) { self.frame(now); self.raf = requestAnimationFrame(tick); };
+  this.raf = requestAnimationFrame(tick);
+}
+
+componentWillUnmount() { cancelAnimationFrame(this.raf); clearInterval(this.si); clearTimeout(this.st); }
+
+/* Each scene is a list of solid polylines: matrix equation, neural network, chip with traces. */
+build(k) {
+  if (this.cache[k]) return this.cache[k];
+  var Q = [], i, j;
+  var add = function (pts, yl, w, a, fill) { Q.push({ p: pts, y: !!yl, w: w || 1.6, a: a == null ? 1 : a, fill: !!fill }); };
+  var rect = function (x, y, w, h, yl, lw, fill) { add([[x, y], [x + w, y], [x + w, y + h], [x, y + h], [x, y]], yl, lw, 1, fill); };
+  var circ = function (cx, cy, r, yl, fill) { var pts = []; for (var n = 0; n <= 24; n++) { var t = n / 24 * 6.2832; pts.push([cx + Math.cos(t) * r, cy + Math.sin(t) * r]); } add(pts, yl, 1.8, 1, fill); };
+  var corners = function (x, y, w, h, arm, yl) {
+    add([[x, y + arm], [x, y], [x + arm, y]], yl, 2.8); add([[x + w - arm, y], [x + w, y], [x + w, y + arm]], yl, 2.8);
+    add([[x + w, y + h - arm], [x + w, y + h], [x + w - arm, y + h]], yl, 2.8); add([[x + arm, y + h], [x, y + h], [x, y + h - arm]], yl, 2.8);
+  };
+  if (k === 0) {
+    corners(150, 232, 980, 176, 30, true);
+    add([[40, 320], [150, 320]], true, 1.2, 0.8); add([[1130, 320], [1240, 320]], true, 1.2, 0.8);
+    circ(40, 320, 4, true, true); circ(1240, 320, 4, true, true);
+    for (i = 0; i < 3; i++) {
+      rect(170 + 320 * i, 250, 300, 140, false, 1.8, false);
+      if (i < 2) add([[470 + 320 * i, 320], [490 + 320 * i, 320]], false, 1.2, 0.7);
+    }
+  } else if (k === 1) {
+    var br = function (x0, x1, yl) {
+      add([[x0 + 14, 190], [x0, 190], [x0, 610], [x0 + 14, 610]], yl, 2.2);
+      add([[x1 - 14, 190], [x1, 190], [x1, 610], [x1 - 14, 610]], yl, 2.2);
+      for (var r = 1; r < 5; r++) add([[x0 + 12, 200 + 80 * r], [x1 - 12, 200 + 80 * r]], yl, 0.8, 0.4);
+    };
+    br(120, 400, false); br(470, 830, false); br(900, 1160, true);
+    add([[590, 204], [590, 596]], false, 0.8, 0.4); add([[710, 204], [710, 596]], false, 0.8, 0.4);
+    add([[427, 392], [443, 408]], false, 2.2); add([[443, 392], [427, 408]], false, 2.2);
+    add([[855, 395], [875, 395]], true, 2.2); add([[855, 405], [875, 405]], true, 2.2);
+  } else if (k === 2) {
+    var L0 =[285, 375, 465, 555], L1 = [240, 330, 420, 510, 600];
+    for (i = 0; i < L0.length; i++) for (j = 0; j < L1.length; j++) add([[260, L0[i]], [540, L1[j]]], false, 0.9, 0.5);
+    for (i = 0; i < L1.length; i++) for (j = 0; j < L1.length; j++) add([[540, L1[i]], [820, L1[j]]], false, 0.9, 0.5);
+    for (i = 0; i < L1.length; i++) add([[820, L1[i]], [1080, 420]], true, 1.3, 0.8);
+    for (i = 0; i < L0.length; i++) circ(260, L0[i], 12, false, true);
+    for (i = 0; i < L1.length; i++) { circ(540, L1[i], 12, false, true); circ(820, L1[i], 12, false, true); }
+    circ(1080, 420, 20, true, true);
+  } else if (k === 3) {
+    var trace = function (x0, y0, x1, y1, bx, yl) {
+      var dir = x1 > x0 ? 1 : -1, c = 14;
+      if (y0 === y1) add([[x0, y0], [x1, y1]], yl, 1.6);
+      else { var s = y1 > y0 ? 1 : -1; add([[x0, y0], [bx - dir * c, y0], [bx, y0 + s * c], [bx, y1 - s * c], [bx + dir * c, y1], [x1, y1]], yl, 1.6); }
+      circ(x0, y0, 4, yl, true); circ(x1, y1, 4, yl, true);
+    };
+    var my = [228, 380, 532], py = [340, 380, 420], off = [-8, 8];
+    for (i = 0; i < 3; i++) for (j = 0; j < 2; j++) {
+      var o = off[j], s2 = py[i] > my[i] ? 1 : (py[i] < my[i] ? -1 : 0);
+      var po = s2 === 0 ? o : o * 0.6;
+      trace(400, my[i] + o, 540, py[i] + po, 470 - s2 * o, true);
+      trace(880, my[i] + o, 740, py[i] + po, 810 + s2 * o, false);
+    }
+    var tx = [580, 620, 660, 700];
+    for (i = 0; i < 4; i++) {
+      add([[tx[i], 290], [tx[i], 262], [tx[i] + (i < 2 ? -18 : 18), 244]], false, 1.2, 0.7); circ(tx[i] + (i < 2 ? -18 : 18), 240, 4, false, true);
+      add([[tx[i], 470], [tx[i], 498], [tx[i] + (i < 2 ? -18 : 18), 516]], false, 1.2, 0.7); circ(tx[i] + (i < 2 ? -18 : 18), 520, 4, false, true);
+    }
+    for (i = 0; i < 3; i++) { rect(120, 180 + 152 * i, 280, 96, true, 1.8, true); rect(880, 180 + 152 * i, 280, 96, false, 1.8, true); }
+    rect(540, 290, 200, 180, false, 2.2, true); rect(554, 304, 172, 152, false, 0.8, false);
+    circ(566, 316, 3, true, true);
+  }
+  var total = 0;
+  for (i = 0; i < Q.length; i++) {
+    var q = Q[i], c = [0];
+    for (j = 1; j < q.p.length; j++) c.push(c[j - 1] + Math.hypot(q.p[j][0] - q.p[j - 1][0], q.p[j][1] - q.p[j - 1][1]));
+    q.c = c; q.len = c[c.length - 1]; total += q.len;
+  }
+  Q.total = total; this.cache[k] = Q; return Q;
+}
+
+pointAt(q, d) {
+  d = ((d % q.len) + q.len) % q.len;
+  for (var j = 1; j < q.c.length; j++) if (d <= q.c[j]) {
+    var f = (d - q.c[j - 1]) / ((q.c[j] - q.c[j - 1]) || 1);
+    return [q.p[j - 1][0] + (q.p[j][0] - q.p[j - 1][0]) * f, q.p[j - 1][1] + (q.p[j][1] - q.p[j - 1][1]) * f];
+  }
+  return q.p[q.p.length - 1];
+}
+
+begin(k, now) {
+  this.old = this.cur; this.cur = this.build(k);
+  var Q = this.cur, G = k === 0 ? this.glyphs() : null;
+  clearInterval(this.si);
+  for (var i = 0; i < this.P.length; i++) {
+    var p = this.P[i], r = Math.random() * Q.total, pi = 0;
+    p.fx = p.x; p.fy = p.y;
+    if (G && G.length && i % 10 < 8) {
+      var gp = G[Math.floor(Math.random() * G.length)];
+      p.tx = gp[0]; p.ty = gp[1]; p.nyl = false; p.pi = -1; p.off = 0;
+    } else {
+      while (pi < Q.length - 1 && r > Q[pi].len) { r -= Q[pi].len; pi++; }
+      var pt = this.pointAt(Q[pi], r);
+      p.tx = pt[0]; p.ty = pt[1]; p.nyl = Q[pi].y; p.pi = pi; p.off = r;
+    }
+    p.cx = this.W / 2 + (Math.random() - 0.5) * 1500; p.cy = this.H / 2 + (Math.random() - 0.5) * 900;
+    p.d = Math.random();
+  }
+  this.idx = k; this.t0 = now; this.phase = 'morph';
+  this.setState({ scene: k, formed: false });
+}
+
+strokeAll(ctx, Q, r, alpha) {
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i], pts = q.p, lim = q.len * r, j;
+    if (lim <= 0) continue;
+    ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+    for (j = 1; j < pts.length; j++) {
+      if (q.c[j] <= lim) ctx.lineTo(pts[j][0], pts[j][1]);
+      else { var f = (lim - q.c[j - 1]) / ((q.c[j] - q.c[j - 1]) || 1); if (f > 0) ctx.lineTo(pts[j - 1][0] + (pts[j][0] - pts[j - 1][0]) * f, pts[j - 1][1] + (pts[j][1] - pts[j - 1][1]) * f); break; }
+    }
+    if (q.fill) { ctx.globalAlpha = alpha * r; ctx.fillStyle = '#0B0D18'; ctx.fill(); }
+    ctx.globalAlpha = alpha * q.a; ctx.lineWidth = q.w; ctx.strokeStyle = q.y ? '#FFD24A' : '#58C4DD';
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke();
+  }
+}
+
+frame(now) {
+  var cv = this.cv; if (!cv || !this.P || !this.cur) return;
+  var dt = Math.min(0.05, (now - (this.last || now)) / 1000); this.last = now;
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  if (cv.width !== this.W * dpr) { cv.width = this.W * dpr; cv.height = this.H * dpr; }
+  var ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, this.W, this.H);
+  if (!this.bg) this.makeBg();
+  ctx.drawImage(this.bg, 0, 0, this.W, this.H);
+  if (!this.reduced) this.drawRain(ctx, now, dt);
+  var P = this.P, i, p, hold = this.phase === 'hold', r = 1;
+  if (!hold) {
+    var g = Math.min(1, (now - this.t0) / (this.reduced ? 1 : 3200));
+    r = Math.max(0, Math.min(1, (g - 0.5) / 0.5));
+    for (i = 0; i < P.length; i++) {
+      p = P[i];
+      var u = Math.max(0, Math.min(1, g * 1.9 - p.d * 0.45));
+      var s = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2, m = 1 - s;
+      p.x = m * m * p.fx + 2 * m * s * p.cx + s * s * p.tx;
+      p.y = m * m * p.fy + 2 * m * s * p.cy + s * s * p.ty;
+      if (u > 0.5) p.yl = p.nyl;
+    }
+    if (this.old && g < 0.25) this.strokeAll(ctx, this.old, 1, 1 - g * 4);
+    if (g >= 1) { this.phase = 'hold'; this.h0 = now; this.b0 = now; this.setState({ formed: true }); if (this.idx === 0) this.scramble(); }
+  } else {
+    for (i = 0; i < P.length; i++) { p = P[i]; if (!p.sig || p.pi < 0) continue; p.off += dt * 45 * (0.5 + p.d); var pt = this.pointAt(this.cur[p.pi], p.off); p.x = pt[0]; p.y = pt[1]; }
+    if ((this.state || {}).playing && !this.reduced && now - this.h0 > 5600) { this.begin((this.idx + 1) % 4, now); }
+  }
+  this.strokeAll(ctx, this.cur, r, 1);
+  if (hold && !this.reduced && this.phase === 'hold') {
+    var be = now - this.b0;
+    if (this.idx === 0 && be < 1300) {
+      /* guardrail scan: a beam sweeps the request and the name decodes behind it */
+      var bx = 150 + 980 * Math.min(1, be / 1200);
+      ctx.globalAlpha = 0.14; ctx.fillStyle = '#58C4DD'; ctx.fillRect(bx - 60, 232, 60, 176);
+      ctx.globalAlpha = 0.95; ctx.fillStyle = '#D6F4FB'; ctx.fillRect(bx - 1, 224, 2, 192);
+    }
+    ctx.globalAlpha = 1;
+  }
+  for (var pass = 0; pass < 2; pass++) {
+    for (i = 0; i < P.length; i++) {
+      p = P[i]; if ((p.yl ? 1 : 0) !== pass) continue;
+      if (p.pi < 0) {
+        var ga = hold ? Math.max(0, 1 - (now - this.h0) / 700) : 0.95;
+        if (ga > 0) { ctx.globalAlpha = ga; ctx.fillStyle = '#F2F2F2'; ctx.fillRect(p.x - 1, p.y - 1, 2, 2); }
+      }
+      else if (p.sig) { ctx.globalAlpha = 1; ctx.fillStyle = pass ? '#FFF1B8' : '#D6F4FB'; ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3); }
+      else if (r < 1) { ctx.globalAlpha = 0.95 * (1 - r); ctx.fillStyle = pass ? '#FFD24A' : '#58C4DD'; ctx.fillRect(p.x - 1, p.y - 1, 2, 2); }
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+renderVals() {
+  var st = this.state || {}, self = this;
+  if (!this._ref) this._ref = function (el) { self.cv = el; };
+  if (!this._next) this._next = function () { self.begin(((self.idx || 0) + 1) % 4, performance.now()); };
+  if (!this._prev) this._prev = function () { self.begin(((self.idx || 0) + 3) % 4, performance.now()); };
+  if (!this._toggle) this._toggle = function () { self.h0 = performance.now(); self.setState({ playing: !(self.state || {}).playing }); };
+  var labels = ['0 · guardrail', '5 · x · W = ŷ', '6 · network', '7 · chip'];
+  var on = function (k) { return st.scene === k && st.formed ? 1 : 0; };
+  var words = ['Hoàng', 'Đức', 'Long'], pool = '0123456789ABCDEF#$%&<>/=+*', shown = [], base = 0, scr = st.scr || 0;
+  for (var a = 0; a < 3; a++) {
+    var chars = Array.from(words[a]), txt = '';
+    for (var b = 0; b < chars.length; b++) txt += (scr >= 210 + 320 * a + (b + 1) / chars.length * 220) ? chars[b] : pool.charAt(Math.floor(Math.random() * pool.length));
+    shown.push(txt);
+  }
+  var chk = st.chk || 0;
+  return {
+    cvRef: this._ref, next: this._next, prev: this._prev, toggle: this._toggle,
+    label: labels[st.scene || 0],
+    hud: st.playing ? 'auto · pause to read' : 'paused · play to resume',
+    playLabel: st.playing ? 'pause' : 'play',
+    w0: shown[0], w1: shown[1], w2: shown[2],
+    c0: chk > 0 ? 1 : 0, c1: chk > 1 ? 1 : 0, c2: chk > 2 ? 1 : 0, c3: chk > 3 ? 1 : 0, c4: chk > 4 ? 1 : 0,
+    o0: on(0), o1: on(1), o2: on(2), o3: on(3)
+  };
+}
+}
+(function () {
+  var fit = document.getElementById('fit');
+  var size = function () { var k = Math.min(window.innerWidth / 1280, window.innerHeight / 720); fit.style.transform = 'translate(-50%,-50%) scale(' + k + ')'; };
+  window.addEventListener('resize', size); size();
+  var app = new Component();
+  app.cv = document.getElementById('cv');
+  app.paint();
+  app.componentDidMount();
+})();
+</script>
+</body>
+</html>
