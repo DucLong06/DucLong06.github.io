@@ -78,7 +78,7 @@ export const GUARDRAIL_STORY: Record<Lang, GuardrailStoryText> = {
       rows: [
         { system: 'GitLab review bot', company: 'FPT Telecom', stack: ['Langchain', 'SAST', 'FastAPI'], result: '6,000 MRs / month' },
         { system: 'RAG chatbot', company: 'FPT Telecom', stack: ['Vertex AI', 'ChromaDB', 'GCS'], result: '75.5% accuracy' },
-        { system: 'Blacklist bot', company: 'FPT Telecom', stack: ['Selenium', 'BS4', 'web-check'], result: 'real-time domain blocking' },
+        { system: 'Blacklist bot', company: 'FPT Telecom', stack: ['Selenium', 'BS4', 'web-check'], result: '90% security acc.' },
         { system: 'TechHub', company: 'FPT Telecom', stack: ['Django', 'Vue 3', 'Figma'], result: '5,000+ users' },
         { system: 'AX-OCR engine', company: 'Cyber Eye', stack: ['C++', 'OpenCV', 'PyTorch'], result: '98% · Sao Khuê 2022' },
       ],
@@ -122,7 +122,7 @@ export const GUARDRAIL_STORY: Record<Lang, GuardrailStoryText> = {
       rows: [
         { system: 'GitLab review bot', company: 'FPT Telecom', stack: ['Langchain', 'SAST', 'FastAPI'], result: '6.000 MR / tháng' },
         { system: 'RAG chatbot', company: 'FPT Telecom', stack: ['Vertex AI', 'ChromaDB', 'GCS'], result: 'độ chính xác 75,5%' },
-        { system: 'Blacklist bot', company: 'FPT Telecom', stack: ['Selenium', 'BS4', 'web-check'], result: 'chặn tên miền thời gian thực' },
+        { system: 'Blacklist bot', company: 'FPT Telecom', stack: ['Selenium', 'BS4', 'web-check'], result: 'độ chính xác bảo mật 90%' },
         { system: 'TechHub', company: 'FPT Telecom', stack: ['Django', 'Vue 3', 'Figma'], result: '5.000+ người dùng' },
         { system: 'AX-OCR engine', company: 'Cyber Eye', stack: ['C++', 'OpenCV', 'PyTorch'], result: '98% · Sao Khuê 2022' },
       ],
