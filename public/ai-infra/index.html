@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="vi" data-lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-title-vi="AI Infra - M1: LLM dưới góc nhìn hạ tầng" data-title-en="AI Infra - M1: LLM from an infrastructure point of view">AI Infra - M1: LLM dưới góc nhìn hạ tầng</title>
+<meta name="description" content="Khóa học AI Infra, module M1: tính byte, FLOP và token/s của LLM inference từ config.json.">
+<meta name="color-scheme" content="light">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap"></noscript>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main"><span data-l="vi" lang="vi">Tới nội dung chính</span><span data-l="en" lang="en">Skip to content</span></a>
+<header class="site-head">
+<a class="brand" href="index.html">AI Infra <span>&middot; M1</span></a>
+
+<span class="head-spacer"></span>
+<div class="lang-switch" role="group" aria-label="Language / Ngôn ngữ">
+<button type="button" data-set-lang="vi" aria-pressed="true">VI</button>
+<button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+</div>
+</header>
+<div class="hero"><div class="hero-inner">
+<div data-l="vi" lang="vi"><p class="eyebrow">Khóa học &middot; Module M1</p></div>
+<div data-l="en" lang="en"><p class="eyebrow">Course &middot; Module M1</p></div>
+<h1><span data-l="vi" lang="vi">AI Infra &mdash; M1: LLM dưới góc nhìn hạ tầng</span><span data-l="en" lang="en">AI Infra &mdash; M1: LLM from an infrastructure point of view</span></h1>
+<div data-l="vi" lang="vi"><p class="lead">Năm bài học để đi từ một dòng <code>config.json</code> đến con số byte, FLOP và token/s của một máy thật. Mọi con số trong khóa đều in đúng như output của <code>course/m1/calc.py</code> hoặc của lệnh lab, và kiểm lại được bằng chính lệnh đó.</p></div>
+<div data-l="en" lang="en"><p class="lead">Five lessons that go from one line of <code>config.json</code> to the bytes, FLOPs and tokens per second of a real machine. Every number in the course is printed exactly as <code>course/m1/calc.py</code> or a lab command outputs it, and you can re-run that command to check it.</p></div>
+<ul class="chips">
+<li><span data-l="vi" lang="vi">5 bài</span><span data-l="en" lang="en">5 lessons</span></li><li><span data-l="vi" lang="vi">Song ngữ VI / EN</span><span data-l="en" lang="en">Bilingual VI / EN</span></li>
+<li><span data-l="vi" lang="vi">Lab chạy trên CPU</span><span data-l="en" lang="en">Labs run on CPU</span></li><li><span data-l="vi" lang="vi">2 demo tương tác</span><span data-l="en" lang="en">2 interactive demos</span></li>
+<li><span data-l="vi" lang="vi">Không cần GPU để học</span><span data-l="en" lang="en">No GPU needed to learn</span></li>
+</ul>
+</div></div>
+
+<section class="home-sec">
+<h2><span data-l="vi" lang="vi">Khóa này về cái gì</span><span data-l="en" lang="en">What this course is about</span></h2>
+<div data-l="vi" lang="vi"><p>Một trục duy nhất: <strong>chạy và vận hành LLM inference trên GPU</strong>. Không phải huấn luyện model, không phải nghiên cứu kiến trúc. Câu hỏi mà khóa này trả lời là câu hỏi của người trực hệ thống: model này có vừa máy không, một người dùng được bao nhiêu token mỗi giây, bao nhiêu người dùng cùng lúc thì hết bộ nhớ, và đổi dtype hay đổi kiến trúc thì các con số đó đi đâu.</p><p>M1 là module nền: nó dựng bộ công cụ tính tay mà mọi module sau dùng lại. Học xong M1, bạn đọc một <code>config.json</code> là ra được dung lượng weight, byte KV mỗi token, FLOPs mỗi bước và số request tối đa vừa một máy &mdash; trước khi tải một byte weight nào.</p></div>
+<div data-l="en" lang="en"><p>One axis only: <strong>running and operating LLM inference on GPUs</strong>. Not training, not architecture research. The questions this course answers are an on-call engineer&rsquo;s questions: does this model fit the machine, how many tokens per second does one user get, how many concurrent users before memory runs out, and where do those numbers move when you change dtype or architecture.</p><p>M1 is the foundation module: it builds the hand-calculation toolkit every later module reuses. After M1 you can read a <code>config.json</code> and get weight size, KV bytes per token, FLOPs per step and the maximum requests per machine &mdash; before downloading a single byte of weights.</p></div>
+</section>
+
+<section class="home-sec">
+<h2><span data-l="vi" lang="vi">Năm bài của M1</span><span data-l="en" lang="en">The five M1 lessons</span></h2>
+<ul class="cards"><li><a class="card" href="lesson-01.html"><span class="n"><span data-l="vi" lang="vi">Bài</span><span data-l="en" lang="en">Lesson</span> 01</span><h3><span data-l="vi" lang="vi">Token và tokenizer</span><span data-l="en" lang="en">Tokens and tokenizers</span></h3><p><span data-l="vi" lang="vi">Đếm token bằng đúng tokenizer của model, rồi đổi ra byte KV cache.</span><span data-l="en" lang="en">Count tokens with the model&#x27;s own tokenizer, then turn that count into KV-cache bytes.</span></p></a></li><li><a class="card" href="lesson-02.html"><span class="n"><span data-l="vi" lang="vi">Bài</span><span data-l="en" lang="en">Lesson</span> 02</span><h3><span data-l="vi" lang="vi">Transformer một lượt forward</span><span data-l="en" lang="en">One transformer forward pass</span></h3><p><span data-l="vi" lang="vi">Mọi ma trận weight trong một tầng, và FLOPs của prefill so với decode.</span><span data-l="en" lang="en">Every weight matrix in one layer, and the FLOPs of prefill versus decode.</span></p></a></li><li><a class="card" href="lesson-03.html"><span class="n"><span data-l="vi" lang="vi">Bài</span><span data-l="en" lang="en">Lesson</span> 03</span><h3><span data-l="vi" lang="vi">Prefill, decode và KV cache</span><span data-l="en" lang="en">Prefill, decode and the KV cache</span></h3><p><span data-l="vi" lang="vi">KV cache của một request, và cận dưới thời gian mỗi bước decode.</span><span data-l="en" lang="en">The KV cache of one request, and the floor on each decode step.</span></p></a></li><li><a class="card" href="lesson-04.html"><span class="n"><span data-l="vi" lang="vi">Bài</span><span data-l="en" lang="en">Lesson</span> 04</span><h3><span data-l="vi" lang="vi">Đọc config.json tính tham số và bộ nhớ</span><span data-l="en" lang="en">Read config.json: parameters and memory</span></h3><p><span data-l="vi" lang="vi">Từ config.json ra tham số, byte weight và số request vừa một máy.</span><span data-l="en" lang="en">From config.json to parameters, weight bytes and requests per machine.</span></p></a></li><li><a class="card" href="lesson-05.html"><span class="n"><span data-l="vi" lang="vi">Bài</span><span data-l="en" lang="en">Lesson</span> 05</span><h3><span data-l="vi" lang="vi">GQA, MLA, MoE</span><span data-l="en" lang="en">GQA, MLA, MoE</span></h3><p><span data-l="vi" lang="vi">Nhận diện kiến trúc attention và MoE, rồi tính byte KV và lượng đọc expert.</span><span data-l="en" lang="en">Spot the attention and MoE architecture, then compute KV bytes and expert reads.</span></p></a></li></ul>
+<div data-l="vi" lang="vi"><p>Hai demo tương tác nằm trong bài: <a href="lesson-03.html#sec-3">KV cache lớn dần theo token</a> (bài 03) và <a href="lesson-05.html#sec-3">GQA so với MHA, MQA, MLA</a> (bài 05).</p></div>
+<div data-l="en" lang="en"><p>Two interactive demos live inside the lessons: <a href="lesson-03.html#sec-3">the KV cache growing with tokens</a> (lesson 03) and <a href="lesson-05.html#sec-3">GQA versus MHA, MQA and MLA</a> (lesson 05).</p></div>
+</section>
+
+<section class="home-sec">
+<h2><span data-l="vi" lang="vi">Bản đồ 9 module</span><span data-l="en" lang="en">The nine-module map</span></h2>
+<div data-l="vi" lang="vi"><p>M1 đang mở. Các module còn lại đang soạn.</p></div>
+<div data-l="en" lang="en"><p>M1 is open. The others are being written.</p></div>
+<ul class="modules"><li><span class="code">M0</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Nền tảng Linux, mạng, GPU</span><span data-l="en" lang="en">Linux, networking and GPU groundwork</span></span></li><li class="open"><span class="code">M1</span><span class="state now"><span data-l="vi" lang="vi">đang mở</span><span data-l="en" lang="en">open</span></span><span class="ttl"><span data-l="vi" lang="vi">LLM dưới góc nhìn hạ tầng</span><span data-l="en" lang="en">LLM from an infrastructure point of view</span></span></li><li><span class="code">M2</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Serving engine: vLLM và SGLang</span><span data-l="en" lang="en">Serving engines: vLLM and SGLang</span></span></li><li><span class="code">M3</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Đo đạc và benchmark</span><span data-l="en" lang="en">Measurement and benchmarking</span></span></li><li><span class="code">M4</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Batching, scheduling, hàng đợi</span><span data-l="en" lang="en">Batching, scheduling and queueing</span></span></li><li><span class="code">M5</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Quantization và nén model</span><span data-l="en" lang="en">Quantization and model compression</span></span></li><li><span class="code">M6</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Nhiều GPU, nhiều máy</span><span data-l="en" lang="en">Multi-GPU and multi-node</span></span></li><li><span class="code">M7</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Gateway, quota, chi phí</span><span data-l="en" lang="en">Gateway, quota and cost</span></span></li><li><span class="code">M8</span><span class="state soon"><span data-l="vi" lang="vi">sắp có</span><span data-l="en" lang="en">soon</span></span><span class="ttl"><span data-l="vi" lang="vi">Vận hành: giám sát và sự cố</span><span data-l="en" lang="en">Operations: monitoring and incidents</span></span></li></ul>
+</section>
+
+<section class="home-sec">
+<h2><span data-l="vi" lang="vi">Cách dùng trang này</span><span data-l="en" lang="en">How to use this site</span></h2>
+<div data-l="vi" lang="vi"><ul><li>Nút <strong>VI | EN</strong> trên đầu trang đổi ngôn ngữ cho toàn bộ nội dung và nhớ lựa chọn của bạn.</li><li>Mỗi bài có đúng 9 mục theo cùng một khuôn: mục tiêu, vì sao cần, lý thuyết có số, video, key notes, minh họa, lab, tự kiểm tra, nguồn.</li><li>Lab chạy được trên máy Linux thường có python3; phần cần GPU được ghi rõ là phần riêng.</li><li>Khối lệnh có nút Chép. Khối &ldquo;kết quả mong đợi&rdquo; là output thật, chạy ngày 2026-11-27.</li><li>Lời giải phần tự kiểm tra nằm trong khối gập lại: thử trả lời trước khi mở.</li></ul></div>
+<div data-l="en" lang="en"><ul><li>The <strong>VI | EN</strong> button at the top switches the whole page and remembers your choice.</li><li>Every lesson has exactly 9 sections in the same order: goal, why it matters, theory with worked numbers, video, key notes, illustration, lab, self-check, sources.</li><li>Labs run on an ordinary Linux machine with python3; the GPU parts are marked as separate.</li><li>Command blocks have a Copy button. The &ldquo;expected output&rdquo; blocks are real output, captured 2026-11-27.</li><li>Self-check answers are collapsed: try answering before opening them.</li></ul></div>
+</section>
+<footer class="site-foot"><div class="inner">
+<div data-l="vi" lang="vi"><p>AI Infra &middot; M1: LLM dưới góc nhìn hạ tầng. Mọi con số in đúng như output của <code>course/m1/calc.py</code> hoặc của lệnh lab. Trang tĩnh, không backend, không theo dõi người dùng.</p></div>
+<div data-l="en" lang="en"><p>AI Infra &middot; M1: LLM from an infrastructure point of view. Every number is printed exactly as <code>course/m1/calc.py</code> or a lab command outputs it. Static page, no backend, no tracking.</p></div>
+</div></footer>
+</body>
+</html>
